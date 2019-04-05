@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="写在前面 进程基础  进程概念 进程描述符 进程创建 上下文切换 init进程   进程应用  进程间通信 信号处理 后台进程与守护进程 浅谈nginx多进程模型   常用工具介绍  ps: 查看进程属性 lsof: 查看打开的文件情况 netstat: 查看网络连接情况 strace: 查看系统调用情况    进程基础基础概念进程是操作系统的基本概念之一，它是操作系统分配资源的基本单位，也是程序">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈Linux进程模型">
+<meta property="og:url" content="https://blog.lecury.cn/2019/04/04/浅谈Linux进程模型/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="写在前面 进程基础  进程概念 进程描述符 进程创建 上下文切换 init进程   进程应用  进程间通信 信号处理 后台进程与守护进程 浅谈nginx多进程模型   常用工具介绍  ps: 查看进程属性 lsof: 查看打开的文件情况 netstat: 查看网络连接情况 strace: 查看系统调用情况    进程基础基础概念进程是操作系统的基本概念之一，它是操作系统分配资源的基本单位，也是程序">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://blog.lecury.cn/images/linux/process/signal.jpg">
+<meta property="og:image" content="https://blog.lecury.cn/images/linux/process/nginx_arch.png">
+<meta property="og:updated_time" content="2019-04-05T08:32:37.356Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈Linux进程模型">
+<meta name="twitter:description" content="写在前面 进程基础  进程概念 进程描述符 进程创建 上下文切换 init进程   进程应用  进程间通信 信号处理 后台进程与守护进程 浅谈nginx多进程模型   常用工具介绍  ps: 查看进程属性 lsof: 查看打开的文件情况 netstat: 查看网络连接情况 strace: 查看系统调用情况    进程基础基础概念进程是操作系统的基本概念之一，它是操作系统分配资源的基本单位，也是程序">
+<meta name="twitter:image" content="https://blog.lecury.cn/images/linux/process/signal.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2019/04/04/浅谈Linux进程模型/">
+
+
+
+
+
+  <title>浅谈Linux进程模型 | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2019/04/04/浅谈Linux进程模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅谈Linux进程模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-04T15:18:30+08:00">
+                2019-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/04/浅谈Linux进程模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/04/浅谈Linux进程模型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/04/04/浅谈Linux进程模型/" class="leancloud_visitors" data-flag-title="浅谈Linux进程模型">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><ul>
+<li><p>进程基础</p>
+<ul>
+<li>进程概念</li>
+<li>进程描述符</li>
+<li>进程创建</li>
+<li>上下文切换</li>
+<li>init进程</li>
+</ul>
+</li>
+<li><p>进程应用</p>
+<ul>
+<li>进程间通信</li>
+<li>信号处理</li>
+<li>后台进程与守护进程</li>
+<li>浅谈nginx多进程模型</li>
+</ul>
+</li>
+<li><p>常用工具介绍</p>
+<ul>
+<li>ps: 查看进程属性</li>
+<li>lsof: 查看打开的文件情况</li>
+<li>netstat: 查看网络连接情况</li>
+<li>strace: 查看系统调用情况</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程基础"><a href="#进程基础" class="headerlink" title="进程基础"></a>进程基础</h2><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><p>进程是操作系统的基本概念之一，它是操作系统分配资源的基本单位，也是程序执行过程的实体。程序是代码和数据的集合，本身是一个静态的概念，而进程是程序的一次执行的实体，是一个动态的概念。</p>
+<p>那在Linux操作系统中，是如何描述一个进程的呢？</p>
+<h4 id="进程描述符"><a href="#进程描述符" class="headerlink" title="进程描述符"></a>进程描述符</h4><p>为了管理进程，内核需要对每个进程的属性和所需要做的事情，进行清楚的描述，这个就是进程描述符的作用，Linux中的进程描述符由<code>task_struct</code>标识。</p>
+<p><code>task_struct</code>的数据结构是相当复杂的，不仅包含了很进程属性的字段，而且也包括了指向其他数据结构的指针。大致结构如下：</p>
+<ul>
+<li>state: 描述进程状态</li>
+<li>thread_info: 进程的基本信息</li>
+<li>mm: <code>mm_struct</code>指向内存区描述符的指针</li>
+<li>tty: <code>tty_struct</code>终端相关的描述符</li>
+<li>fs: <code>fs_struct</code>当前目录</li>
+<li>files: <code>files_struct</code>指向文件描述符的指针</li>
+<li>signal: <code>signal_struct</code>所接收的信号描述</li>
+<li>很多等等。。</li>
+</ul>
+<p>总结一下，进程描述符完整的保存了一个进程的属性和生命周期内的数据、状态和行为，由一个复杂的数据结构<code>task_struct</code>来表示。</p>
+<h4 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h4><p>Linux创建一个进程，大致经历的过程如下：</p>
+<ul>
+<li><ol>
+<li>初始化进程描述符</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>申请相应的内存区域</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>设置进程状态、加入调度队列等等</li>
+</ol>
+</li>
+<li>…</li>
+</ul>
+<p>为了完整的描述一个进程，操作系统设计了非常复杂的数据结构、也申请了大量的内存空间。但是得益于写时复制技术，这些初始化操作，并没有明显的降低进程的创建速度。</p>
+<p>写时复制技术：当新进程（子进程）被创建时，Linux内核并不会立马将父进程的内容复制给子进程，而仅仅当进程空间的内容发生变化时，才执行复制操作。写时复制技术允许父子进程读取相同的物理页，只要两者有一个试图更改页内容，内核就会把这个页的内容拷贝到新的物理页，并把这块页分给正在写的进程。</p>
+<p>Linux中有三种系统调用可以创建进程 clone()、fork()、vfork()</p>
+<ul>
+<li>clone(): 最基础的创建进程的系统调用，可以指明子进程的基础属性（由各种FLAG标识）、堆栈等等。</li>
+<li>fork(): 通过clone()实现，它的堆栈指向的是父进程的堆栈，因此父子进程共享同一个用户态堆栈。fork的子进程需要完全copy父进程的内存空间，但是得益于写时复制技术，这个过程其实挺快。</li>
+<li>vfork(): 也是基于clone()来实现的，是历史上对fork()的优化，因为fork()需要copy父进程的内存空间，并且fork()后常常执行execve()将另一个程序加载进来，在写时复制技术之前，这种不必要的copy是代价是比较高昂的。因此vfork()实现时，会指明flag告诉clone()共享父进程的虚拟内存空间，以加快进程的创建过程。</li>
+</ul>
+<h4 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h4><p>概念：进程创建好之后，内核必须有能力挂起正在CPU运行的进程，并切换其他进程到CPU上执行。这种过程被称作为进程切换、任务切换或者上下文切换。</p>
+<p>这个过程包括硬件上下文切换和软件上下文切换。</p>
+<p>硬件上下文切换：主要通过汇编指令far jmp操作，将一个进程的描述符指针，替换为另一个进程描述符指针，并改变 eip、cs、esp等寄存器，从而改变程序的执行流。</p>
+<p>软件上下文切换：</p>
+<ul>
+<li><ol>
+<li>内存地址的切换，切换页全局目录，安装新的地址空间。</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>内核态堆栈的切换。</li>
+</ol>
+</li>
+</ul>
+<p>进程切换发生在<code>schedule()</code>函数中，内核提供了一个 need_resched 的标志，来表明是否需要重新执行一次调度。当某个进程被抢占或者更高优先级的进程进入可执行状态时，内核都会设置这个标志。那什么时候，内核会检查这个标志，来重新调度程序呢？那就是从内核态切换成用户态，或者从中断返回时。</p>
+<p>执行系统调用时，会经历用户态与内核态的切换以及中断返回。也就是说，每一次执行系统调用，比如fork、read、write等，都可能触发内核调度新进程。</p>
+<h4 id="init进程"><a href="#init进程" class="headerlink" title="init进程"></a>init进程</h4><p>Linux进程是以树形的结构组织的，每一个进程都有唯一的进程标识，简称PID。PID为1的常常是init进程，它相对于普通进程来说，有三个特殊之处：</p>
+<ul>
+<li><p>它没有默认的信号处理，因此如果发信号给init进程的话，会被它忽略掉，除非显示的注册过该信号。如果熟悉docker的同学，会观察到docker化的进程，如果按ctrl-c是没啥反应的，因为docker化的进程它们有独立的pid命名空间，第一个新创出的进程，pid为1，是不会理会kill signal信号的。</p>
+</li>
+<li><p>如果一个进程退出时，它还有子进程存在，被称为孤儿进程，那么这些孤儿进程会重新成为init进程的子进程，转由init进程来管理这些子进程，包括回收退出状态、从进程表中移除等。</p>
+</li>
+<li><p>如果init进程跪了，那么所有用户进程都会被退出。</p>
+</li>
+</ul>
+<p>与孤儿进程类似的是僵尸进程，清理僵尸进程的方法，是杀掉不断产生僵尸进程的父进程，然后这些僵尸进程会称为孤儿进程，由init进程接管、回收。</p>
+<h2 id="进程应用"><a href="#进程应用" class="headerlink" title="进程应用"></a>进程应用</h2><h4 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h4><p>谈到通信我们都知道，通信的双方必须存在一种可以承载信息的介质，对于计算机之间的通信来说，这种介质可以是双绞线、光纤、电磁波。那对于进程间的通信呢？这种介质有哪些呢？在Linux中，满足这种条件的介质，可以是：</p>
+<ul>
+<li>操作系统提供的内存介质，比如共享内存、管道、信号量等。</li>
+<li>文件系统提供的文件介质，比如UNIX域套接字、文件等</li>
+<li>网络设备提供的网卡介质，比如socket套接字。</li>
+<li>等等。</li>
+</ul>
+<p>对于操作系统提供的介质来说，常用的有</p>
+<ul>
+<li>信号量机制</li>
+<li>匿名管道（仅限父子进程）与有名管道</li>
+<li>SysV和POSIX<ul>
+<li>消息队列</li>
+<li>共享内存</li>
+</ul>
+</li>
+<li>等等</li>
+</ul>
+<p>优缺点介绍：</p>
+<ul>
+<li>信号量：不能传递复杂消息，只能用来同步</li>
+<li>匿名管道：容量有限速度较慢，只有父子进程能通讯</li>
+<li>有名管道：任何进程间都能通讯，但速度较慢。</li>
+<li>消息队列：容量受到系统限制，有队列的特性，先进先出。</li>
+<li>共享内存：速度快，可以控制容量大小，但需要进行同步操作。</li>
+</ul>
+<p>它们的用法相对较为简单，在需要使用时查阅相关文档即可，共享内存是比较常用的做法。</p>
+<h4 id="信号处理"><a href="#信号处理" class="headerlink" title="信号处理"></a>信号处理</h4><p>信号最早是在Unix系统被引入，它主要用于进程间的通信，同时进程可以主动注册信号处理函数，来检测或者应对系统发生的事件。比如当进程访问非法地址空间时，进程会收到操作系统发送SIGSEGV信号，默认情况下的处理方式是：该进程会退出并且把堆栈dump出来，简称出core。</p>
+<p>总的来说信号的主要目的：</p>
+<ul>
+<li>让进程知道已经发生的特定事件。</li>
+<li>强迫进程处理这个特定事件。</li>
+</ul>
+<p>目前Linux支持的信号，已经默认的处理函数，可以在man手册中查到，截图如下：</p>
+<p><img src="/images/linux/process/signal.jpg" alt>  </p>
+<p>比较常见的信号，解释如下：</p>
+<ul>
+<li>SIGCHLD: 一个进程通过 <code>fork</code> 函数创建，当它结束时，会向父进程发送SIGCHLD信号。</li>
+<li>SIGHUP: 挂起信号，当检测到控制终端，或者控制进程死亡时。比如用户退出shell终端时，该shell启动的所有进程，都会收到这个信号，默认是终止进程。</li>
+<li>SIGINT：当用户按下Ctrl+C组合键时，终端会向该进程发送此信号，默认是终止进程。</li>
+<li>SIGKILL: 常用的kill -9指令会发送该信号，无条件终止进程，本信号无法被忽略。</li>
+<li>SIGSEGV: 进程访问了非法的内存地址，默认行为是终止进程并产生core堆栈。</li>
+<li>SIGTERM: 程序结束信号，该信号可以被阻塞和忽略，通常标识程序正常退出。</li>
+<li>SIGSTOP: 停止进程的执行，该信号不能被忽略，默认动作为暂停进程。</li>
+<li>SIGPIPE: 当往一个写端关闭的管道或socket连接中连续写入数据时会引发SIGPIPE信号,引发SIGPIPE信号的写操作将设置errno为EPIPE。在TCP通信中，当通信的双方中的一方close一个连接时，若另一方接着发数据，根据TCP协议的规定，会收到一个RST响应报文，若再往这个服务器发送数据时，系统会发出一个SIGPIPE信号给进程，告诉进程这个连接已经断开了，不能再写入数据。</li>
+</ul>
+<p>其实在项目开发中，常常会和信号处理打交道。比如在处理程序优雅退出时，一般需要捕获SIGINT、SIGPIPE、SIGTERM等信号，以合理的释放资源、处理剩余链接等，防止程序意外crash，导致的一些问题。</p>
+<h4 id="后台进程与守护进程"><a href="#后台进程与守护进程" class="headerlink" title="后台进程与守护进程"></a>后台进程与守护进程</h4><p>在接触Linux系统时，常常会遇到后台进程与守护进程，这里简单的介绍一下这两种进程。</p>
+<ul>
+<li><p>后台进程：通常情况下，进程是放置在前台执行，并占据当前shell，在进程结束前，用户无法再通过shell做其他操作。对于那些没有交互的进程，可以将其放在后台启动，也就是启动时加一个 <code>&amp;</code>，那么在该进程运行期间，我们仍是可以通过shell操作其他命令。<strong>不过当shell退出时，该后台进程也会退出</strong>。</p>
+</li>
+<li><p>守护进程：如果一个进程总是以后台的方式启动，并且不能受shell退出的影响而退出，那么可以将其改造为守护进程。后续进程是系统长期运行的后台进程，比如mysqld、nginx等常见的服务进程。</p>
+</li>
+</ul>
+<p>那么这两者有啥区别呢？</p>
+<ul>
+<li>守护进程已经完全脱离终端，而后台进程并未完全脱离终端，即后台进程仍是可以输出到终端的。</li>
+<li>在终端关闭时，后台进程会收到信号退出，但是守护进程则不会。</li>
+</ul>
+<p>举个例子，通过<code>./spider &amp;</code>在后台执行抓取任务，但没过多久，终端自动断开，导致spider进程中断退出。</p>
+<p>在进一步了解守护进程之前，还需要了解一些会话和进程组的概念。</p>
+<ul>
+<li>进程组：由一系列相互关联的进程组成，由PGID来标识，一般是进程组创建进程的PID。进程组的存在是为了方便对多个相关进程执行统一的操作，比如发送信号量给统一进程组的所有进程。</li>
+<li>会话：由若干个进程组组成，每一个进程组从属于一个会话，一个会话对应着一个控制终端，该终端为会话所有进程组的进程所共用，其中只有前台进程组才可以与终端交互。</li>
+</ul>
+<p>那如何实现一个守护进程呢？</p>
+<ol>
+<li>在后台运行：fork出子进程A，当前进程退出，保留子进程A。</li>
+<li>脱离控制终端：目的是摆脱终端的影响，通过<code>setsid()</code>重新为子进程A设置新的会话。</li>
+<li>禁止子进程A重新打开终端：因为设置新会话之后的进程A，是进程组的组长，所以它是有能力重新申请打开一个控制终端。通过再次fork子进程B，并退出进程A，B不再是进程组组长，也无法打开新的终端。</li>
+<li>关闭已打开的文件描述符、改变工作目录等等。</li>
+<li>处理SIGCHILD信号：由于守护进程一般是长期运行的进程，当产生子进程时，需要处理子进程退出时发送的SIGCHILD信号，不然子进程就会变成僵尸进程，从而占据系统资源。</li>
+</ol>
+<p>总结来说，守护进程是一种长期运行于后台的进程，它脱离了控制终端，不受用户终端退出的影响。可以通过<code>nohup</code>操作，将一个进程变成守护进程执行。比如<code>nohup ./spider &amp;</code>，这样即使终端断开后，spider进程仍会继续执行。</p>
+<h4 id="浅谈nginx多进程模型"><a href="#浅谈nginx多进程模型" class="headerlink" title="浅谈nginx多进程模型"></a>浅谈nginx多进程模型</h4><p>nginx是一款高性能的Web服务器，由于它优秀的性能、成熟的社区、完善的文档，受到广大开发者的喜爱和支持。它的高性能与其架构是分不开的，nginx的框架如下图所示：</p>
+<p><img src="/images/linux/process/nginx_arch.png" alt></p>
+<p>Nginx是经典的多进程模型，它启动以后以守护进程的方式在后台运行，后台进程包含一个master进程，和多个worker进程。其中master进程相当于控制进程，有以下作用：</p>
+<ul>
+<li>接收外界信号执行指令，包括配置加载、向worker发指令、优雅退出等等。</li>
+<li>维护worker进程的状态，当worker进程退出后，自动启动新的worker。</li>
+</ul>
+<p>其中 master 进程支持的信号处理如下：</p>
+<ul>
+<li>TERM、INT：快速退出</li>
+<li>QUIT：优雅退出</li>
+<li>HUP: 变更配置，用新配置启动worker，优雅关闭老的worker等。</li>
+<li>USR1: 重新打开日志文件</li>
+<li>USR2: 升级二进制文件（nginx升级）</li>
+<li>WINCH: worker进程的优雅退出</li>
+</ul>
+<p>单个worker进程也支持信号处理，包括：</p>
+<ul>
+<li>TERM、INT: 快速退出</li>
+<li>QUIT: 优雅退出</li>
+<li>USR1: 重新打开日志文件</li>
+<li>WINCH: 终端调试等</li>
+</ul>
+<p>worker进程基于异步非阻塞的模式处理每个请求，这种非阻塞的模式，大大提高了worker进程处理请求的速度。为了尽可能的提高性能，nginx对每个worker进程设置了CPU的亲和性，尽量把worker进程绑定在指定的CPU上执行，以减少上下文切换带来的开销。由于这种绑核的模式，一般推荐worker进程的数目，为CPU的核数。</p>
+<p>nginx使用了master<->worker这种多进程的模型，有哪些好处呢？</-></p>
+<ul>
+<li>worker进程间很少共享资源，在处理各自请求时，几乎不用加锁，省掉了锁带来的开销。</li>
+<li>worker进程间异常不会相互影响，一个进程挂掉之后，其他进程还在工作，可以提高服务的稳定性。</li>
+<li>尽可能的利用多核特性，最大化利用系统资源。</li>
+</ul>
+<h2 id="常用工具介绍"><a href="#常用工具介绍" class="headerlink" title="常用工具介绍"></a>常用工具介绍</h2><p>Linux内置了许多工具，用于排查系统问题和查看资源使用情况，这里简单介绍和进程有关的几个工具。</p>
+<h4 id="ps-查看进程的基本属性"><a href="#ps-查看进程的基本属性" class="headerlink" title="ps: 查看进程的基本属性"></a>ps: 查看进程的基本属性</h4><p>常用的参数如下：</p>
+<ul>
+<li>ps aux : 查看所有进程的基本信息</li>
+<li>ps -p $pid : 查看指定pid的进程</li>
+<li>ps -fp $pid : 打印的进程信息较全</li>
+<li>自定义打印进程的信息：例如<code>ps -C nginx -o pid,ppid,rsz,vsz,pcpu</code>: 打印nginx进程的pid、ppid、实存、虚存、cpu。</li>
+<li>ps axjf：查看进程树：，使用<code>pstree -p $pid</code>更加直观</li>
+<li><code>ps -T -p $pid</code>或者<code>ps -Lf $pid</code>: 查看进程的线程信息</li>
+<li>等等</li>
+</ul>
+<p>除了通过ps获取进程的信息外，还可以通过/proc文件系统来查看进程的基本信息：</p>
+<ul>
+<li>/proc/$pid/cmdline: 进程的命令行参数</li>
+<li>/proc/$pid/cwd: 当前工作目录</li>
+<li>/proc/$pid/environ: 环境变量值</li>
+<li>/proc/$pid/exe: 软链到二进制执行程序。</li>
+<li>/proc/$pid/fd: 包含所有的文件描述符。</li>
+<li>/proc/$pid/maps: 内存映射，包括二进制和lib文件。</li>
+<li>/proc/$pid/mem: 进程的内存</li>
+<li>/proc/$pid/stat: 进程状态</li>
+<li>等等</li>
+</ul>
+<h4 id="lsof-查看进程打开的文件情况"><a href="#lsof-查看进程打开的文件情况" class="headerlink" title="lsof: 查看进程打开的文件情况"></a>lsof: 查看进程打开的文件情况</h4><p>有两个场景：</p>
+<ul>
+<li>场景一：机器上一个文件大小不停的增长，导致磁盘空间一次又一次的爆满，如果这时候你想把写文件的罪魁祸首进程找到，那应该怎么做呢？</li>
+<li>场景二：发现磁盘已经快满了，通过rm -f 删除一些大文件，但磁盘空间并没有明显减少，这个时候应该怎么做呢？</li>
+</ul>
+<p>对于这些场景，我们可以借助lsof命令，</p>
+<ul>
+<li>对于场景一来说：可以查看该文件被哪个进程打开，找到罪魁祸首进程，然后对其处理。</li>
+<li>对于场景二来说：如果这个文件被其他进程打开，通过rm -f是无法真正删掉一个文件的，还需要杀掉打开该文件的进程，以关闭文件描述符，那么文件才能真正被清理。</li>
+</ul>
+<p>lsof的常见用法如下：</p>
+<ul>
+<li>查看特定用户打开的文件列表：<code>lsof -u xxx</code></li>
+<li>查看特定端口打开的文件列表：<code>lsof -i 8080</code></li>
+<li>查看特定端口范围打开的文件列表：<code>lsof -i :1-1024</code></li>
+<li>基于TCP或者UDP查看打开的文件列表：<code>lsof -i udp</code></li>
+<li>查看特定进程打开的文件列表：<code>lsof -p $pid</code></li>
+<li>查看打开特定文件的进程列表：<code>lsof -t $file_name</code></li>
+<li>查看打开特定目录的进程列表：<code>lsof +D $file_path</code></li>
+<li>等等</li>
+</ul>
+<h4 id="netstat-查看网络连接情况"><a href="#netstat-查看网络连接情况" class="headerlink" title="netstat: 查看网络连接情况"></a>netstat: 查看网络连接情况</h4><p>netstat是一个监控TCP/IP网络非常有用的工具，它可以显示路由表、网络连接、网络接口设备状态等信息。输出的信息类型由第一个参数决定：</p>
+<ul>
+<li>(none): 默认情况下，netstat会显示打开的socket列表。</li>
+<li>–route，-r: 显示内核的路由表，和 -e 的输出相同。</li>
+<li>–group，-g: 显示IPv4和IPv6的多播组成员身份信息。</li>
+<li>–interfaces, -i: 显示网络接口状态。</li>
+<li>–statistics, -s: 显示每一种协议的统计信息。</li>
+</ul>
+<p>下面列举各个场景的使用用法：</p>
+<ul>
+<li>仅显示数字地址：netstat -n</li>
+<li>仅显示tcp链接：netstat -t</li>
+<li>仅显示udp链接：netstat -u</li>
+<li>仅显示监控socket链接：netstat -l</li>
+<li>显示进程的名字和PID：netstat -p</li>
+</ul>
+<h4 id="strace-查看系统调用情况"><a href="#strace-查看系统调用情况" class="headerlink" title="strace: 查看系统调用情况"></a>strace: 查看系统调用情况</h4><p>strace用来跟踪进程执行时的系统调用和所接收的信号。在Linux中，进程是无法直接访问硬件设备的，当访问硬件设备时，必须要切换至内核态模式，通过系统调用来访问硬件设备。</p>
+<p>strace可以跟踪到一个进程产生的系统调用，包括参数、返回值、执行消耗的时间。每一行的输出，左边是系统调用的函数名和参数，后面是调用的返回值。用法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">-c 统计每一系统调用的所执行的时间,次数和出错的次数等.</span><br><span class="line">-d 输出strace关于标准错误的调试信息.</span><br><span class="line">-f 跟踪由fork调用所产生的子进程.</span><br><span class="line">-ff 如果提供-o filename,则所有进程的跟踪结果输出到相应的filename.pid中,pid是各进程的进程号.</span><br><span class="line">-F 尝试跟踪vfork调用.在-f时,vfork不被跟踪.</span><br><span class="line">-h 输出简要的帮助信息.</span><br><span class="line">-i 输出系统调用的入口指针.</span><br><span class="line">-q 禁止输出关于脱离的消息.</span><br><span class="line">-r 打印出相对时间关于,,每一个系统调用.</span><br><span class="line">-t 在输出中的每一行前加上时间信息.</span><br><span class="line">-tt 在输出中的每一行前加上时间信息,微秒级.</span><br><span class="line">-ttt 微秒级输出,以秒了表示时间.</span><br><span class="line">-T 显示每一调用所耗的时间.</span><br><span class="line">-v 输出所有的系统调用.一些调用关于环境变量,状态,输入输出等调用由于使用频繁,默认不输出.</span><br><span class="line">-V 输出strace的版本信息.</span><br><span class="line">-x 以十六进制形式输出非标准字符串</span><br><span class="line">-xx 所有字符串以十六进制形式输出.</span><br><span class="line">-a column</span><br><span class="line">设置返回值的输出位置.默认 为40.</span><br><span class="line">-e expr</span><br><span class="line">指定一个表达式,用来控制如何跟踪.格式如下:</span><br><span class="line">[qualifier=][!]value1[,value2]...</span><br><span class="line">qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value是用来限定的符号或数字.默认的 qualifier是 trace.感叹号是否定符号.例如:</span><br><span class="line">-eopen等价于 -e trace=open,表示只跟踪open调用.而-etrace!=open表示跟踪除了open以外的其他调用.有两个特殊的符号 all 和 none.</span><br><span class="line">注意有些shell使用!来执行历史记录里的命令,所以要使用\\.</span><br><span class="line">-e trace=set</span><br><span class="line">只跟踪指定的系统 调用.例如:-e trace=open,close,rean,write表示只跟踪这四个系统调用.默认的为set=all.</span><br><span class="line">-e trace=file</span><br><span class="line">只跟踪有关文件操作的系统调用.</span><br><span class="line">-e trace=process</span><br><span class="line">只跟踪有关进程控制的系统调用.</span><br><span class="line">-e trace=network</span><br><span class="line">跟踪与网络有关的所有系统调用.</span><br><span class="line">-e strace=signal</span><br><span class="line">跟踪所有与系统信号有关的 系统调用</span><br><span class="line">-e trace=ipc</span><br><span class="line">跟踪所有与进程通讯有关的系统调用</span><br><span class="line">-e abbrev=set</span><br><span class="line">设定 strace输出的系统调用的结果集.-v 等与 abbrev=none.默认为abbrev=all.</span><br><span class="line">-e raw=set</span><br><span class="line">将指 定的系统调用的参数以十六进制显示.</span><br><span class="line">-e signal=set</span><br><span class="line">指定跟踪的系统信号.默认为all.如 signal=!SIGIO(或者signal=!io),表示不跟踪SIGIO信号.</span><br><span class="line">-e read=set</span><br><span class="line">输出从指定文件中读出 的数据.例如:</span><br><span class="line">-e read=3,5</span><br><span class="line">-e write=set</span><br><span class="line">输出写入到指定文件中的数据.</span><br><span class="line">-o filename</span><br><span class="line">将strace的输出写入文件filename</span><br><span class="line">-p pid</span><br><span class="line">跟踪指定的进程pid.</span><br><span class="line">-s strsize</span><br><span class="line">指定输出的字符串的最大长度.默认为32.文件名一直全部输出.</span><br><span class="line">-u username</span><br><span class="line">以username 的UID和GID执行被跟踪的命令</span><br></pre></td></tr></table></figure>
+<p>当服务器卡顿时，可以通过strace系统调用查看特定进程的系统调用执行情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strace -c -tt -o ./server.log -p 26844</span><br></pre></td></tr></table></figure>
+<p>输出如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">% time     seconds  usecs/call     calls    errors syscall</span><br><span class="line">------ ----------- ----------- --------- --------- ----------------</span><br><span class="line">100.00    0.170843        2512        68           epoll_wait</span><br><span class="line">------ ----------- ----------- --------- --------- ----------------</span><br><span class="line">100.00    0.170843                    68           total</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/20/浅谈Linux线程模型/" rel="next" title="浅谈Linux线程模型">
+                <i class="fa fa-chevron-left"></i> 浅谈Linux线程模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程基础"><span class="nav-number">2.</span> <span class="nav-text">进程基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基础概念"><span class="nav-number">2.0.1.</span> <span class="nav-text">基础概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程描述符"><span class="nav-number">2.0.2.</span> <span class="nav-text">进程描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程创建"><span class="nav-number">2.0.3.</span> <span class="nav-text">进程创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#上下文切换"><span class="nav-number">2.0.4.</span> <span class="nav-text">上下文切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#init进程"><span class="nav-number">2.0.5.</span> <span class="nav-text">init进程</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#进程应用"><span class="nav-number">3.</span> <span class="nav-text">进程应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程间通信"><span class="nav-number">3.0.1.</span> <span class="nav-text">进程间通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#信号处理"><span class="nav-number">3.0.2.</span> <span class="nav-text">信号处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台进程与守护进程"><span class="nav-number">3.0.3.</span> <span class="nav-text">后台进程与守护进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浅谈nginx多进程模型"><span class="nav-number">3.0.4.</span> <span class="nav-text">浅谈nginx多进程模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用工具介绍"><span class="nav-number">4.</span> <span class="nav-text">常用工具介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ps-查看进程的基本属性"><span class="nav-number">4.0.1.</span> <span class="nav-text">ps: 查看进程的基本属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lsof-查看进程打开的文件情况"><span class="nav-number">4.0.2.</span> <span class="nav-text">lsof: 查看进程打开的文件情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#netstat-查看网络连接情况"><span class="nav-number">4.0.3.</span> <span class="nav-text">netstat: 查看网络连接情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#strace-查看系统调用情况"><span class="nav-number">4.0.4.</span> <span class="nav-text">strace: 查看系统调用情况</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
+        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

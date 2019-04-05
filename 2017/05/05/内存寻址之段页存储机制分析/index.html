@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,内存管理,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
+<meta name="keywords" content="Linux,内存管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存寻址之段页存储机制分析">
+<meta property="og:url" content="https://blog.lecury.cn/2017/05/05/内存寻址之段页存储机制分析/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-05T08:26:37.795Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内存寻址之段页存储机制分析">
+<meta name="twitter:description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2017/05/05/内存寻址之段页存储机制分析/">
+
+
+
+
+
+  <title>内存寻址之段页存储机制分析 | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2017/05/05/内存寻址之段页存储机制分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">内存寻址之段页存储机制分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-05T16:30:30+08:00">
+                2017-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/05/05/内存寻址之段页存储机制分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/05/05/内存寻址之段页存储机制分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/05/05/内存寻址之段页存储机制分析/" class="leancloud_visitors" data-flag-title="内存寻址之段页存储机制分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。</p>
+<p>要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。</p>
+<h2 id="内存寻址方式的发展历程"><a href="#内存寻址方式的发展历程" class="headerlink" title="内存寻址方式的发展历程"></a>内存寻址方式的发展历程</h2><p>首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依曼的体系结构，这个体系结构是以存储为中心的，也就是说所有的运算的前提都是先从内存中取得数据，所以内存寻址技术从某种程度上代表了计算机技术。</p>
+<h4 id="直接寻址"><a href="#直接寻址" class="headerlink" title="直接寻址"></a>直接寻址</h4><p>在处理器发展的早期阶段，Intel 公司推出了第一款8位的处理器–8080，它的内存寻址的方式简单粗暴，程序都是通过硬编码的形式绝对定位到内存地址。这种情况下的程序都有明显的缺点：可控性弱、难以重定位、难以维护等。</p>
+<h4 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h4><p>很快在 Intel 推出的另一款处理器 8086 中，它可以寻址空间达到 1M，即地址线扩展到了 20 位，由于当时制造20位的寄存器比较困难，为了能在 16 位的寄存器的基础上寻址 20 位的地址空间，引入了一个重要的概念——<code>段</code>，段的地址存放在寄存器中，换句话说把 1M 的空间分成数个 64K（16位寄存器可寻址）的段来管理。所以8086中的分段机制的内存寻址为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">段基址左移4位 + 偏移 = 物理地址</span><br></pre></td></tr></table></figure></p>
+<p>为了很好的支持分段机制，8086 处理器为程序使用的代码段、数据段、堆栈段分别提供了专门的 16 位寄存器用于保存这些段的段基址。引入了分段机制后，程序的地址不再需要硬编码了，调试错误也更加容易定位，同时更加重要的是支持了更大的内存地址空间。</p>
+<h4 id="分页与虚拟内存"><a href="#分页与虚拟内存" class="headerlink" title="分页与虚拟内存"></a>分页与虚拟内存</h4><p>分页机制第一次出现在 80386 的处理器中，这是内存寻址方式的一个重大突破，对后来的计算机系统产生了很大影响。80386处理器寻址空间达到 32 位，是为了配合<code>虚拟内存</code>技术而引入了分页机制，接下来简单的说下虚拟内存技术。</p>
+<p>简单的来说，<code>虚拟内存</code>技术<b>允许程序使用的内存大于计算机的实际内存</b>。举个简单例子来说，运行一个大型游戏的时候，它需要 5G 内存，但是 32 位的笔记本最大支持 4G 内存，而冯.诺依曼体系告诉我们，程序运行的时候，需要将程序装载到内存中才可以运行，那么难道这个游戏就玩不了了么？不是的，借助虚拟内存技术就可以运行这个程序了，只不过可能会卡点。</p>
+<p>虚拟内存技术本质上将部分硬盘空间映射到内存中的一种技术，这样使得程序可以使用的内存空间变大了。简单的做法是如果程序访问的地址不在内存中时（放在外部磁盘空间中），就需要将访问地址所对应磁盘空间的程序内容加载到内存中，在加载的过程中可能面临着旧程序内容的置换。如何方便的管理这些<code>置换</code>或者<code>加载</code>的内容呢？操作系统引入了<code>页</code>的概念，页是一个存储单位，一般为4K 大小。</p>
+<p>话说回来能通过<code>段机制</code>管理这些被置换和加载的内容么？因为段的大小不定，因此不方便把整段大小的虚拟空间在内存和磁盘之间调来调去，需要一个更小更灵活的存储单位——页，管理换进换出的机制称为<code>页机制</code>。</p>
+<p>引入分页机制后，通过段机制转换得到的地址仅仅是一个中间地址——线性地址，线性地址还需要通过页机制来转变成实际的物理地址。总结一下内存寻址过程，程序中使用的逻辑地址到最后的物理地址的转换过程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">逻辑地址 --&gt;(分段机制)  线性地址  --&gt;(分页机制) 物理地址</span><br></pre></td></tr></table></figure></p>
+<h2 id="内存寻址过程分析"><a href="#内存寻址过程分析" class="headerlink" title="内存寻址过程分析"></a>内存寻址过程分析</h2><p>简单的介绍了一下操作系统内存寻址的发展历程，接下来细致的分析一下分段和分页机制内存寻址的过程。首先先简单的说下逻辑地址、线性地址、物理地址的概念：</p>
+<ul>
+<li>逻辑地址：程序代码中一个操作数或者一条指令的地址</li>
+<li>线性地址：虚拟地址可映射 4G 内存空间（分页机制的产物，逻辑上连续）</li>
+<li>物理地址：处理器的引脚发送到内存总线上的电信号相对应</li>
+</ul>
+<h2 id="分段机制详解"><a href="#分段机制详解" class="headerlink" title="分段机制详解"></a>分段机制详解</h2><p>代码中使用到的逻辑地址由两部分组成：</p>
+<ul>
+<li><code>段选择符</code>: 16 位长的字段</li>
+<li><code>段内偏移地址</code>：32 位长的字段（最大的段大小为 4GB）</li>
+</ul>
+<p>为了快速找到<code>段选择符</code>所指定的段的位置，处理器提供了段寄存器（<code>cs</code>、<code>ss</code>、<code>ds</code>、<code>es</code>、<code>fs</code>、<code>gs</code>），相比于 8086 来说，80386 新增了 <code>fs</code>、<code>gs</code> 附加段寄存器，主要是为了减少 <code>es</code> 这个寄存器的负担引入的。</p>
+<p>值得注意的是 <code>cs</code> 寄存器，它含有一个 2 位的字段，用以指定当前 CPU 的特权等级 DPL，3 为用户态，0 为内核态。</p>
+<h4 id="段描述符"><a href="#段描述符" class="headerlink" title="段描述符"></a>段描述符</h4><p>前面说到<code>段选择符</code>是一个 16 位的字段，格式如下：</p>
+<ul>
+<li>15 ~ 3 位：Index 索引号</li>
+<li>2 位：TI 标志，指明段描述符在 GDT（TI=0）中或者 LDT（TI=1）中</li>
+<li>1 ~ 0 位：RPL 标志，请求者的特权级</li>
+</ul>
+<p>由<code>段选择符</code>中的索引号可以索引到段的信息，段的信息是由8字节的<code>段描述符</code>表示，<code>段描述符</code>存放在<code>全局描述符表</code>（GDT）和<code>局部描述符表</code>（LDT）中。同样 GDT 和 LDT 的地址也是存放在寄存器中的，通常系统初始化的时候会初始化 <code>gdtr</code> 控制寄存器，写入 GDT 表的地址，如果每个进程除了存放 GDT 外，还需要自己的附加的段，就可以创建一个 <code>LDT</code>，将 <code>LDT</code> 表的地址写进 <code>ldtr</code> 寄存器中。</p>
+<h4 id="快速访问段描述符"><a href="#快速访问段描述符" class="headerlink" title="快速访问段描述符"></a>快速访问段描述符</h4><p>因为段寄存器中存放的只是<code>段选择符</code>的地址，由<code>段选择符</code>来索引实际的<code>段描述符</code>还需要查找 GDT 或者 LDT 表。为了加速逻辑地址到线性地址的转换过程，80x86提供了一种附加的非编程寄存器，即每当一个<code>段选择符</code>装入寄存器时，相对应的<code>段描述符</code>就由内存装入到这个非编程寄存器中。</p>
+<p>这样当针对那个段的逻辑地址转换线性地址时，就不用访问 GDT 或者 LDT 表，直接引用存放这个<code>段描述符</code>的非编程寄存器就好了。</p>
+<h4 id="分段机制下地址转换的过程"><a href="#分段机制下地址转换的过程" class="headerlink" title="分段机制下地址转换的过程"></a>分段机制下地址转换的过程</h4><p>一个逻辑地址由<code>段选择符</code>和<code>段内偏移组成</code>，在转换成线性地址时，分段单元执行以下操作：</p>
+<ul>
+<li>先检查段<code>选择符</code>的 TI 字段，判断这个段的<code>段描述符</code>是存放在 GDT 中还是 LDT 中</li>
+<li>然后由<code>段选择符</code>中的 Index 索引到实际的<code>段描述符</code></li>
+<li>将 Index 索引到实际的<code>段描述符</code>的地址✖️8，再加上 <code>gdtr</code> 或者 <code>ldtr</code> 寄存器中的值。这个过程就完成了<code>段</code>起始的位置的计算</li>
+<li>最后把计算的结果加上逻辑地址中的<code>段内偏移</code>就得到了线性地址</li>
+</ul>
+<h4 id="Linux中的分段"><a href="#Linux中的分段" class="headerlink" title="Linux中的分段"></a>Linux中的分段</h4><p>Linux 以非常有限的方式使用分段，更偏向使用分页的形式管理内存，因为：</p>
+<ul>
+<li>当所有进程使用相同的段寄存器时，内存管理将变得简单，也就是说它们可以共享同一组线性地址</li>
+<li>Linux 的设计目标是可以移植到大部分平台上，然而 RISC 对分段支持有限</li>
+</ul>
+<p>在 Linux 运行在 80x86 平台上使用到了分段机制，并通过定义四个宏来定义相应的段选择符</p>
+<ul>
+<li>__USER_CS ：用户态代码段选择符</li>
+<li>__USER_DS : 用户态数据段选择符</li>
+<li>__KERNEL_CS ：内核态代码段选择符</li>
+<li>__KERNEL_DS : 内核态数据段选择符</li>
+</ul>
+<p>也就是说对内核代码段寻址时，只需要将 __KERNEL_CS 的值装入 <code>cs</code> 段寄存器即可，其中 <code>cs</code> 段寄存器中的段选择符所指定的 RPL 值，表明了当前进程是属于用户态还是内核态。</p>
+<p>对于 GDT 表来说，在 Linux 中每个 CPU 对应一个 GDT 表，所有的 GDT 都存放在 <code>cpu_gdt_table</code> 中，而 GDT 的地址和它们的大小，则存放在 <code>cpu_gdt_descr</code> 数组中，这些都将在系统启动之前初始化。</p>
+<h2 id="分页机制详解"><a href="#分页机制详解" class="headerlink" title="分页机制详解"></a>分页机制详解</h2><p>前面提到分页机制是为了配合操作系统中的虚拟内存管理而引入的，分页机制目的是为了将线性地址转换成物理地址。</p>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>简要讲述一下<code>页</code>、<code>页框</code>、<code>页表</code>的概念</p>
+<ul>
+<li>页：对应着线性地址，线性地址被分成以固定大小为单位的组，称为页，页大小一般为4K</li>
+<li>页框：对应着物理地址，物理地址也就是 RAM，被分成固定大小的页框，每个页框对应一个实际的页</li>
+<li>页表：用来将页映射到具体的页框中的数据结构</li>
+</ul>
+<h4 id="常规分页"><a href="#常规分页" class="headerlink" title="常规分页"></a>常规分页</h4><p>因为每个页的大小为 4KB，为了映射 4GB 的物理空间，页表中将会有 1MB（2^20） 的映射项，对应每个程序来都要保存一个这么大的页表项是难以接受的，所以引出了多级页表的概念，也称为<code>页目录</code>。</p>
+<p>也就是说线性地址的转换过程需要两步，首先是查找<code>页目录</code>找到具体的页表，然后查找页表，找到具体的页。如果这个页不存在 RAM 中，即缺页，还会引发缺页中断，申请调页；如果存在 RAM 就可以完成线性地址到具体物理地址的转换了。</p>
+<p>分页机制中每个活动进程必须有一个页目录，不必为进程的所有页表都分配 RAM，只有实际使用到时才分配，这样才会更有效率，进程正在使用的<code>页目录</code>地址存放在 <code>cr3</code> 寄存器中。</p>
+<h4 id="线性地址字段分析"><a href="#线性地址字段分析" class="headerlink" title="线性地址字段分析"></a>线性地址字段分析</h4><p>线性地址分成3部分，如下所示：</p>
+<ul>
+<li>Directory：决定页目录中的目录项，10位大小</li>
+<li>Table：决定页表中的表项，10位大小</li>
+<li>Offset：页框的相对位置</li>
+</ul>
+<p>因为 Directory 和 Table 字段都是 10 位大小，所以页目录项和页表都多达 1024 项。页目录和页表的数据结构类似，都包含着下面字段：</p>
+<ul>
+<li>Present标志：1（页在主存中）0（不在主存，引发缺页中断）</li>
+<li>Accessed标志：每当分页单元对相应页框寻址时就设置这个标志</li>
+<li>Dirty标志：只应用于页表项，每当对一个页框进行写操作时就会设置这个</li>
+<li>Read/Write标志：含页或页表的存取权限</li>
+<li>User/Supervisor标志：含有访问页或页表的特权级</li>
+<li>PCD和PWT标志：控制硬件高速缓存处理页和页表的方式</li>
+<li>Page Size标志：只用于页目录项，如果设置为1，那么页框的大小为2MB或者4MB</li>
+<li>Global标志：只用于页表项，防止常用页从 TLB 高速缓存中刷新出去</li>
+</ul>
+<h4 id="转换后援缓冲器-TLB"><a href="#转换后援缓冲器-TLB" class="headerlink" title="转换后援缓冲器 TLB"></a>转换后援缓冲器 TLB</h4><p>除了内部的硬件高速缓存外，还包含了一个转换后援缓冲器 TLB 的高速缓存用以加快线性地址的转换。当一个线性地址第一次使用时，通过慢速访问 RAM 中的页表计算出相应的物理地址，同时物理地址被存放到 TLB 的表项中，以便下次对同一个物理地址的引用可以快速的得到转换。</p>
+<p>在多处理器中，每个 CPU 都有自己的 TLB。当 CPU 的 <code>cr3</code> 寄存器被修改时，那么 TLB 的所有项都变得无效了，因为当前使用的是新的<code>页目录</code>了。</p>
+<h4 id="Linux中的分页"><a href="#Linux中的分页" class="headerlink" title="Linux中的分页"></a>Linux中的分页</h4><p>两级页表对 32 位系统是足够了，但为了支持 64 位系统，还需要引入多级页表，Linux 从 2.6.11 版本开始引入四级页表：</p>
+<ul>
+<li>页全局目录</li>
+<li>页上级目录</li>
+<li>页中间目录</li>
+<li>页表</li>
+</ul>
+<p>对于没有启用物理地址扩展的 32 位系统，两级页表已经足够了，这时通过将<code>页上级目录</code>和<code>页中间目录</code>位全部置0，从而保持了两级页表的格式。</p>
+<p>在内存初始化阶段，内核必须建立一个物理地址映射来指定哪些物理地址范围对内核可用，哪些不可用。内核将以下页框记为保留：</p>
+<ul>
+<li>在不可用的物理地址范围的页框</li>
+<li>含有内核代码和已初始化的数据结构的页框</li>
+</ul>
+<p>保留页框的页决不能被动态的分配或交换到磁盘上。进程的线性地址空间分成2个部分：</p>
+<ul>
+<li>从 0x00000000 到 0xbfffffff 的线性地址，无论线程运行在内核态还是用户态都可以寻址</li>
+<li>从 0xc0000000 到 0xffffffff 的线性地址，只有内核态线程才可以寻址</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/内存管理/" rel="tag"># 内存管理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/14/基于kubernetes的Docker-Registry的高可用部署/" rel="next" title="基于kubernetes的Docker Registry的高可用部署">
+                <i class="fa fa-chevron-left"></i> 基于kubernetes的Docker Registry的高可用部署
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/Linux-Namespace简介/" rel="prev" title="Linux Namespae介绍">
+                Linux Namespae介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存寻址方式的发展历程"><span class="nav-number">2.</span> <span class="nav-text">内存寻址方式的发展历程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接寻址"><span class="nav-number">2.0.1.</span> <span class="nav-text">直接寻址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分段"><span class="nav-number">2.0.2.</span> <span class="nav-text">分段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页与虚拟内存"><span class="nav-number">2.0.3.</span> <span class="nav-text">分页与虚拟内存</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#内存寻址过程分析"><span class="nav-number">3.</span> <span class="nav-text">内存寻址过程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分段机制详解"><span class="nav-number">4.</span> <span class="nav-text">分段机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符"><span class="nav-number">4.0.1.</span> <span class="nav-text">段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速访问段描述符"><span class="nav-number">4.0.2.</span> <span class="nav-text">快速访问段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分段机制下地址转换的过程"><span class="nav-number">4.0.3.</span> <span class="nav-text">分段机制下地址转换的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux中的分段"><span class="nav-number">4.0.4.</span> <span class="nav-text">Linux中的分段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页机制详解"><span class="nav-number">5.</span> <span class="nav-text">分页机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">5.0.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常规分页"><span class="nav-number">5.0.2.</span> <span class="nav-text">常规分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线性地址字段分析"><span class="nav-number">5.0.3.</span> <span class="nav-text">线性地址字段分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转换后援缓冲器-TLB"><span class="nav-number">5.0.4.</span> <span class="nav-text">转换后援缓冲器 TLB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux中的分页"><span class="nav-number">5.0.5.</span> <span class="nav-text">Linux中的分页</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
+        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="论文,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="背景简介组里目前支持了一个非常重要的业务，为了支持业务快速的扩展，更好的进行产品维护，决定成立一个虚拟化学习小组。主要宗旨就是为了提升大家对虚拟化、资源管理这方面知识的理解，共同调研生产环境下关于资源虚拟化方面的主流解决方案 Borg论文解读先贴上原文的地址：http://static.googleusercontent.com/media/research.google.com/en//pubs">
+<meta name="keywords" content="论文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Borg论文解读">
+<meta property="og:url" content="https://blog.lecury.cn/2017/01/14/Borg论文解读/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="背景简介组里目前支持了一个非常重要的业务，为了支持业务快速的扩展，更好的进行产品维护，决定成立一个虚拟化学习小组。主要宗旨就是为了提升大家对虚拟化、资源管理这方面知识的理解，共同调研生产环境下关于资源虚拟化方面的主流解决方案 Borg论文解读先贴上原文的地址：http://static.googleusercontent.com/media/research.google.com/en//pubs">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://blog.lecury.cn/images/Borg/1.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Borg/2.png">
+<meta property="og:updated_time" content="2019-04-05T08:24:09.499Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Borg论文解读">
+<meta name="twitter:description" content="背景简介组里目前支持了一个非常重要的业务，为了支持业务快速的扩展，更好的进行产品维护，决定成立一个虚拟化学习小组。主要宗旨就是为了提升大家对虚拟化、资源管理这方面知识的理解，共同调研生产环境下关于资源虚拟化方面的主流解决方案 Borg论文解读先贴上原文的地址：http://static.googleusercontent.com/media/research.google.com/en//pubs">
+<meta name="twitter:image" content="https://blog.lecury.cn/images/Borg/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2017/01/14/Borg论文解读/">
+
+
+
+
+
+  <title>Borg论文解读 | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2017/01/14/Borg论文解读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Borg论文解读</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-14T22:00:30+08:00">
+                2017-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/14/Borg论文解读/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/01/14/Borg论文解读/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/01/14/Borg论文解读/" class="leancloud_visitors" data-flag-title="Borg论文解读">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景简介"><a href="#背景简介" class="headerlink" title="背景简介"></a>背景简介</h2><p>组里目前支持了一个非常重要的业务，为了支持业务快速的扩展，更好的进行产品维护，决定成立一个虚拟化学习小组。主要宗旨就是为了提升大家对虚拟化、资源管理这方面知识的理解，共同调研生产环境下关于资源虚拟化方面的主流解决方案</p>
+<h2 id="Borg论文解读"><a href="#Borg论文解读" class="headerlink" title="Borg论文解读"></a>Borg论文解读</h2><p>先贴上原文的地址：<a href="http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43438.pdf" target="_blank" rel="noopener">http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43438.pdf</a></p>
+<p>这里先做一下论文的简要梳理，然后对比一下开源平台kubernetes</p>
+<h4 id="Borg简介"><a href="#Borg简介" class="headerlink" title="Borg简介"></a>Borg简介</h4><p>Borg是什么呢？它是Google公司的大规模分布式的集群管理系统，负责管理、调度、运行和监控公司绝大部分的应用程序和框架包括Gmail、Google Docs、Web Search这样的应用程序，也包含一些底层的框架Map Reduce计算框架、GFS分布式的存储系统、Big Table。主要是解决了这么几个问题</p>
+<ul>
+<li>隐藏了资源管理和故障处理细节，使其用户可以专注应用开发</li>
+<li>支持应用程序做到高可用和高可靠</li>
+<li>提升了资源利用率，有效的降低了成本</li>
+</ul>
+<h4 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h4><p>整体来看，Borg是一个典型的分布式平台架构，每个节点部署一个代理（Borglet），统一由BorgMaster来管理这些节点的运行情况。同时对外部而言，Borg提供了命令行和Web UI的方式访问Borg系统，提交任务或者申请资源。这些请求会发送到BorgMaster那里，然后由BorgMaster来决定后续的操作，下面是Borg的基本架构图</p>
+<p><img src="/images/Borg/1.png" alt></p>
+<p>一套由BorgMaster和Borglet部署的Borg环境称为cell，一个IDC可以部署多个cell。一般来说为了防止单点问题存在，每个cell都要由五个BorgMaster组成，它们通过paxos协议进行选主和同步，所有的写操作都要由leader来执行。BorgMaster要定期轮询所有Borglet节点的状态，如果机器规模很大的情况下就会造成负载过重，因此Borg系统将轮询工作平摊给每个BorgMaster的follower处理，只有Borglet的状态发生变化时，才会通知leader处理。</p>
+<p>为了减少BorgMaster的压力、灵活的迭代调度器的模型，Borg系统融入了omega的设计，将调度器scheduler作为一个独立的服务拆分出来了~ 下面梳理一下调度器方面的细节</p>
+<h4 id="Borg的调度器"><a href="#Borg的调度器" class="headerlink" title="Borg的调度器"></a>Borg的调度器</h4><p>决策调度的过程主要涉及到以下两个方面：<b>适用性</b>(feasibility checking)和<b>最适合</b>(scoring)</p>
+<p><b>适用性：</b>是指找到哪些机器能够负载（运行）这个任务<br><b>最适合：</b>是指在这些适合的机器中，按照一定的打分策略选择分数最高的那个</p>
+<h5 id="适用性估量"><a href="#适用性估量" class="headerlink" title="适用性估量"></a>适用性估量</h5><p>Borg会对每个任务Task做了一个资源上的估量，下图是一张资源限制图的说明：<br><img src="/images/Borg/2.png" alt></p>
+<p>最外层的那个虚线是这个Task的配额，这是一个硬性的限制，如果超过了这个限制，这个Task是无法运行起来的。实际生产环境中，对一个Task实际需要多少资源是很难估量的，所以Borg提出了一种资源回收的解决方法，它在Task启动300秒之后，就会进行一个资源回收的工作，上图中黄色区域是程序实际使用的资源，然后Borg会从外围的硬限制资源区域慢慢向里推进，直到推到一个安全的区域，那么剩下的资源Borg可以重新利用起来。</p>
+<p>绿色区域的那个范围是一个动态的过程，Borg会隔几秒就会重新计算一下应用程序耗费了多少资源。为了更合理的进行回收资源的过程，它对应用类型做了区分，分成生产型的应用（prod task）和非生产型的应用(non-prod task)，这些概念会在一下章节中提及。</p>
+<h5 id="最适合"><a href="#最适合" class="headerlink" title="最适合"></a>最适合</h5><p>根据Task的资源估量，来选出哪些机器可以负载这个Task，然后通过一些打分策略，选择分数最高的机器来运行这个Task。目前有2种打分模型一种是考虑负载均衡，将负载平均分配到所有机器上，这样做的代价是增加了碎片，对于那些需要大部分的机器的Task来说，是很难获取到足够的资源的，论文中也称为<b>最差匹配</b>策略。</p>
+<p>还有一种相对应的分配策略称为<b>最佳匹配</b>：就是把机器塞的越满越好，这样能够一下一批空闲的机器给用户。这样的策略对那些资源预估不足的用户来说，是很不友好的，比如用户的Task负载突然升高将会大大降低Task的服务质量。</p>
+<p>Borg论文里使用的是两种方式混合的，试图减少碎片资源。还有一个比较明显的特征是如果一些高优先级的任务没有找到合适的资源来运行服务时，就会试图驱除一些低优先级的任务来达到释放资源的目的。</p>
+<p>启动延迟（Task从提交到真正运行起来）是一个比较关注的问题。Borg为了减少Task的启动时间，scheduler希望机器上已经有足够的包(程序和数据)：大部分包是只读的所以可以被分享和缓存。</p>
+<h4 id="任务类型"><a href="#任务类型" class="headerlink" title="任务类型"></a>任务类型</h4><p>运行于Borg系统之上的应用主要分成两类，一类称为<b>prod task</b>：启动后作为一个服务存在，长时间不断接受并处理收到的请求。这类任务对请求处理延迟和可用性比较敏感，多数服务于终端用户（比如Gmail、Google Docs等）这些应用也称为<b>在线服务</b>。另一类应用称为non-prod task，这类任务执行结束后自行退出，对执行时间和执行失败不那么敏感，也可称这些服务为<b>离线作业</b>。</p>
+<p>对任务类型进行区分有很多好处，因为这两种负载的差异性比较大，不能以相同的调度策略来对待。对任务类型进行区分一方面可以优化调度策略（prod任务可以通过抢占non-prod任务来提高服务的可用性），一方面可以针对任务类型来进行相应的优化（对prod任务来说需要关注的是可用性，对non-prod来说系统的整体吞吐才比较重要）</p>
+<h4 id="服务发现和命名机制"><a href="#服务发现和命名机制" class="headerlink" title="服务发现和命名机制"></a>服务发现和命名机制</h4><p>光是创建和部署task是不够的：一个服务的客户端和其他系统需要能找到它们。为了实现这一点，Borg內建了一个Borg Name Service的系统，这个系统将Task的主机名、端口、属性等信息写入到一个持久化高可用的文件里，以BNS为文件名放在Chubby中，通过访问这个文件的形式来发现Task的地址。</p>
+<p>每个Task都会有一个内置的HTTP服务，用来健康检查和收集各项性能指标信息，并通过Dashboard来展示出来。为了防止某些Task运行中产生大量的日志塞满磁盘，Borg会自动的滚动这些日志信息，会在Task结束后保留一小段时间用来调试。</p>
+<h4 id="为了提升资源利用率，Borg的做法"><a href="#为了提升资源利用率，Borg的做法" class="headerlink" title="为了提升资源利用率，Borg的做法"></a>为了提升资源利用率，Borg的做法</h4><p>Borg集群支持混布（离线作业和在线作业在一起调度）：为了实现这一点，Borg首次使用cgroup技术进行物理资源隔离。这个工作是后续众多容器技术的基础，早期的lxc以及后续的docker都得益于Google的贡献</p>
+<p>Borg支持优先级调度，支持抢占、支持超发：Borg上运行的任务都需要指定具体的优先级，主要分成四种任务：基础业务（monitoring）、在线业务（production）、离线计算（batch）、best-effort。best-effort是在机器利用率低峰期跑一些任务，不会保证任务的可靠性，这样可以大大提升集群整体的资源利用率。对于抢占策略，一般是高优先级抢占低优先级，不过对于production和monitoring来说是不可被抢占的。</p>
+<p>在系统运行的过程中，会出现这种情况：用户往往会多申请一部分资源，以确保服务压力突增时有一定的冗余空间。如果在分配资源时，以用户的请求值来实际的分配资源，那么就会导致集群累积大量的闲置资源。为此，borg提出  reclaimed-resource的概念解决这个问题（over-commit思想）。</p>
+<p>简单通过来说，如果节点有 100 的物理资源，这时候先以monitor/ production优先级申请 60，但是实际只使  40，那么这个节点就出现 (60-40)=20 的闲置资源(reclaimed-resource)。borg的处理思想是，当来有个batch/best-effort优先级的资源需求的时候，那么就认为这台机总共有（100+20=120）、还剩（120-60=60）的可分配资源， 对于monitor/production优先级的请求来说，则认为节点还有（100-60=40）的可分配。</p>
+<p>这种分配方式，确保在单机上分配给monitor/production级别任务的资源之和不会超过真实物理资源。当monitor/production级别的资源，增加到其申请的配额数的时候(比如服务器压力突升)，可以通过抢占低优先级任务来满足其需求。通过这种资源超发机制，大大提高了资源利用率。</p>
+<h4 id="Borg的经验和教训"><a href="#Borg的经验和教训" class="headerlink" title="Borg的经验和教训"></a>Borg的经验和教训</h4><p>Job是唯一的Task分组机制，无法很好的标识服务间的关系，因此Borg无法很好的管理多个Job组成的单个服务。为了避免这些困难，Kubernetes不用job这个概念，而是用标签(label)来管理它的调度单位(pods)，标签是任意的键值对，用户可以把标签打在系统的所有对象上。Kubernetes用标签选择这种方式来选取对象，完成操作。这样就比固定的job分组更加灵活好用。</p>
+<p>每台机器只有1个IP把事情弄复杂了，这种策略将端口和IP作为资源参与到Task调度中去了，对于Task的发起者也要事先声明一下需要的端口。Kubernetes可以用一种更用户友好的方式来消解这些复杂性：所有pod和service都可以有一个自己的IP地址，允许开发者选择端口而不是委托基础设施来帮他们选择，这些就消除了基础设置管理端口的复杂性。</p>
+<h2 id="Borg与Kubernetes的对比"><a href="#Borg与Kubernetes的对比" class="headerlink" title="Borg与Kubernetes的对比"></a>Borg与Kubernetes的对比</h2><p>Kubernetes是一个开源的容器集群系统，为容器化的应用提供资源调度、部署运行、服务发现、扩容缩容等整一套功能。kubernetes与Borg非常类似，是Borg的一个开源实现。Borg底层是lxc容器，而kubernetes支持不止一种容器类型，默认是docker容器，还支持着rocket容器。Borg是C++编写的，而kubernetes则是Go语言编写的，Borg在集群调度性能上做了很多的优化，但是kubernetes对于调度这块没有做过多的优化措施，仅仅是一些机器适用性的选择。Borg可以支持上万的集群规模，而kubernetes支持的机器数有限，千台左右。</p>
+<p>Kubernetes可以说是Borg的简化版的实现，它虽然不能像Borg那样支持超大规模的集群、无法使用优秀的调度策略，但是它弥补了很多Borg设计之初的不足。比如细分了任务的类型，通过Pod形式作为一个服务的管理单位；其次kubernetes将资源隔离交给基础容器去做，为每一个服务单独赋予一个IP，而不是像Borg那样，一个机器上的所有应用共享本地的IP和端口，这导致端口成为资源调度的一部分，复杂了资源管理的过程。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/论文/" rel="tag"># 论文</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/07/实习半年的阶段性总结/" rel="next" title="实习半年的总结">
+                <i class="fa fa-chevron-left"></i> 实习半年的总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/14/基于kubernetes的Docker-Registry的高可用部署/" rel="prev" title="基于kubernetes的Docker Registry的高可用部署">
+                基于kubernetes的Docker Registry的高可用部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景简介"><span class="nav-number">1.</span> <span class="nav-text">背景简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Borg论文解读"><span class="nav-number">2.</span> <span class="nav-text">Borg论文解读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Borg简介"><span class="nav-number">2.0.1.</span> <span class="nav-text">Borg简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#整体框架"><span class="nav-number">2.0.2.</span> <span class="nav-text">整体框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Borg的调度器"><span class="nav-number">2.0.3.</span> <span class="nav-text">Borg的调度器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#适用性估量"><span class="nav-number">2.0.3.1.</span> <span class="nav-text">适用性估量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#最适合"><span class="nav-number">2.0.3.2.</span> <span class="nav-text">最适合</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任务类型"><span class="nav-number">2.0.4.</span> <span class="nav-text">任务类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务发现和命名机制"><span class="nav-number">2.0.5.</span> <span class="nav-text">服务发现和命名机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为了提升资源利用率，Borg的做法"><span class="nav-number">2.0.6.</span> <span class="nav-text">为了提升资源利用率，Borg的做法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Borg的经验和教训"><span class="nav-number">2.0.7.</span> <span class="nav-text">Borg的经验和教训</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Borg与Kubernetes的对比"><span class="nav-number">3.</span> <span class="nav-text">Borg与Kubernetes的对比</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
+        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

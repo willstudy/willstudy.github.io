@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="系统安全,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me. Lab 4 :  AuthenticationLab Environment Setup">
+<meta name="keywords" content="系统安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Authentication">
+<meta property="og:url" content="https://blog.lecury.cn/2015/12/20/Authentication/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me. Lab 4 :  AuthenticationLab Environment Setup">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/1.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/2.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/3.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/4.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/5.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/6.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/7.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/8.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/9.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/10.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/11.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/12.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/13.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/14.png">
+<meta property="og:image" content="https://blog.lecury.cn/images/Authentication/15.png">
+<meta property="og:updated_time" content="2019-04-05T07:51:48.461Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Authentication">
+<meta name="twitter:description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me. Lab 4 :  AuthenticationLab Environment Setup">
+<meta name="twitter:image" content="https://blog.lecury.cn/images/Authentication/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2015/12/20/Authentication/">
+
+
+
+
+
+  <title>Authentication | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2015/12/20/Authentication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Authentication</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-20T18:32:30+08:00">
+                2015-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/12/20/Authentication/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2015/12/20/Authentication/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2015/12/20/Authentication/" class="leancloud_visitors" data-flag-title="Authentication">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me.</p>
+<h2 id="Lab-4-Authentication"><a href="#Lab-4-Authentication" class="headerlink" title="Lab 4 :  Authentication"></a><strong>Lab 4 :  Authentication</strong></h2><h3 id="Lab-Environment-Setup"><a href="#Lab-Environment-Setup" class="headerlink" title="Lab Environment Setup"></a><strong>Lab Environment Setup</strong></h3><ul>
+<li>Platform  :  Ubuntu 12.04 ( 64 bits )  </li>
+<li>Contents  :         <a href="http://219.219.220.220:8091/~csslab2015/lab4/Lab4-Authentication.html" target="_blank" rel="noopener">Authentication</a></li>
+</ul>
+<h3 id="Part-A：Identity-Forgery"><a href="#Part-A：Identity-Forgery" class="headerlink" title="Part A：Identity Forgery"></a><strong>Part A：Identity Forgery</strong></h3><p>There is a new service in the Touchstone web server: the transfer service. You can first register an account in the server and log in. You can now find the account page which will present the transferring interface, along with user name, login time, among other things.</p>
+<h4 id="Exercise-1"><a href="#Exercise-1" class="headerlink" title="Exercise 1 :"></a><strong>Exercise 1 :</strong></h4><p>There are many bugs and vulnerabilities in the current utility for transferring money. Find as many bugs as you can. For now, just focus on bugs that an adversary can trigger by giving unanticipated values to the transfer page. Think carefully about what kinds of inputs an attacker might provide, and try them out by entering them on the transfer page. Please write down detail descriptions of your observation in bugs.txt. (You should find at least 4 different bugs.)  </p>
+<ul>
+<li><p>In <strong>getValues</strong> function: these key-values was parsed from the HTTP’s body and stored in the <strong>temp[16]</strong> array without boundary checking. If constructed a HTTP POST which included a lot of ‘user=liuchang&amp;passwd=123&amp;…’ strings, the <strong>banksv</strong> process will be crashed rapidly.    </p>
+</li>
+<li><p>In <strong>handlePostLogin</strong> and <strong>handlePostRegister</strong> functions: there is a serious SQL injection attack here. Because when we execute these functions, the <strong>Db_checkUser Db_readBalance</strong> and <strong>Db_checkUserPasswd</strong> are called absolutely. However we can perform a SQL injection attack in these functions easily. For example, when a attack constructs a input about username likes : <strong>liuchang’;delete from user;</strong>, we will lost all user’s datas…  </p>
+</li>
+<li><p>In <strong>handlePostTransfer</strong> function: there is no checking about the input of <strong>money</strong> filed, if given a negative number and transferring money to anyone, it will get more and more money constantly.  </p>
+</li>
+<li><p>In <strong>handlePostTransfer</strong> function: if the transferring money is bigger than his account, it will result in a negative account… An important to note, it does not check whether the user exist in <strong>users.db</strong>.  </p>
+</li>
+<li><p>In <strong>handlePostTransfer</strong> function: it doesn’t check the receiver and the sender. Now we use <strong>LiuChang</strong> account to transfer 100 $ to <strong>LiuChang</strong>, the result is funny, <strong>LiuChang</strong> will obtain 100 $ additionally. Let’s review these codes nearly.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fromBalance = Db_readBalance (from);  <span class="comment">// 100$</span></span><br><span class="line"><span class="keyword">int</span> newFromBalance = fromBalance - money; <span class="comment">// 0$</span></span><br><span class="line"><span class="keyword">int</span> toBalance = Db_readBalance (to);  <span class="comment">// 100$</span></span><br><span class="line"><span class="keyword">int</span> newToBalance = toBalance + money;  <span class="comment">// 200$</span></span><br><span class="line">Db_writeBalance (from, newFromBalance); <span class="comment">// 0$</span></span><br><span class="line">Db_writeBalance (to, newToBalance);  <span class="comment">// 200$</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>If the sender and the receiver is the same person, it will get more money constantly.</p>
+<h4 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2 :"></a><strong>Exercise 2 :</strong></h4><p>Fix as many bugs as you can, from those you found above. Just keep your code as clean as possible. Also don’t forget to test your implementation after you fix the bugs.</p>
+<p>For the <strong>first bug</strong>: when we get key-values form HTTP body, we should check the boundary of the <strong>temp</strong> array, If exceed the boundary, we should response a error to the browser and finish this request.  </p>
+<p>For the <strong>second bug</strong>: we should check these input filed, and exclude some special characters, such as <strong> , ; ? </strong> and so on.    </p>
+<p>For the <strong>third bug</strong>: we should check the input of money filed, and ensure that it is a positive number.<br><img src="/images/Authentication/1.png" alt><br><img src="/images/Authentication/2.png" alt></p>
+<p>For the <strong>fourth bug</strong>: we should check the account and the receiver at first.<br><img src="/images/Authentication/3.png" alt><br><img src="/images/Authentication/4.png" alt><br><img src="/images/Authentication/5.png" alt><br><img src="/images/Authentication/6.png" alt></p>
+<p>For the <strong>fifth bug</strong>: we have many ways to fix this bug. Simple to say, we just judge that whether the two person are the same. Surely, we can also make efforts in other aspects, when calculated the value of new balance, we should update the date base at once, just likes this :<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fromBalance = Db_readBalance (from);</span><br><span class="line"><span class="keyword">int</span> newFromBalance = fromBalance - money;</span><br><span class="line">Db_writeBalance (from, newFromBalance);</span><br><span class="line"><span class="keyword">int</span> toBalance = Db_readBalance (to);</span><br><span class="line"><span class="keyword">int</span> newToBalance = toBalance + money;   <span class="comment">// a little stupid</span></span><br><span class="line">Db_writeBalance (to, newToBalance);</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/Authentication/7.png" alt><br><img src="/images/Authentication/8.png" alt></p>
+<h4 id="Exercise-3"><a href="#Exercise-3" class="headerlink" title="Exercise 3 :"></a><strong>Exercise 3 :</strong></h4><p>Read the source code of the login web page (in your browser), and the server’s source code. Make sure that you make it clear that how the server identify who is transferring.</p>
+<p><b>At first, if a new client comes, the <strong>server</strong> will <strong>accept</strong> a <strong>fd</strong> and send it to the <strong>httpd</strong> process. Then the <strong>httpd</strong> begins to parse the client’s requests, GET requests are sent to <strong>filesv</strong> process, while POST requests will be sent to <strong>banksv</strong> process.<br></b></p>
+<p><b>Before transferring money to others, <strong>banksv</strong> process parses the body of the request, and get the key-values from this body. If the first key is equal to <strong>Transfer</strong>, that’s to say, the user wants to transfer money to others. The <strong>banksv</strong> process identify who is transferring by the remaining key-values, such as <strong>transfer_from transfer_to</strong> and so on, and then start to update data base.<br></b></p>
+<p>To this point, it should be clear to us that we can fool the server. That is: if we can construct a fake POST with some specific HTTP body attributes (what should they be?), and send the request to the server, we can fool the server that a victim is transferring money. And the server will perform the transfer!</p>
+<h4 id="Exercise-4"><a href="#Exercise-4" class="headerlink" title="Exercise 4 :"></a><strong>Exercise 4 :</strong></h4><p>Try to construct a POST request about the money transferring, which steal money from some account if you know the victim’s account (it’s often the case). You can use browser.c or some tools, such as firebug to construct the request. Your request may look like this:</p>
+<p>We can construct a HTTP POST request like this :<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *req =<span class="string">"POST / HTTP/1.1\r\nContent-Length: 74\r\n\r\n"</span></span><br><span class="line">        <span class="string">"submit=Transfer&amp;transfer_from=abc&amp;transfer_to=LiuChang&amp;"</span></span><br><span class="line">        <span class="string">"transfer_money=100\r\n\r\n"</span>;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Exercise-5"><a href="#Exercise-5" class="headerlink" title="Exercise 5 :"></a><strong>Exercise 5 :</strong></h4><p>Locate the code which handles the post request in handle.c, and add more code. You may find the response header Set-cookie: value useful. When one user transfers money, you should identify the user by cookie.</p>
+<p><b>I am sorry about that I change a lot in this codes and ignore some design principles…</b></p>
+<p><strong>First of all</strong>, we should put forward such a problem about how to generate and save cookies ? In my way, I use a very large random integer as a cookie which can identify the unique user, may be repeated in very little probability, but who care. obtaining accurate values correspond to its user by guessing is impossible. I also add a filed named <strong>favorite number</strong>, it will describe clearly in <strong>Exercise 7</strong>, together they formed the cookie, like this :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username=random_number:favorite_number=user&apos;s input</span><br></pre></td></tr></table></figure></p>
+<p><strong>Secondly</strong>, the server saves and obtains this value by reading <strong>cookie.txt</strong> file. When a new user registered, we will generate a cookie for it and save its other information into <strong>cookie.txt</strong> file as well. After registered, the server should response a HTTP headers likes this :<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> * cookieFileOk = <span class="string">"HTTP/1.1 200 OK\r\nSet-Cookie: "</span>;</span><br><span class="line"><span class="keyword">int</span> cookie = lookup_cookie( name );</span><br><span class="line"><span class="keyword">int</span> favorite_number = Db_getFavoriteNumber( name );</span><br><span class="line"><span class="keyword">char</span> send_cookie[<span class="number">128</span>];</span><br><span class="line"><span class="keyword">char</span> info[<span class="number">512</span>];</span><br><span class="line"><span class="built_in">memset</span>( send_cookie, <span class="number">0</span>, <span class="number">128</span> );</span><br><span class="line"><span class="built_in">memset</span>( info, <span class="number">0</span>, <span class="number">512</span> );</span><br><span class="line"><span class="built_in">sprintf</span>( send_cookie, <span class="string">"%s=%d:%s=%d"</span>, name, cookie, <span class="string">"Favorite_number"</span>, favorite_number );</span><br><span class="line"><span class="built_in">sprintf</span>( info, <span class="string">"%s%s\r\n\r\n"</span>, cookieFileOk, send_cookie );</span><br><span class="line">write( fd, info, <span class="built_in">strlen</span>(info) );</span><br></pre></td></tr></table></figure></p>
+<p>I use HttpFox to capture these POST headers, just like this :  </p>
+<p><img src="/images/Authentication/9.png" alt></p>
+<p><strong>Finally</strong>, when user wants to transfer money to others, it must provide its passport : cookie. If a attack doesn’t know the cookie exactly and just constructs a HTTP request likes <strong>Exercise 4</strong>, failure is no doubt. I will attach my codes to illustrate it more clearly.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line"><span class="keyword">if</span>( Db_checkUser( to ) &lt;= <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"the transfer receiver does not exist !!!"</span> );</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( m &lt;= <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd , <span class="string">"illegal transfer account ! transfer money must be bigger than 0 !"</span>);</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( m &gt; Db_readBalance(from) ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"illegal transfer account ! transfer money must be less than your account !"</span>);</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( <span class="built_in">strcmp</span>( from, to ) == <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"sender is the same as the reciever !"</span> );</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( <span class="built_in">strcmp</span>( cookie_value, real_cookie ) != <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"identify the cookie error! You are a bad guy..."</span> );</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;       </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>An important to note: this cookie_value is parsed from the HTTP body in <strong>parseHeaders</strong> function, and was passed from <strong>Parse_parse</strong> to <strong>Handle_main</strong>, finally passed to <strong>handlePost</strong> function. It is a little awkward.  </p>
+<h3 id="Part-B：Packet-Sniffing"><a href="#Part-B：Packet-Sniffing" class="headerlink" title="Part B：Packet Sniffing"></a><strong>Part B：Packet Sniffing</strong></h3><h4 id="Exercise-6"><a href="#Exercise-6" class="headerlink" title="Exercise 6 :"></a><strong>Exercise 6 :</strong></h4><p>Using the Wireshark to steal the cookie, and then use the cookie to make fake POST request. Send the request to the server and transfer some one else’s money.</p>
+<p>My account’s username is <strong>LiuChang</strong>. I use <strong>HttpFox</strong> to capture the cookie and construct a HTTP POST request to steal <strong>Alice</strong> account’s money. I will illustrate it in some pictures.<br><img src="/images/Authentication/10.png" alt="We steal Alice&#39;s cookie"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">char *req2 =&quot;POST / HTTP/1.1\r\nContent-Length: 75\r\nCookie: Alice=876960:Favorite_number=123\r\n\r\n&quot;</span><br><span class="line">           &quot;submit=Transfer&amp;transfer_from=Alice&amp;transfer_to=LiuChang&amp;&quot;</span><br><span class="line">           &quot;transfer_money=80\r\n\r\n&quot;;</span><br><span class="line"></span><br><span class="line">write(sock_client,req2,strlen(req2));</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/Authentication/11.png" alt="Steal Alice&#39;s money successfully"></p>
+<h3 id="Part-C：Encryption"><a href="#Part-C：Encryption" class="headerlink" title="Part C：Encryption"></a><strong>Part C：Encryption</strong></h3><p>Encryption is the standard way to protect sensitive information from leaking. Encryption itself does not prevent interception, but denies the message content to the interceptor. In this part of the lab, you will explore how to use encryption to protect the packets.</p>
+<h4 id="Exercise-7"><a href="#Exercise-7" class="headerlink" title="Exercise 7 :"></a><strong>Exercise 7 :</strong></h4><p>Encrypt the cookie. You should modify as least these files: index.html, handle.c, and dbutil.c etc..</p>
+<p>As we known,<strong>Cookie</strong> is a small piece of data sent from a website and stored in the user’s web browser while the user is browsing it. It always saves user’s sensitive information and can be obtained by tools easily. In order to protect users’ sensitive information, we should encrypt these cookies.  </p>
+<p>In <strong>Exercise : 5</strong>, we use <strong>HttpFox</strong> to capture these Cookies and get user’s information easily. In order to defuse this , we need encrypt these cookies, and separate <strong>Login</strong> and <strong>Register</strong> modules.</p>
+<p><strong>First of all</strong>, we should drop old user’s table and re-build this table to add a <strong>number</strong> field which to save user’s favorite number. It just likes as the number of USB-key.  </p>
+<p>When a new user complete to register , we get its input about favorite number and generate a cookie. And we set this <strong>cookie</strong> into HTTP headers.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">static</span> <span class="keyword">char</span> *cookieFileOk =</span><br><span class="line"> <span class="string">"HTTP/1.1 200 OK\r\nSet-Cookie: "</span>;</span><br><span class="line"></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">Cookie</span> <span class="title">cookie</span>;</span></span><br><span class="line"> srand(time(<span class="literal">NULL</span>));</span><br><span class="line"> <span class="keyword">int</span> cookie_value = rand() % <span class="number">1000000</span> + <span class="number">99999</span> ;   <span class="comment">// generate a random cookie</span></span><br><span class="line"> <span class="built_in">memset</span>( &amp;cookie, <span class="number">0</span>, <span class="keyword">sizeof</span>( struct Cookie) );</span><br><span class="line"> cookie.value = cookie_value;</span><br><span class="line"> <span class="built_in">strcpy</span>( cookie.key, name );</span><br><span class="line"> fwrite( &amp;cookie, <span class="keyword">sizeof</span>( struct Cookie ), <span class="number">1</span>, fp );   <span class="comment">// save it into cookie.txt</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line">  <span class="keyword">char</span> info[<span class="number">512</span>];</span><br><span class="line">  <span class="keyword">char</span> send_cookie[<span class="number">128</span>];</span><br><span class="line">  <span class="built_in">memset</span>( send_cookie, <span class="number">0</span>, <span class="number">128</span> );</span><br><span class="line">  <span class="built_in">memset</span>( info, <span class="number">0</span>, <span class="number">512</span> );</span><br><span class="line">  <span class="built_in">sprintf</span>( send_cookie, <span class="string">"%s=%d:%s=%d"</span>, name, cookie_value, <span class="string">"Favorite_number"</span> , atoi( number ) );</span><br><span class="line">  encryption( send_cookie );</span><br><span class="line">  <span class="built_in">sprintf</span>( info, <span class="string">"%s%s\r\n\r\n"</span>, cookieFileOk, send_cookie );</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  write(fd, info, <span class="built_in">strlen</span>(info));</span><br></pre></td></tr></table></figure></p>
+<p>I use a simple algorithm to encrypt cookies…But the result is not bad.<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">char</span> * <span class="title">encryption</span><span class="params">( <span class="keyword">char</span> * s )</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *p = s;</span><br><span class="line">    <span class="keyword">while</span>( *p != <span class="string">'\0'</span> ) &#123;</span><br><span class="line">            *p = *p + <span class="number">0x10</span>;</span><br><span class="line">            p++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/Authentication/12.png" alt></p>
+<p>When users want to transfer money to others, he must provide his favorite number(just likes USB-key)  </p>
+<p><img src="/images/Authentication/13.png" alt></p>
+<p>The Login and Register modules are changed a little, but it does not make a difference…<br><img src="/images/Authentication/14.png" alt><br><img src="/images/Authentication/15.png" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/系统安全/" rel="tag"># 系统安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/10/Red-Black-Tree/" rel="next" title="Red Black Tree">
+                <i class="fa fa-chevron-left"></i> Red Black Tree
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/05/STL-基础数据结构/" rel="prev" title="STL基础数据结构">
+                STL基础数据结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-4-Authentication"><span class="nav-number">1.</span> <span class="nav-text">Lab 4 :  Authentication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lab-Environment-Setup"><span class="nav-number">1.1.</span> <span class="nav-text">Lab Environment Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-A：Identity-Forgery"><span class="nav-number">1.2.</span> <span class="nav-text">Part A：Identity Forgery</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">Exercise 1 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-2"><span class="nav-number">1.2.2.</span> <span class="nav-text">Exercise 2 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-3"><span class="nav-number">1.2.3.</span> <span class="nav-text">Exercise 3 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-4"><span class="nav-number">1.2.4.</span> <span class="nav-text">Exercise 4 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-5"><span class="nav-number">1.2.5.</span> <span class="nav-text">Exercise 5 :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-B：Packet-Sniffing"><span class="nav-number">1.3.</span> <span class="nav-text">Part B：Packet Sniffing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-6"><span class="nav-number">1.3.1.</span> <span class="nav-text">Exercise 6 :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-C：Encryption"><span class="nav-number">1.4.</span> <span class="nav-text">Part C：Encryption</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-7"><span class="nav-number">1.4.1.</span> <span class="nav-text">Exercise 7 :</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
+        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
