@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Brains">
 <meta property="og:description" content="写在前面 线程基础 线程概念 Linux线程实现方式   Linux Thread vs Process 资源共享层面的差异 调度层面的差异 性能层面的差异 Thread 缺点 &amp;amp;&amp;amp; 应用场景   Linux Thread 使用 创建线程 内核线程 同步操作   常见的多线程编程模式 leader-follow 模型（主从） producer-consumer模型（生产者消费者）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-05T08:47:59.906Z">
+<meta property="og:updated_time" content="2019-07-27T01:44:48.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈Linux线程模型">
 <meta name="twitter:description" content="写在前面 线程基础 线程概念 Linux线程实现方式   Linux Thread vs Process 资源共享层面的差异 调度层面的差异 性能层面的差异 Thread 缺点 &amp;amp;&amp;amp; 应用场景   Linux Thread 使用 创建线程 内核线程 同步操作   常见的多线程编程模式 leader-follow 模型（主从） producer-consumer模型（生产者消费者）">
@@ -481,23 +481,20 @@
 <p>有兴趣的同学，看看看下这篇文章：<a href="http://blog.lecury.cn/2016/02/21/同步互斥锁/">http://blog.lecury.cn/2016/02/21/同步互斥锁/</a> 。总结来说，锁的代价是高昂的，所以在设计高并发、高吞吐的程序时，尽量避免锁的使用，或者减少锁的区间。</p>
 <h4 id="常见的多线程编程模式"><a href="#常见的多线程编程模式" class="headerlink" title="常见的多线程编程模式"></a>常见的多线程编程模式</h4><p>下面谈一下实际工作中，要如何合理的线程呢？这里我简单的提出三种常见的线程模型。</p>
 <ul>
-<li><p>leader-follow 模型（主从）</p>
-<ul>
+<li>leader-follow 模型（主从）<ul>
 <li>线程与连接对应，并发度等于线程数。</li>
 <li>所有线程经历accept-&gt;close整个过程。</li>
 <li>适用于连接数少、处理时间长、CPU密集型服务。</li>
 </ul>
 </li>
-<li><p>producer-consumer模型（生产者消费者）</p>
-<ul>
+<li>producer-consumer模型（生产者消费者）<ul>
 <li>主线程用于accept请求，并将fd放置在消费队列pendingpool中。</li>
 <li>pendingpool进行连接的维护工作。</li>
 <li>多个worker竞争pendingpool的连接。</li>
 <li>适用于连接数多、处理速度快的业务。</li>
 </ul>
 </li>
-<li><p>高并发索引模型</p>
-<ul>
+<li>高并发索引模型<ul>
 <li>无锁设计</li>
 <li>将请求或者事务映射到具体线程处理</li>
 </ul>
@@ -632,7 +629,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -645,7 +642,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
