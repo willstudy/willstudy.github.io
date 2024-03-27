@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Brains">
 <meta property="og:description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-05T08:26:37.795Z">
+<meta property="og:updated_time" content="2019-04-05T08:26:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内存寻址之段页存储机制分析">
 <meta name="twitter:description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
@@ -117,6 +117,8 @@
     }
   };
 </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7626921954258592" crossorigin="anonymous"></script>
 
 
 
@@ -371,6 +373,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
 
           
 
@@ -616,7 +623,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -629,7 +636,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -698,7 +705,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -715,7 +722,34 @@
 
 
 
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+
+
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
 
 
 
@@ -874,8 +908,8 @@
         el: '#comments' ,
         verify: false,
         notify: false,
-        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
-        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        appId: 'G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz',
+        appKey: 'Ro8xPoiy3igQTMA4btTCXGPL',
         placeholder: 'Just go go',
         avatar:'mm',
         guest_info:guest,
@@ -1225,7 +1259,7 @@
 
   
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>AV.initialize("G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz", "Ro8xPoiy3igQTMA4btTCXGPL");</script>
   <script>
     function showTime(Counter) {
       var query = new AV.Query(Counter);
@@ -1333,6 +1367,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   

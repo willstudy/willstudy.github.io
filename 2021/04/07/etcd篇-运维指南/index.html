@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="etcd,架构设计,配置中心,服务注册,运维,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. etcd集群1.1 etcd集群简介etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇数，如果">
+<meta name="keywords" content="etcd,架构设计,配置中心,服务注册,运维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="etcd篇——运维指南">
+<meta property="og:url" content="https://blog.lecury.cn/2021/04/07/etcd篇-运维指南/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="1. etcd集群1.1 etcd集群简介etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇数，如果">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://blog.lecury.cn/images/etcd/etcd-arch.jpg">
+<meta property="og:updated_time" content="2024-03-27T11:28:25.767Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="etcd篇——运维指南">
+<meta name="twitter:description" content="1. etcd集群1.1 etcd集群简介etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇数，如果">
+<meta name="twitter:image" content="https://blog.lecury.cn/images/etcd/etcd-arch.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7626921954258592" crossorigin="anonymous"></script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2021/04/07/etcd篇-运维指南/">
+
+
+
+
+
+  <title>etcd篇——运维指南 | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2021/04/07/etcd篇-运维指南/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">etcd篇——运维指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-04-07T15:26:30+08:00">
+                2021-04-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/04/07/etcd篇-运维指南/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/04/07/etcd篇-运维指南/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2021/04/07/etcd篇-运维指南/" class="leancloud_visitors" data-flag-title="etcd篇——运维指南">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-etcd集群"><a href="#1-etcd集群" class="headerlink" title="1. etcd集群"></a>1. etcd集群</h2><h4 id="1-1-etcd集群简介"><a href="#1-1-etcd集群简介" class="headerlink" title="1.1 etcd集群简介"></a>1.1 etcd集群简介</h4><p>etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：</p>
+<ol>
+<li>API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。</li>
+<li>集群成员的数目一般是奇数，如果有3个成员，表明集群最大允许挂掉1个节点，如果有5个成员，则最大允许挂掉2个节点。<strong>当然节点数目不是越大越好，因为一致性机制下节点数目会影响写性能。</strong></li>
+</ol>
+<h4 id="1-2-etcd集群搭建"><a href="#1-2-etcd集群搭建" class="headerlink" title="1.2 etcd集群搭建"></a>1.2 etcd集群搭建</h4><p>参考手册：<a href="https://blog.lecury.cn/2016/06/27/Etcd%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">https://blog.lecury.cn/2016/06/27/Etcd%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/</a></p>
+<p><img src="/images/etcd/etcd-arch.jpg" alt="etcd架构图"></p>
+<h2 id="2-etcd运维"><a href="#2-etcd运维" class="headerlink" title="2. etcd运维"></a>2. etcd运维</h2><p>集群模式大大提高了etcd的可用性，但是仍存在异常和挂掉的可能性。为了进一步提高稳定性和可用性，可以从以下方面着手。</p>
+<h4 id="2-1-etcd-operator"><a href="#2-1-etcd-operator" class="headerlink" title="2.1 etcd operator"></a>2.1 etcd operator</h4><p>etcd operator概念最早出现在k8s的生态中，目的是借助k8s平台自动创建、管理etcd集群，不仅提供部署能力，还提供故障迁移的能力。</p>
+<p>方案的理念是相似的，是将etcd集群交给一个全局控制器来管理，这个控制器可以运行在k8s平台，也可以独立运行，以提高etcd集群的稳定性和可用性。</p>
+<h4 id="2-2-容灾和恢复"><a href="#2-2-容灾和恢复" class="headerlink" title="2.2 容灾和恢复"></a>2.2 容灾和恢复</h4><p>目前搜集到的方案大致是：</p>
+<ol>
+<li>定期dump数据，推送到分布式存储中。</li>
+<li>恢复时，将数据拷到每个节点上然后分别执行restore。</li>
+</ol>
+<p>restore的方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \</span><br><span class="line">  --name m1 \</span><br><span class="line">  --initial-cluster m1=http://host1:2380,m2=http://host2:2380,m3=http://host3:2380 \</span><br><span class="line">  --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">  --initial-advertise-peer-urls http://host1:2380</span><br><span class="line">$ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \</span><br><span class="line">  --name m2 \</span><br><span class="line">  --initial-cluster m1=http://host1:2380,m2=http://host2:2380,m3=http://host3:2380 \</span><br><span class="line">  --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">  --initial-advertise-peer-urls http://host2:2380</span><br><span class="line">$ ETCDCTL_API=3 etcdctl snapshot restore snapshot.db \</span><br><span class="line">  --name m3 \</span><br><span class="line">  --initial-cluster m1=http://host1:2380,m2=http://host2:2380,m3=http://host3:2380 \</span><br><span class="line">  --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">  --initial-advertise-peer-urls http://host3:2380</span><br></pre></td></tr></table></figure></p>
+<p>然后再启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ etcd \</span><br><span class="line">  --name m1 \</span><br><span class="line">  --listen-client-urls http://host1:2379 \</span><br><span class="line">  --advertise-client-urls http://host1:2379 \</span><br><span class="line">  --listen-peer-urls http://host1:2380 &amp;</span><br><span class="line">$ etcd \</span><br><span class="line">  --name m2 \</span><br><span class="line">  --listen-client-urls http://host2:2379 \</span><br><span class="line">  --advertise-client-urls http://host2:2379 \</span><br><span class="line">  --listen-peer-urls http://host2:2380 &amp;</span><br><span class="line">$ etcd \</span><br><span class="line">  --name m3 \</span><br><span class="line">  --listen-client-urls http://host3:2379 \</span><br><span class="line">  --advertise-client-urls http://host3:2379 \</span><br><span class="line">  --listen-peer-urls http://host3:2380 &amp;</span><br></pre></td></tr></table></figure></p>
+<p>整体操作还是挺麻烦的，完善的容灾机制需要快、准，最好提供平台化的支持，最终目标是实现一键回滚到某个时间点。</p>
+<p>参考：<a href="https://etcd.io/docs/v3.3.12/op-guide/recovery/" target="_blank" rel="noopener">https://etcd.io/docs/v3.3.12/op-guide/recovery/</a></p>
+<h4 id="2-3-etcd监控和报警"><a href="#2-3-etcd监控和报警" class="headerlink" title="2.3 etcd监控和报警"></a>2.3 etcd监控和报警</h4><p>对etcd集群来说，监控和报警是必不可少的，没有机制能够保证100%的可用，我们需要监控和报警及时的发现问题。</p>
+<p>etcd内置了很多prometheus metrics，可以通过prometheus+Grafana方便的监控etcd集群。主要监控点包括：</p>
+<ul>
+<li>成员状态</li>
+<li>集群吞吐 kps</li>
+<li>snapshot时间</li>
+<li>错误情况</li>
+<li>内存相关</li>
+<li>等等</li>
+</ul>
+<p>这里有个etcd监控模板：<a href="https://grafana.com/grafana/dashboards/3070" target="_blank" rel="noopener">https://grafana.com/grafana/dashboards/3070</a></p>
+<h4 id="2-4-etcd集群新增节点"><a href="#2-4-etcd集群新增节点" class="headerlink" title="2.4 etcd集群新增节点"></a>2.4 etcd集群新增节点</h4><p>如果该节点曾属于集群成员，那么删除etcd data目录，重启即可。可以通过以下方式查看是否是集群成员<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=2 etcdctl member list</span><br></pre></td></tr></table></figure></p>
+<p>如果该节点是一个新的节点，那么启动etcd时，</p>
+<ol>
+<li>先在集群节点上执行 <code>etcdctl member add new_node --peer-urls=xxx</code></li>
+<li>设置环境变量<code>ETCD_INITIAL_CLUSTER</code>和<code>ETCD_INITIAL_CLUSTER_STATE</code>：分别指明了etcd的集群地址和集群状态。</li>
+<li>启动这个new node</li>
+</ol>
+<h2 id="3-常见问题"><a href="#3-常见问题" class="headerlink" title="3. 常见问题"></a>3. 常见问题</h2><h4 id="3-1-如何选择etcd集群的节点数目？"><a href="#3-1-如何选择etcd集群的节点数目？" class="headerlink" title="3.1 如何选择etcd集群的节点数目？"></a>3.1 如何选择etcd集群的节点数目？</h4><p>首先要理解为什么需要增加节点数目？原因大致为：</p>
+<ol>
+<li><strong>提高etcd集群的可用性</strong>：3个节点能最大容忍一个节点不可用，5个节点则可以最大容忍2个节点不可用，节点数增加从概率角度上确实能增大集群的可用性。</li>
+<li><strong>提高读的吞吐</strong>：集群任何一个节点都能提供读的服务，增加节点类似于横向扩展了。</li>
+</ol>
+<p><strong>注意节点数并不是越多越好</strong>，因为etcd的一致性机制，每次写操作都需要同步到每个节点，节点数越多会降低写操作的吞吐。</p>
+<p>在读写均存在的场景下，建议etcd集群有3个节点，如果读远大于写的场景下，可以考虑增加到5个节点。</p>
+<h4 id="3-2-etcd内存、snapshot大小异常"><a href="#3-2-etcd内存、snapshot大小异常" class="headerlink" title="3.2 etcd内存、snapshot大小异常"></a>3.2 etcd内存、snapshot大小异常</h4><p>大致原因有以下几点：</p>
+<ol>
+<li>etcd的key/value具有版本功能，频繁更新key/value会使得版本增加过快。</li>
+<li>raft log的太多了</li>
+<li>golang gc问题</li>
+</ol>
+<p>解决办法有：</p>
+<ol>
+<li>开启自动compact：启动参数增加<code>--auto-compaction-retention=168</code></li>
+<li>设置存储quota上限: 启动参数增加<code>--quota-backend-bytes=8589934592</code></li>
+<li>限制raft log：调小<code>--snapshot-count=10000</code></li>
+</ol>
+<h4 id="3-3-etcd节点挂掉时间太长，重启失败咋办？"><a href="#3-3-etcd节点挂掉时间太长，重启失败咋办？" class="headerlink" title="3.3 etcd节点挂掉时间太长，重启失败咋办？"></a>3.3 etcd节点挂掉时间太长，重启失败咋办？</h4><p>集群没挂掉的情况下，直接删除data目录，重新加入集群处理。</p>
+<h4 id="3-4-mvcc-database-space-exceeded-报错如何处理？"><a href="#3-4-mvcc-database-space-exceeded-报错如何处理？" class="headerlink" title="3.4 mvcc: database space exceeded 报错如何处理？"></a>3.4 mvcc: database space exceeded 报错如何处理？</h4><p>etcd会保存key的历史版本，如果没有定期compact的话，就会耗尽etcd的存储空间。如果etcd的剩余空间很小的时候，就会报警：<code>mvcc: database space exceeded.</code> 解决办法：</p>
+<ol>
+<li>compact etcd历史</li>
+<li>清理每个etcd endpoint</li>
+<li>消除报警</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">recv=`ETCDCTL_API=3 ./etcdctl --endpoints=http://$addr endpoint status --write-out=&quot;json&quot; | egrep -o &apos;&quot;revision&quot;:[0-9]*&apos; | egrep -o &apos;[0-9].*&apos;`</span><br><span class="line"></span><br><span class="line">ETCDCTL_API=3 ./etcdctl --endpoints=http://$addr compact $recv</span><br><span class="line"></span><br><span class="line">ETCDCTL_API=3 ./etcdctl --endpoints=http://$addr defrag</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/etcd/" rel="tag"># etcd</a>
+          
+            <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
+          
+            <a href="/tags/配置中心/" rel="tag"># 配置中心</a>
+          
+            <a href="/tags/服务注册/" rel="tag"># 服务注册</a>
+          
+            <a href="/tags/运维/" rel="tag"># 运维</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/27/etcd篇-基本介绍/" rel="next" title="etcd篇——基本介绍">
+                <i class="fa fa-chevron-left"></i> etcd篇——基本介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/willstudy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:958823492@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-etcd集群"><span class="nav-number">1.</span> <span class="nav-text">1. etcd集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-etcd集群简介"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 etcd集群简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-etcd集群搭建"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 etcd集群搭建</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-etcd运维"><span class="nav-number">2.</span> <span class="nav-text">2. etcd运维</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-etcd-operator"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 etcd operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-容灾和恢复"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 容灾和恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-etcd监控和报警"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 etcd监控和报警</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-etcd集群新增节点"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 etcd集群新增节点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-常见问题"><span class="nav-number">3.</span> <span class="nav-text">3. 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-如何选择etcd集群的节点数目？"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 如何选择etcd集群的节点数目？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-etcd内存、snapshot大小异常"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 etcd内存、snapshot大小异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-etcd节点挂掉时间太长，重启失败咋办？"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 etcd节点挂掉时间太长，重启失败咋办？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-mvcc-database-space-exceeded-报错如何处理？"><span class="nav-number">3.0.4.</span> <span class="nav-text">3.4 mvcc: database space exceeded 报错如何处理？</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz',
+        appKey: 'Ro8xPoiy3igQTMA4btTCXGPL',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz", "Ro8xPoiy3igQTMA4btTCXGPL");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

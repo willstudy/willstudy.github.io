@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="kubernetes,docker,">
+  <meta name="keywords" content="docker,kubernetes,">
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="写在前面在kubernetes集群中运维生成环境的服务已经长达半年多时间，我们遇到了很多问题，也踩到了很多坑，其中因为 Docker Registry 的故障而导致的不可用事件还是挺多的，这些问题常常被用户埋怨。 Docker Registry 作为镜像仓库、数据中心，在整个服务发布流程中是异常关键的一环。由于之前初期我们搭建的 Docker Registry 是通过 docker run 跑在单">
-<meta name="keywords" content="kubernetes,docker">
+<meta name="keywords" content="docker,kubernetes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于kubernetes的Docker Registry的高可用部署">
 <meta property="og:url" content="https://blog.lecury.cn/2017/04/14/基于kubernetes的Docker-Registry的高可用部署/index.html">
@@ -88,7 +88,7 @@
 <meta property="og:description" content="写在前面在kubernetes集群中运维生成环境的服务已经长达半年多时间，我们遇到了很多问题，也踩到了很多坑，其中因为 Docker Registry 的故障而导致的不可用事件还是挺多的，这些问题常常被用户埋怨。 Docker Registry 作为镜像仓库、数据中心，在整个服务发布流程中是异常关键的一环。由于之前初期我们搭建的 Docker Registry 是通过 docker run 跑在单">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/Registry_HA_K8s/1.png">
-<meta property="og:updated_time" content="2019-04-05T08:25:24.652Z">
+<meta property="og:updated_time" content="2019-04-05T08:25:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于kubernetes的Docker Registry的高可用部署">
 <meta name="twitter:description" content="写在前面在kubernetes集群中运维生成环境的服务已经长达半年多时间，我们遇到了很多问题，也踩到了很多坑，其中因为 Docker Registry 的故障而导致的不可用事件还是挺多的，这些问题常常被用户埋怨。 Docker Registry 作为镜像仓库、数据中心，在整个服务发布流程中是异常关键的一环。由于之前初期我们搭建的 Docker Registry 是通过 docker run 跑在单">
@@ -119,6 +119,8 @@
     }
   };
 </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7626921954258592" crossorigin="anonymous"></script>
 
 
 
@@ -373,6 +375,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
 
           
 
@@ -429,9 +436,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kubernetes/" rel="tag"># kubernetes</a>
-          
             <a href="/tags/docker/" rel="tag"># docker</a>
+          
+            <a href="/tags/kubernetes/" rel="tag"># kubernetes</a>
           
         </div>
       
@@ -538,7 +545,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -551,7 +558,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -620,7 +627,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -637,7 +644,34 @@
 
 
 
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+
+
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
 
 
 
@@ -796,8 +830,8 @@
         el: '#comments' ,
         verify: false,
         notify: false,
-        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
-        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        appId: 'G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz',
+        appKey: 'Ro8xPoiy3igQTMA4btTCXGPL',
         placeholder: 'Just go go',
         avatar:'mm',
         guest_info:guest,
@@ -1147,7 +1181,7 @@
 
   
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>AV.initialize("G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz", "Ro8xPoiy3igQTMA4btTCXGPL");</script>
   <script>
     function showTime(Counter) {
       var query = new AV.Query(Counter);
@@ -1255,6 +1289,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   

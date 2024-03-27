@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Brains">
 <meta property="og:description" content="这一篇文章主要讲述UNIX里面的锁机制，分为2类：一种主要用于多线程Thread之间的共享资源访问，另一种主要用于多进程Process之间的访问。参考资料《UNIX环境高级编程》，这是我自己的一些理解，以后还要继续补充。 线程Thread之间的锁在多线程的环境中，涉及到共享变量的存取，就需要一定程度的同步，否则可能出现意想不到的情况。在UNIX中，用于多线程之间同步的锁分为以下几种：    互斥量">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-05T08:03:08.184Z">
+<meta property="og:updated_time" content="2019-04-05T08:03:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="同步互斥锁.md">
 <meta name="twitter:description" content="这一篇文章主要讲述UNIX里面的锁机制，分为2类：一种主要用于多线程Thread之间的共享资源访问，另一种主要用于多进程Process之间的访问。参考资料《UNIX环境高级编程》，这是我自己的一些理解，以后还要继续补充。 线程Thread之间的锁在多线程的环境中，涉及到共享变量的存取，就需要一定程度的同步，否则可能出现意想不到的情况。在UNIX中，用于多线程之间同步的锁分为以下几种：    互斥量">
@@ -117,6 +117,8 @@
     }
   };
 </script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7626921954258592" crossorigin="anonymous"></script>
 
 
 
@@ -371,6 +373,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
 
           
 
@@ -562,7 +569,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -575,7 +582,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -644,7 +651,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -661,7 +668,34 @@
 
 
 
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+
+
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
 
 
 
@@ -820,8 +854,8 @@
         el: '#comments' ,
         verify: false,
         notify: false,
-        appId: 'afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz',
-        appKey: '7uXY1m6g6eN2gYvhiUE1fdBU',
+        appId: 'G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz',
+        appKey: 'Ro8xPoiy3igQTMA4btTCXGPL',
         placeholder: 'Just go go',
         avatar:'mm',
         guest_info:guest,
@@ -1171,7 +1205,7 @@
 
   
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("afv7H0W2yshtuTMrsbnbdyLf-gzGzoHsz", "7uXY1m6g6eN2gYvhiUE1fdBU");</script>
+  <script>AV.initialize("G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz", "Ro8xPoiy3igQTMA4btTCXGPL");</script>
   <script>
     function showTime(Counter) {
       var query = new AV.Query(Counter);
@@ -1279,6 +1313,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   
