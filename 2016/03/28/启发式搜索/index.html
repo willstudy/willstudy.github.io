@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。 写在前面为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。 问题的引入这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题。其主要">
+<meta name="description" content="最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。  写在前面 为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。  问题的引入 这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题">
 <meta name="keywords" content="算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="启发式搜索">
 <meta property="og:url" content="https://blog.lecury.cn/2016/03/28/启发式搜索/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。 写在前面为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。 问题的引入这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题。其主要">
+<meta property="og:description" content="最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。  写在前面 为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。  问题的引入 这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T07:56:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="启发式搜索">
-<meta name="twitter:description" content="最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。 写在前面为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。 问题的引入这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题。其主要">
+<meta name="twitter:description" content="最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。  写在前面 为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。  问题的引入 这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题">
 
 
 
@@ -397,15 +397,21 @@
 
       
         <p>最近为了解决一个问题，粗略的学习了一些搜索算法，我真正动手实现的只有里面的2种，忽然感觉饶了一大圈又跑到机器学习的领域上去了。。。</p>
-<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a><strong>写在前面</strong></h2><p>为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。</p>
-<h2 id="问题的引入"><a href="#问题的引入" class="headerlink" title="问题的引入"></a><strong>问题的引入</strong></h2><p>这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题。其主要解决的问题就是在指定拓扑图G(V, E)中，找到一条尽量最优的路径，且这条路径不存在回路，且经过指定顶点集。</p>
-<h2 id="最短路径问题"><a href="#最短路径问题" class="headerlink" title="最短路径问题"></a><strong>最短路径问题</strong></h2><p>想到最短路径问题，立马想到了Dijkstra算法了。。。这是一个非常高效的算法，它是基于贪心的算法思想。但上述题目并不具有贪心选择性质，会陷入局部最优。好的的情况下，会生成一条不是最优的路径；但差的情况下，甚至找不到一条有效路径。。</p>
-<h2 id="局部最优的情况"><a href="#局部最优的情况" class="headerlink" title="局部最优的情况"></a><strong>局部最优的情况</strong></h2><p>我第一次接触局部最优问题是在机器学习中的，比如逻辑回归在训练的过程中，采用梯度下降法对一些参数的优化的时候，会产生一些局部最优解。这是因为它的损失函数不是凸函数的缘故，因为这个函数有多个极值嘛。  </p>
+<h2 id="写在前面"><a class="markdownIt-Anchor" href="#写在前面"></a> <strong>写在前面</strong></h2>
+<p>为了解决一个关于查找最短路径的问题，我查找了很多资料，学习到了一些新的算法。这篇文章我打算叙述两个部分，一个关于局部最优问题，一个关于启发式搜索问题。</p>
+<h2 id="问题的引入"><a class="markdownIt-Anchor" href="#问题的引入"></a> <strong>问题的引入</strong></h2>
+<p>这个问题来源于某公司的一个挑战赛中，是一个NP-hard问题，类似于旅行商问题和邮递员问题。其主要解决的问题就是在指定拓扑图G(V, E)中，找到一条尽量最优的路径，且这条路径不存在回路，且经过指定顶点集。</p>
+<h2 id="最短路径问题"><a class="markdownIt-Anchor" href="#最短路径问题"></a> <strong>最短路径问题</strong></h2>
+<p>想到最短路径问题，立马想到了Dijkstra算法了。。。这是一个非常高效的算法，它是基于贪心的算法思想。但上述题目并不具有贪心选择性质，会陷入局部最优。好的的情况下，会生成一条不是最优的路径；但差的情况下，甚至找不到一条有效路径。。</p>
+<h2 id="局部最优的情况"><a class="markdownIt-Anchor" href="#局部最优的情况"></a> <strong>局部最优的情况</strong></h2>
+<p>我第一次接触局部最优问题是在机器学习中的，比如逻辑回归在训练的过程中，采用梯度下降法对一些参数的优化的时候，会产生一些局部最优解。这是因为它的损失函数不是凸函数的缘故，因为这个函数有多个极值嘛。</p>
 <p>在这个问题中，直接使用Dijkstra算法也会陷入局部最优的情况，如何跳出这个局部最优呢？比较典型的算法，哦不对应该是算法思想吧，模拟退火。这一题我之前就是用这个算法求解的，但效果不太理想。模拟退火算法属于一种启发式的搜素算法。</p>
-<h2 id="启发式的搜索"><a href="#启发式的搜索" class="headerlink" title="启发式的搜索"></a><strong>启发式的搜索</strong></h2><p>启发式搜索算是一种思想吧，就像动态规划一样，它是一种算法思想。它采用某些反馈措施，影响下一次选择的可能，而不是仅仅着眼于当下。其中我知道的有A*寻路算法、蚁群算法、遗传算法、模拟退火算法，还有最近很火的蒙特卡洛算法。我自己动手实现的就退火还有蚁群算法，它们的思想都很相似，我感悟最深的一句话，来自于百度百科关于蚁群算法的介绍中。  </p>
-<p><strong>大自然的进化，社会的进步、人类的创新实际上都离不开这两样东西，多样性保证了系统的创新能力，正反馈保证了优良特性能够得到强化，两者要恰到好处的结合。</strong>   </p>
-<p>蚁群算法、遗传、蒙特卡洛算法的思想非常类似于上面两句话。我对启发式的理解也与它类似，就是随机性加上正负反馈。后面我的算法就是根据这句改进的，但目前陷入参数待优化的尴尬情况。。。从3月初到现在，我已经换过2次数据结构，三次算法了。。真是醉了。。总得来说，受益匪浅吧。一路学习的过程中，虽然没有真正掌握几个算法，但多了几种解决问题的思路，还是可以的~  </p>
-<h2 id="吐槽一下"><a href="#吐槽一下" class="headerlink" title="吐槽一下"></a><strong>吐槽一下</strong></h2><p>我看到有些同学开始采用开源的算法引擎库了，不知道效果咋样？？找了好多论文都没来得及看，群里面有大神提出一种新的思路求解这道题目，用线性规划的思想找到这个最优解。感觉好牛X的样子，但我完全没思路，怎么破？只能老实的优化自己的代码，然后尝试学习下线性规划方面的知识。还有十几天就要结束了，希望自己能坚持到最后，加油啊 ~_~ 忽然感觉一个人的战斗好累啊。。。</p>
+<h2 id="启发式的搜索"><a class="markdownIt-Anchor" href="#启发式的搜索"></a> <strong>启发式的搜索</strong></h2>
+<p>启发式搜索算是一种思想吧，就像动态规划一样，它是一种算法思想。它采用某些反馈措施，影响下一次选择的可能，而不是仅仅着眼于当下。其中我知道的有A*寻路算法、蚁群算法、遗传算法、模拟退火算法，还有最近很火的蒙特卡洛算法。我自己动手实现的就退火还有蚁群算法，它们的思想都很相似，我感悟最深的一句话，来自于百度百科关于蚁群算法的介绍中。</p>
+<p><strong>大自然的进化，社会的进步、人类的创新实际上都离不开这两样东西，多样性保证了系统的创新能力，正反馈保证了优良特性能够得到强化，两者要恰到好处的结合。</strong></p>
+<p>蚁群算法、遗传、蒙特卡洛算法的思想非常类似于上面两句话。我对启发式的理解也与它类似，就是随机性加上正负反馈。后面我的算法就是根据这句改进的，但目前陷入参数待优化的尴尬情况。。。从3月初到现在，我已经换过2次数据结构，三次算法了。。真是醉了。。总得来说，受益匪浅吧。一路学习的过程中，虽然没有真正掌握几个算法，但多了几种解决问题的思路，还是可以的~</p>
+<h2 id="吐槽一下"><a class="markdownIt-Anchor" href="#吐槽一下"></a> <strong>吐槽一下</strong></h2>
+<p>我看到有些同学开始采用开源的算法引擎库了，不知道效果咋样？？找了好多论文都没来得及看，群里面有大神提出一种新的思路求解这道题目，用线性规划的思想找到这个最优解。感觉好牛X的样子，但我完全没思路，怎么破？只能老实的优化自己的代码，然后尝试学习下线性规划方面的知识。还有十几天就要结束了，希望自己能坚持到最后，加油啊 <sub>_</sub> 忽然感觉一个人的战斗好累啊。。。</p>
 
       
     </div>
@@ -592,7 +598,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的引入"><span class="nav-number">2.</span> <span class="nav-text">问题的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最短路径问题"><span class="nav-number">3.</span> <span class="nav-text">最短路径问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局部最优的情况"><span class="nav-number">4.</span> <span class="nav-text">局部最优的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启发式的搜索"><span class="nav-number">5.</span> <span class="nav-text">启发式的搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吐槽一下"><span class="nav-number">6.</span> <span class="nav-text">吐槽一下</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text"> 写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的引入"><span class="nav-number">2.</span> <span class="nav-text"> 问题的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最短路径问题"><span class="nav-number">3.</span> <span class="nav-text"> 最短路径问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局部最优的情况"><span class="nav-number">4.</span> <span class="nav-text"> 局部最优的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启发式的搜索"><span class="nav-number">5.</span> <span class="nav-text"> 启发式的搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#吐槽一下"><span class="nav-number">6.</span> <span class="nav-text"> 吐槽一下</span></a></li></ol></div>
             
 
           </div>

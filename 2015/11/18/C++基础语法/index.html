@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C++盲点记录一下。这些都是C++的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…. 2 从C到C++2.1 命名空间使用命名空间（namespace）时，结尾处不能添加分号。 2.2 操作符使用不带参数的操作符，如(hex, endl)，必须包含头文件iostream；而使用带参数">
+<meta name="description" content="本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C盲点记录一下。这些都是C的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…  2 从C到C++  2.1 命名空间 使用命名空间（namespace）时，结尾处不能添加分号。  2.2 操作符 使用不带参数的操作符，如**(hex, endl)，必须包含头文件iostream**；而">
 <meta name="keywords" content="C++,基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++基础语法">
 <meta property="og:url" content="https://blog.lecury.cn/2015/11/18/C++基础语法/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C++盲点记录一下。这些都是C++的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…. 2 从C到C++2.1 命名空间使用命名空间（namespace）时，结尾处不能添加分号。 2.2 操作符使用不带参数的操作符，如(hex, endl)，必须包含头文件iostream；而使用带参数">
+<meta property="og:description" content="本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C盲点记录一下。这些都是C的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…  2 从C到C++  2.1 命名空间 使用命名空间（namespace）时，结尾处不能添加分号。  2.2 操作符 使用不带参数的操作符，如**(hex, endl)，必须包含头文件iostream**；而">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T07:46:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++基础语法">
-<meta name="twitter:description" content="本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C++盲点记录一下。这些都是C++的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…. 2 从C到C++2.1 命名空间使用命名空间（namespace）时，结尾处不能添加分号。 2.2 操作符使用不带参数的操作符，如(hex, endl)，必须包含头文件iostream；而使用带参数">
+<meta name="twitter:description" content="本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C盲点记录一下。这些都是C的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…  2 从C到C++  2.1 命名空间 使用命名空间（namespace）时，结尾处不能添加分号。  2.2 操作符 使用不带参数的操作符，如**(hex, endl)，必须包含头文件iostream**；而">
 
 
 
@@ -396,25 +396,36 @@
       
 
       
-        <p>本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C++盲点记录一下。这些都是C++的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点….</p>
-<h2 id="2-从C到C"><a href="#2-从C到C" class="headerlink" title="2 从C到C++"></a><strong>2 从C到C++</strong></h2><h4 id="2-1-命名空间"><a href="#2-1-命名空间" class="headerlink" title="2.1 命名空间"></a>2.1 命名空间</h4><p>使用命名空间（<strong>namespace</strong>）时，结尾处不能添加分号。</p>
-<h4 id="2-2-操作符"><a href="#2-2-操作符" class="headerlink" title="2.2 操作符"></a>2.2 操作符</h4><p>使用不带参数的操作符，如<strong>(hex, endl)</strong>，必须包含头文件<strong>iostream</strong>；而使用带参数的操作符，如<strong>(setfill，setw)</strong>，则需要头文件<strong>iomanip</strong>。</p>
+        <p>本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C<ins>盲点记录一下。这些都是C</ins>的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…</p>
+<h2 id="2-从c到c"><a class="markdownIt-Anchor" href="#2-从c到c"></a> <strong>2 从C到C++</strong></h2>
+<h4 id="21-命名空间"><a class="markdownIt-Anchor" href="#21-命名空间"></a> 2.1 命名空间</h4>
+<p>使用命名空间（<strong>namespace</strong>）时，结尾处不能添加分号。</p>
+<h4 id="22-操作符"><a class="markdownIt-Anchor" href="#22-操作符"></a> 2.2 操作符</h4>
+<p>使用不带参数的操作符，如**(hex, endl)<strong>，必须包含头文件</strong>iostream**；而使用带参数的操作符，如**(setfill，setw)<strong>，则需要头文件</strong>iomanip**。</p>
 <p><strong>setw</strong>操作符，一次设置，一次有效；而其他操作符，一旦设置，一直有效，持续到下次被设置为止。</p>
 <p>加<strong>fixed</strong>之后再加<strong>setprecision(n)</strong>，使得小数部分精确到n位。</p>
-<h4 id="2-3-强制类型转换"><a href="#2-3-强制类型转换" class="headerlink" title="2.3 强制类型转换"></a>2.3 强制类型转换</h4><ul>
+<h4 id="23-强制类型转换"><a class="markdownIt-Anchor" href="#23-强制类型转换"></a> 2.3 强制类型转换</h4>
+<ul>
 <li><strong>static_cast:</strong> 最常用的强制类型转换，将一种数据类型转换到另一种数据类型，并使用任何合理的方式。</li>
 <li><strong>const_cast:</strong> 强制去掉常量属性。</li>
 <li><strong>reinterpret_cast:</strong> 可用来改变指针类型，需谨慎使用。</li>
 <li><strong>dynamic_cast:</strong> 使用与继承层次中的类型转换（用于多态）。</li>
 </ul>
-<h4 id="2-4-string"><a href="#2-4-string" class="headerlink" title="2.4 string"></a>2.4 string</h4><p>函数<strong>getline()</strong>常用来读入一行到string类型的变量中，但它<strong>不会把换行符存入到这个变量中</strong>。</p>
+<h4 id="24-string"><a class="markdownIt-Anchor" href="#24-string"></a> 2.4 string</h4>
+<p>函数<strong>getline()<strong>常用来读入一行到string类型的变量中，但它</strong>不会把换行符存入到这个变量中</strong>。</p>
 <ul>
 <li><strong>s1.find_first_of(s2)</strong>: 返回s1和s2都具有的第一个字符的索引。</li>
 <li><strong>s1.find_first_not_of(s2)</strong>: 返回在s1但不在s2中的首位字符的索引。</li>
 </ul>
-<h4 id="2-5-内联函数"><a href="#2-5-内联函数" class="headerlink" title="2.5 内联函数"></a>2.5 内联函数</h4><p>避免函数调用的开销，但如果函数体很大，那么程序的可执行代码将变得很大。宜将频繁使用的小函数声明为内联函数。<br>关键字<strong>inline</strong>出现在函数声明，而不是函数定义中。</p>
-<h4 id="2-6-函数签名与默认参数"><a href="#2-6-函数签名与默认参数" class="headerlink" title="2.6 函数签名与默认参数"></a>2.6 函数签名与默认参数</h4><p>返回值不是函数签名的一部分，所以不能通过返回值类型的不同，来实现函数的重载。默认参数出现的次序，应该从右往左，且不能间断。默认参数应出现在函数的声明而非函数的定义中给出。</p>
-<h2 id="3-类"><a href="#3-类" class="headerlink" title="3 类"></a><strong>3 类</strong></h2><h4 id="3-1-默认构造函数"><a href="#3-1-默认构造函数" class="headerlink" title="3.1 默认构造函数"></a>3.1 默认构造函数</h4><p>摘自CSDN一位大牛的解释 ：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The default constructor is used whenever we define an object but do not supply an initializer. A constructor that supplies default arguments for all its parameters also defines the default constructor.</span><br></pre></td></tr></table></figure></p>
+<h4 id="25-内联函数"><a class="markdownIt-Anchor" href="#25-内联函数"></a> 2.5 内联函数</h4>
+<p>避免函数调用的开销，但如果函数体很大，那么程序的可执行代码将变得很大。宜将频繁使用的小函数声明为内联函数。<br>
+关键字<strong>inline</strong>出现在函数声明，而不是函数定义中。</p>
+<h4 id="26-函数签名与默认参数"><a class="markdownIt-Anchor" href="#26-函数签名与默认参数"></a> 2.6 函数签名与默认参数</h4>
+<p>返回值不是函数签名的一部分，所以不能通过返回值类型的不同，来实现函数的重载。默认参数出现的次序，应该从右往左，且不能间断。默认参数应出现在函数的声明而非函数的定义中给出。</p>
+<h2 id="3-类"><a class="markdownIt-Anchor" href="#3-类"></a> <strong>3 类</strong></h2>
+<h4 id="31-默认构造函数"><a class="markdownIt-Anchor" href="#31-默认构造函数"></a> 3.1 默认构造函数</h4>
+<p>摘自CSDN一位大牛的解释 ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The default constructor is used whenever we define an object but do not supply an initializer. A constructor that supplies default arguments for all its parameters also defines the default constructor.</span><br></pre></td></tr></table></figure>
 <p>默认构造函数（缺省构造函数）跟系统提供不提供构造函数没有任何关系，默认构造函数就是当你定义一个对象时不需要提供初始化的的构造函数。包括三种情况：</p>
 <ul>
 <li>1、根本没有显式的定义构造函数，当然由系统提供的默认构造函数，这个构造函数没有参数，啥也不做</li>
@@ -422,67 +433,98 @@
 <li>3、定义了构造函数，也带有参数，但是所有参数都有默认参数，这个也叫默认构造函数</li>
 </ul>
 <p>当然在一个类中，以上3中情况不可能共存，只要有一点满足就是默认构造函数。</p>
-<h4 id="3-2-拷贝构造函数"><a href="#3-2-拷贝构造函数" class="headerlink" title="3.2 拷贝构造函数"></a>3.2 拷贝构造函数</h4><ul>
+<h4 id="32-拷贝构造函数"><a class="markdownIt-Anchor" href="#32-拷贝构造函数"></a> 3.2 拷贝构造函数</h4>
+<ul>
 <li>拷贝构造函数可以有多于一个的参数，但第一个以后的参数都必须有默认值。</li>
 <li>拷贝构造函数的第一个参数，必须是一个<strong>类对象的引用</strong>。如果一个类包含指向动态存储空间的指针类型的数据成员，则应该为这个类设计拷贝构造函数。</li>
 <li>如果拷贝构造函数是私有的，顶层函数和其他类的成员函数就不能通过传值来传递和返回该类的对象，因为这两个操作都需要调用拷贝构造函数。</li>
 </ul>
-<h4 id="3-3-构造函数"><a href="#3-3-构造函数" class="headerlink" title="3.3 构造函数"></a>3.3 构造函数</h4><p>常量成员只能在初始化列表中初始化,这是初始化const类型成员的唯一方法。</p>
-<h4 id="3-4-析构函数"><a href="#3-4-析构函数" class="headerlink" title="3.4 析构函数"></a>3.4 析构函数</h4><p>析构函数不带参数，不能被重载。</p>
-<h4 id="3-5-类数据成员与成员函数"><a href="#3-5-类数据成员与成员函数" class="headerlink" title="3.5 类数据成员与成员函数"></a>3.5 类数据成员与成员函数</h4><ul>
+<h4 id="33-构造函数"><a class="markdownIt-Anchor" href="#33-构造函数"></a> 3.3 构造函数</h4>
+<p>常量成员只能在初始化列表中初始化,这是初始化const类型成员的唯一方法。</p>
+<h4 id="34-析构函数"><a class="markdownIt-Anchor" href="#34-析构函数"></a> 3.4 析构函数</h4>
+<p>析构函数不带参数，不能被重载。</p>
+<h4 id="35-类数据成员与成员函数"><a class="markdownIt-Anchor" href="#35-类数据成员与成员函数"></a> 3.5 类数据成员与成员函数</h4>
+<ul>
 <li>在类内部声明的static数据成员必须在任何程序块之外定义。</li>
 <li>如果将成员函数内的某个局部变量定义为静态变量，该类的所有对象在调用这个成员函数时将共享这个变量。</li>
 <li>static类成员函数只能访问static类型的成员。</li>
 </ul>
-<h2 id="4-继承"><a href="#4-继承" class="headerlink" title="4 继承"></a><strong>4 继承</strong></h2><h4 id="4-1-改变访问限制"><a href="#4-1-改变访问限制" class="headerlink" title="4.1 改变访问限制"></a>4.1 改变访问限制</h4><p>某些基类的成员可能不适合子类，这时候需要在子类中把基类的成员给隐藏掉。可以使用using声明。如下所示：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BC</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setX</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DC</span>:</span> <span class="keyword">public</span> BC &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">     <span class="keyword">using</span> BC::setX;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<h4 id="4-2-保护成员"><a href="#4-2-保护成员" class="headerlink" title="4.2 保护成员"></a>4.2 保护成员</h4><ul>
-<li>保护成员和私有成员类似，只在该类中可见。但在共有继承下，保护成员在子类中是可见的，而私有成员不可见。<br>在派生类的对象中都是不可见的。   </li>
+<h2 id="4-继承"><a class="markdownIt-Anchor" href="#4-继承"></a> <strong>4 继承</strong></h2>
+<h4 id="41-改变访问限制"><a class="markdownIt-Anchor" href="#41-改变访问限制"></a> 4.1 改变访问限制</h4>
+<p>某些基类的成员可能不适合子类，这时候需要在子类中把基类的成员给隐藏掉。可以使用using声明。如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BC</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setX</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DC</span>:</span> <span class="keyword">public</span> BC &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">     <span class="keyword">using</span> BC::setX;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="42-保护成员"><a class="markdownIt-Anchor" href="#42-保护成员"></a> 4.2 保护成员</h4>
+<ul>
+<li>保护成员和私有成员类似，只在该类中可见。但在共有继承下，保护成员在子类中是可见的，而私有成员不可见。<br>
+在派生类的对象中都是不可见的。</li>
 <li>一般来说，避免将数据成员设计成保护成员，即使某个数据成员可以成为保护成员。但更好地解决办法是：首先将这个数据成员定义为私有成员，然后为它设计一个用来进行存取访问的保护成员函数，通常将这种类型的成员函数成为访问函数。</li>
 </ul>
-<h4 id="4-3-子类的构造函数"><a href="#4-3-子类的构造函数" class="headerlink" title="4.3 子类的构造函数"></a>4.3 子类的构造函数</h4><ul>
+<h4 id="43-子类的构造函数"><a class="markdownIt-Anchor" href="#43-子类的构造函数"></a> 4.3 子类的构造函数</h4>
+<ul>
 <li>如果基类拥有构造函数但没有默认构造函数，那么子类的构造函数应该显式的调用基类的构造函数。</li>
 <li>构造的顺序: 先父母、再客人、最后自己。举个例子:</li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> &#123;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span> <span class="keyword">public</span> A &#123;</span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">     C() &#123; &#125;</span><br><span class="line"> <span class="keyword">private</span>:</span><br><span class="line">     B b1;</span><br><span class="line">     B b2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>C类的构造函数，先构造父母A，在构造客人b1,b2，最后构造自己。子类的构造函数，只负责前一层对象的构造，祖先类对象的构造并不执行。</p>
-<h4 id="4-4-多继承的构造函数"><a href="#4-4-多继承的构造函数" class="headerlink" title="4.4 多继承的构造函数"></a>4.4 多继承的构造函数</h4><p>先继承的先被构造，跟初始化列表中的顺序无关。客人不止一个，先声明谁就先构造谁。</p>
-<h4 id="4-5-保护继承"><a href="#4-5-保护继承" class="headerlink" title="4.5 保护继承"></a>4.5 保护继承</h4><ul>
+<h4 id="44-多继承的构造函数"><a class="markdownIt-Anchor" href="#44-多继承的构造函数"></a> 4.4 多继承的构造函数</h4>
+<p>先继承的先被构造，跟初始化列表中的顺序无关。客人不止一个，先声明谁就先构造谁。</p>
+<h4 id="45-保护继承"><a class="markdownIt-Anchor" href="#45-保护继承"></a> 4.5 保护继承</h4>
+<ul>
 <li>基类中的所有公有成员在派生类中是保护成员。</li>
 <li>基类中的所有保护成员在派生类中是保护成员。</li>
 <li>基类中的所有私有成员在派生类中是不可见的。</li>
 </ul>
-<h2 id="5-多态"><a href="#5-多态" class="headerlink" title="5 多态"></a><strong>5 多态</strong></h2><h4 id="5-1-动态绑定"><a href="#5-1-动态绑定" class="headerlink" title="5.1 动态绑定"></a>5.1 动态绑定</h4><p>使用动态绑定的程序会影响效率，因为虚成员函数表需要额外的存储空间</p>
-<h4 id="5-2-构造函数与析构"><a href="#5-2-构造函数与析构" class="headerlink" title="5.2 构造函数与析构"></a>5.2 构造函数与析构</h4><p>构造函数不能是虚成员函数，析构函数可以是虚成员函数。</p>
-<h4 id="5-3-虚成员函数"><a href="#5-3-虚成员函数" class="headerlink" title="5.3 虚成员函数"></a>5.3 虚成员函数</h4><p>只要非静态成员才可以是虚成员函数。</p>
-<h4 id="5-4-重载、覆盖、隐藏"><a href="#5-4-重载、覆盖、隐藏" class="headerlink" title="5.4 重载、覆盖、隐藏"></a>5.4 重载、覆盖、隐藏</h4><ul>
+<h2 id="5-多态"><a class="markdownIt-Anchor" href="#5-多态"></a> <strong>5 多态</strong></h2>
+<h4 id="51-动态绑定"><a class="markdownIt-Anchor" href="#51-动态绑定"></a> 5.1 动态绑定</h4>
+<p>使用动态绑定的程序会影响效率，因为虚成员函数表需要额外的存储空间</p>
+<h4 id="52-构造函数与析构"><a class="markdownIt-Anchor" href="#52-构造函数与析构"></a> 5.2 构造函数与析构</h4>
+<p>构造函数不能是虚成员函数，析构函数可以是虚成员函数。</p>
+<h4 id="53-虚成员函数"><a class="markdownIt-Anchor" href="#53-虚成员函数"></a> 5.3 虚成员函数</h4>
+<p>只要非静态成员才可以是虚成员函数。</p>
+<h4 id="54-重载-覆盖-隐藏"><a class="markdownIt-Anchor" href="#54-重载-覆盖-隐藏"></a> 5.4 重载、覆盖、隐藏</h4>
+<ul>
 <li>重载：具有不同的函数签名才可以重载，前提函数名要相同。</li>
 <li>覆盖：基类有一个与子类相同函数名的虚成员函数，函数签名要相同，才形成覆盖。</li>
 <li>隐藏：子类有一个与基类函数名相同的非虚成员函数，不论函数签名是否相同，子类都会隐藏基类的同名函数。</li>
 </ul>
-<h4 id="5-5-多态条件"><a href="#5-5-多态条件" class="headerlink" title="5.5 多态条件"></a>5.5 多态条件</h4><p>继承层次中的同名函数，必须具有相同的函数签名，也就是所说的覆盖。</p>
-<h4 id="5-6-抽象基类"><a href="#5-6-抽象基类" class="headerlink" title="5.6 抽象基类"></a>5.6 抽象基类</h4><p>一个类只要有一个纯虚函数，就是抽象基类。抽象基类可以有其他不是纯虚成员函数或数据成员。</p>
-<h4 id="5-7-多态中的dynamic-cast"><a href="#5-7-多态中的dynamic-cast" class="headerlink" title="5.7 多态中的dynamic_cast"></a>5.7 多态中的dynamic_cast</h4><p><strong>dynamic_cast</strong>操作是否正确与转型的目标类型是否多态无关，但转型的源类型必须是多态的。也就是说<strong>dynamic_cast</strong>只能施加于具有多态性的类型，而且转型的目的类型必须是指针或者引用。</p>
-<h2 id="6-操作符重载"><a href="#6-操作符重载" class="headerlink" title="6 操作符重载"></a><strong>6 操作符重载</strong></h2><h4 id="6-1-重载规则"><a href="#6-1-重载规则" class="headerlink" title="6.1 重载规则"></a>6.1 重载规则</h4><ul>
-<li>成员选择符(.)、成员对象选择符(.*)、域解析操作符(::)和条件操作符(?:)不能被重载。除了赋值操作符(=)之外，基类中的所有被重载的操作符都将被子类继承。  </li>
+<h4 id="55-多态条件"><a class="markdownIt-Anchor" href="#55-多态条件"></a> 5.5 多态条件</h4>
+<p>继承层次中的同名函数，必须具有相同的函数签名，也就是所说的覆盖。</p>
+<h4 id="56-抽象基类"><a class="markdownIt-Anchor" href="#56-抽象基类"></a> 5.6 抽象基类</h4>
+<p>一个类只要有一个纯虚函数，就是抽象基类。抽象基类可以有其他不是纯虚成员函数或数据成员。</p>
+<h4 id="57-多态中的dynamic_cast"><a class="markdownIt-Anchor" href="#57-多态中的dynamic_cast"></a> 5.7 多态中的dynamic_cast</h4>
+<p><strong>dynamic_cast</strong>操作是否正确与转型的目标类型是否多态无关，但转型的源类型必须是多态的。也就是说<strong>dynamic_cast</strong>只能施加于具有多态性的类型，而且转型的目的类型必须是指针或者引用。</p>
+<h2 id="6-操作符重载"><a class="markdownIt-Anchor" href="#6-操作符重载"></a> <strong>6 操作符重载</strong></h2>
+<h4 id="61-重载规则"><a class="markdownIt-Anchor" href="#61-重载规则"></a> 6.1 重载规则</h4>
+<ul>
+<li>成员选择符(.)、成员对象选择符(.*)、域解析操作符(::)和条件操作符(?:)不能被重载。除了赋值操作符(=)之外，基类中的所有被重载的操作符都将被子类继承。</li>
 <li>重载不改变操作符的优先级和语法。</li>
 </ul>
-<h4 id="6-2-重载方式"><a href="#6-2-重载方式" class="headerlink" title="6.2 重载方式"></a>6.2 重载方式</h4><p>成员函数重载:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    A( <span class="keyword">int</span> x ) &#123; <span class="keyword">this</span>-&gt;x = x; &#125;</span><br><span class="line">    A <span class="keyword">operator</span>+ ( <span class="keyword">const</span> A &amp; a ) <span class="keyword">const</span> &#123; <span class="keyword">return</span> A( x + a.x ); &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>顶层函数重载：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A <span class="keyword">operator</span>+ ( <span class="keyword">const</span> A &amp; a, <span class="keyword">const</span> B &amp; b ) &#123; <span class="keyword">return</span> A( a.x + b.x ); &#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="6-3-顶层函数进行操作符重载"><a href="#6-3-顶层函数进行操作符重载" class="headerlink" title="6.3 顶层函数进行操作符重载"></a>6.3 顶层函数进行操作符重载</h4><ul>
-<li>除了内存管理操作符new、new[]、delete、delete[]之外，一个以顶层函数形式重载的操作符必须在它的参数表中包含一个类对象。  </li>
+<h4 id="62-重载方式"><a class="markdownIt-Anchor" href="#62-重载方式"></a> 6.2 重载方式</h4>
+<p>成员函数重载:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    A( <span class="keyword">int</span> x ) &#123; <span class="keyword">this</span>-&gt;x = x; &#125;</span><br><span class="line">    A <span class="keyword">operator</span>+ ( <span class="keyword">const</span> A &amp; a ) <span class="keyword">const</span> &#123; <span class="keyword">return</span> A( x + a.x ); &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>顶层函数重载：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A <span class="keyword">operator</span>+ ( <span class="keyword">const</span> A &amp; a, <span class="keyword">const</span> B &amp; b ) &#123; <span class="keyword">return</span> A( a.x + b.x ); &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="63-顶层函数进行操作符重载"><a class="markdownIt-Anchor" href="#63-顶层函数进行操作符重载"></a> 6.3 顶层函数进行操作符重载</h4>
+<ul>
+<li>除了内存管理操作符new、new[]、delete、delete[]之外，一个以顶层函数形式重载的操作符必须在它的参数表中包含一个类对象。</li>
 <li>使用顶层函数进行重载的一个优点就是非对象操作数可以出现在操作符的左边。而使用类成员函数时，第一个操作数必须是类的对象。</li>
 </ul>
-<h4 id="6-4-输入与输出操作符的重载"><a href="#6-4-输入与输出操作符的重载" class="headerlink" title="6.4 输入与输出操作符的重载"></a>6.4 输入与输出操作符的重载</h4><ul>
-<li>不能用顶层函数重载’=’  </li>
+<h4 id="64-输入与输出操作符的重载"><a class="markdownIt-Anchor" href="#64-输入与输出操作符的重载"></a> 6.4 输入与输出操作符的重载</h4>
+<ul>
+<li>不能用顶层函数重载’=’</li>
 <li>只能将&gt;&gt;重载函数设计为顶层函数。</li>
 <li>重载时的流对象应该是引用形式（屏幕、键盘不能复制的吧）。重载&gt;&gt;时，应将参数设为引用，因为要改变这个数的值的。</li>
 </ul>
-<h4 id="6-5-前置后置运算符的重载"><a href="#6-5-前置后置运算符的重载" class="headerlink" title="6.5 前置后置运算符的重载"></a>6.5 前置后置运算符的重载</h4><ul>
+<h4 id="65-前置后置运算符的重载"><a class="markdownIt-Anchor" href="#65-前置后置运算符的重载"></a> 6.5 前置后置运算符的重载</h4>
+<ul>
 <li>operator++(int):后置</li>
 <li>operator++:前置</li>
 </ul>
-<h4 id="6-6-重载转型操作符"><a href="#6-6-重载转型操作符" class="headerlink" title="6.6 重载转型操作符"></a>6.6 重载转型操作符</h4><p>声明中不能包含返回类型，即使void也不行。如下所示：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">operator</span> <span class="title">othertype</span><span class="params">()</span></span>; <span class="comment">// othertype 可以为一个基本类型如int,或者一个类</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="6-7-内存管理操作符"><a href="#6-7-内存管理操作符" class="headerlink" title="6.7 内存管理操作符"></a>6.7 内存管理操作符</h4><ul>
+<h4 id="66-重载转型操作符"><a class="markdownIt-Anchor" href="#66-重载转型操作符"></a> 6.6 重载转型操作符</h4>
+<p>声明中不能包含返回类型，即使void也不行。如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">operator</span> <span class="title">othertype</span><span class="params">()</span></span>; <span class="comment">// othertype 可以为一个基本类型如int,或者一个类</span></span><br></pre></td></tr></table></figure>
+<h4 id="67-内存管理操作符"><a class="markdownIt-Anchor" href="#67-内存管理操作符"></a> 6.7 内存管理操作符</h4>
+<ul>
 <li>重载new、new[]，顶层函数或者成员函数重载方式均返回void *类型。并且两种重载方式的第一个参数必须是size_t类型的参数。</li>
 <li>重载delete、delete[]，两种重载方式均返回void，并且第一个参数必须是void *类型，用来指向需要释放的空间。</li>
 </ul>
@@ -674,7 +716,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-从C到C"><span class="nav-number">1.</span> <span class="nav-text">2 从C到C++</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-命名空间"><span class="nav-number">1.0.1.</span> <span class="nav-text">2.1 命名空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-操作符"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.2 操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-强制类型转换"><span class="nav-number">1.0.3.</span> <span class="nav-text">2.3 强制类型转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-string"><span class="nav-number">1.0.4.</span> <span class="nav-text">2.4 string</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-内联函数"><span class="nav-number">1.0.5.</span> <span class="nav-text">2.5 内联函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-函数签名与默认参数"><span class="nav-number">1.0.6.</span> <span class="nav-text">2.6 函数签名与默认参数</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-类"><span class="nav-number">2.</span> <span class="nav-text">3 类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-默认构造函数"><span class="nav-number">2.0.1.</span> <span class="nav-text">3.1 默认构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-拷贝构造函数"><span class="nav-number">2.0.2.</span> <span class="nav-text">3.2 拷贝构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-构造函数"><span class="nav-number">2.0.3.</span> <span class="nav-text">3.3 构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-析构函数"><span class="nav-number">2.0.4.</span> <span class="nav-text">3.4 析构函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-类数据成员与成员函数"><span class="nav-number">2.0.5.</span> <span class="nav-text">3.5 类数据成员与成员函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-继承"><span class="nav-number">3.</span> <span class="nav-text">4 继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-改变访问限制"><span class="nav-number">3.0.1.</span> <span class="nav-text">4.1 改变访问限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-保护成员"><span class="nav-number">3.0.2.</span> <span class="nav-text">4.2 保护成员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-子类的构造函数"><span class="nav-number">3.0.3.</span> <span class="nav-text">4.3 子类的构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-多继承的构造函数"><span class="nav-number">3.0.4.</span> <span class="nav-text">4.4 多继承的构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-5-保护继承"><span class="nav-number">3.0.5.</span> <span class="nav-text">4.5 保护继承</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-多态"><span class="nav-number">4.</span> <span class="nav-text">5 多态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-动态绑定"><span class="nav-number">4.0.1.</span> <span class="nav-text">5.1 动态绑定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-构造函数与析构"><span class="nav-number">4.0.2.</span> <span class="nav-text">5.2 构造函数与析构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-虚成员函数"><span class="nav-number">4.0.3.</span> <span class="nav-text">5.3 虚成员函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-重载、覆盖、隐藏"><span class="nav-number">4.0.4.</span> <span class="nav-text">5.4 重载、覆盖、隐藏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-多态条件"><span class="nav-number">4.0.5.</span> <span class="nav-text">5.5 多态条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-6-抽象基类"><span class="nav-number">4.0.6.</span> <span class="nav-text">5.6 抽象基类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-7-多态中的dynamic-cast"><span class="nav-number">4.0.7.</span> <span class="nav-text">5.7 多态中的dynamic_cast</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-操作符重载"><span class="nav-number">5.</span> <span class="nav-text">6 操作符重载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-重载规则"><span class="nav-number">5.0.1.</span> <span class="nav-text">6.1 重载规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-重载方式"><span class="nav-number">5.0.2.</span> <span class="nav-text">6.2 重载方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-顶层函数进行操作符重载"><span class="nav-number">5.0.3.</span> <span class="nav-text">6.3 顶层函数进行操作符重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-输入与输出操作符的重载"><span class="nav-number">5.0.4.</span> <span class="nav-text">6.4 输入与输出操作符的重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-5-前置后置运算符的重载"><span class="nav-number">5.0.5.</span> <span class="nav-text">6.5 前置后置运算符的重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-6-重载转型操作符"><span class="nav-number">5.0.6.</span> <span class="nav-text">6.6 重载转型操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-7-内存管理操作符"><span class="nav-number">5.0.7.</span> <span class="nav-text">6.7 内存管理操作符</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-从c到c"><span class="nav-number">1.</span> <span class="nav-text"> 2 从C到C++</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-命名空间"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 2.1 命名空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-操作符"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 2.2 操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-强制类型转换"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 2.3 强制类型转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#24-string"><span class="nav-number">1.0.4.</span> <span class="nav-text"> 2.4 string</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#25-内联函数"><span class="nav-number">1.0.5.</span> <span class="nav-text"> 2.5 内联函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#26-函数签名与默认参数"><span class="nav-number">1.0.6.</span> <span class="nav-text"> 2.6 函数签名与默认参数</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-类"><span class="nav-number">2.</span> <span class="nav-text"> 3 类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-默认构造函数"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 3.1 默认构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-拷贝构造函数"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 3.2 拷贝构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#33-构造函数"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 3.3 构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#34-析构函数"><span class="nav-number">2.0.4.</span> <span class="nav-text"> 3.4 析构函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#35-类数据成员与成员函数"><span class="nav-number">2.0.5.</span> <span class="nav-text"> 3.5 类数据成员与成员函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-继承"><span class="nav-number">3.</span> <span class="nav-text"> 4 继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#41-改变访问限制"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 4.1 改变访问限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#42-保护成员"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 4.2 保护成员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#43-子类的构造函数"><span class="nav-number">3.0.3.</span> <span class="nav-text"> 4.3 子类的构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#44-多继承的构造函数"><span class="nav-number">3.0.4.</span> <span class="nav-text"> 4.4 多继承的构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#45-保护继承"><span class="nav-number">3.0.5.</span> <span class="nav-text"> 4.5 保护继承</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-多态"><span class="nav-number">4.</span> <span class="nav-text"> 5 多态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#51-动态绑定"><span class="nav-number">4.0.1.</span> <span class="nav-text"> 5.1 动态绑定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#52-构造函数与析构"><span class="nav-number">4.0.2.</span> <span class="nav-text"> 5.2 构造函数与析构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#53-虚成员函数"><span class="nav-number">4.0.3.</span> <span class="nav-text"> 5.3 虚成员函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#54-重载-覆盖-隐藏"><span class="nav-number">4.0.4.</span> <span class="nav-text"> 5.4 重载、覆盖、隐藏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#55-多态条件"><span class="nav-number">4.0.5.</span> <span class="nav-text"> 5.5 多态条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#56-抽象基类"><span class="nav-number">4.0.6.</span> <span class="nav-text"> 5.6 抽象基类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#57-多态中的dynamic_cast"><span class="nav-number">4.0.7.</span> <span class="nav-text"> 5.7 多态中的dynamic_cast</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-操作符重载"><span class="nav-number">5.</span> <span class="nav-text"> 6 操作符重载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#61-重载规则"><span class="nav-number">5.0.1.</span> <span class="nav-text"> 6.1 重载规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#62-重载方式"><span class="nav-number">5.0.2.</span> <span class="nav-text"> 6.2 重载方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#63-顶层函数进行操作符重载"><span class="nav-number">5.0.3.</span> <span class="nav-text"> 6.3 顶层函数进行操作符重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#64-输入与输出操作符的重载"><span class="nav-number">5.0.4.</span> <span class="nav-text"> 6.4 输入与输出操作符的重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#65-前置后置运算符的重载"><span class="nav-number">5.0.5.</span> <span class="nav-text"> 6.5 前置后置运算符的重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#66-重载转型操作符"><span class="nav-number">5.0.6.</span> <span class="nav-text"> 6.6 重载转型操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#67-内存管理操作符"><span class="nav-number">5.0.7.</span> <span class="nav-text"> 6.7 内存管理操作符</span></a></li></ol></li></div>
             
 
           </div>

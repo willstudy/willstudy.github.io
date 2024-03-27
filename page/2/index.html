@@ -395,7 +395,9 @@
       
         
           
-          写在前面
+           写在前面
+
+
 进程基础
 
 进程概念
@@ -405,12 +407,14 @@
 init进程
 
 
+
 进程应用
 
 进程间通信
 信号处理
 后台进程与守护进程
 浅谈nginx多进程模型
+
 
 
 常用工具介绍
@@ -422,7 +426,9 @@ strace: 查看系统调用情况
 
 
 
-进程基础基础概念进程是操作系统的基本概念之一，它是操作系统分配资源的基本单位，也是程序
+ 进程基础
+ 基础概念
+进程是操作系统的基本概念之一，它是操作系统分配资源的
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -569,13 +575,16 @@ strace: 查看系统调用情况
       
         
           
-          写在前面
+           写在前面
+
 线程基础
+
 线程概念
 Linux线程实现方式
 
 
 Linux Thread vs Process
+
 资源共享层面的差异
 调度层面的差异
 性能层面的差异
@@ -583,15 +592,16 @@ Thread 缺点 &amp;&amp; 应用场景
 
 
 Linux Thread 使用
+
 创建线程
 内核线程
 同步操作
 
 
 常见的多线程编程模式
-leader-follow 模型（主从）
-producer-consumer模型（生产者消费者）
 
+leader-follow 模型（主从）
+producer-consumer模型（生产
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -738,8 +748,10 @@ producer-consumer模型（生产者消费者）
       
         
           
-          本文简介本文主要叙述在 ubuntu 16.04 环境上搭建 ceph 集群，并介绍 k8s 集群以 storageclass 方式使用 ceph 的两种方式。本文测试环境共 4 台机器:1234ceph-monceph-01ceph-02ceph-03
-其中 ceph-mom 当做集群的监控节点，剩下三台当做数据节点，其中 ceph-01、ceph-02、ceph-03 机器有挂了 2 块磁盘，
+           本文简介
+本文主要叙述在 ubuntu 16.04 环境上搭建 ceph 集群，并介绍 k8s 集群以 storageclass 方式使用 ceph 的两种方式。本文测试环境共 4 台机器:
+1234ceph-monceph-01ceph-02ceph-03
+其中 ceph-mom 当做集群的监控节点，剩下三台当做数据节点，其中 ceph-01、ceph-02、ceph-03 机器有挂了 2 块
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -886,7 +898,8 @@ producer-consumer模型（生产者消费者）
       
         
           
-          kubernetes CRIkubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍，开
+           kubernetes CRI
+kubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1033,10 +1046,16 @@ producer-consumer模型（生产者消费者）
       
         
           
-          容器编排服务变更策略调研本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。其中它们的版本信息如下:
-平台|版本kubernetes|v1.8swarm|v1.2.8nomad|v0.6.3    
+           容器编排服务变更策略调研
+本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。
+其中它们的版本信息如下:
+平台|版本
+kubernetes|v1.8
+swarm|v1.2.8
+nomad|v0.6.3
 下面分别介绍一下这些平台的服务变更策略。
-kubernetes在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目前提供了
+ kubernetes
+在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1183,12 +1202,13 @@ kubernetes在Kubernetes中，是由deployment控制器来控制服务变更的�
       
         
           
-          Linux Namespace简介Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：
+           Linux Namespace简介
+Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：
 
 Mount: 隔离文件系统挂载点
 UTS: 隔离主机名和域名信息
 IPC: 隔离进程间通信
-PID: 隔离进
+PID: 隔
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1335,9 +1355,11 @@ PID: 隔离进
       
         
           
-          背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。
+           背景
+学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。
 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。
-内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依
+ 内存寻址方式的发展历程
+首先简单的介绍下内存寻址的概念，现代计算机是基于
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1484,8 +1506,9 @@ PID: 隔离进
       
         
           
-          写在前面在kubernetes集群中运维生成环境的服务已经长达半年多时间，我们遇到了很多问题，也踩到了很多坑，其中因为 Docker Registry 的故障而导致的不可用事件还是挺多的，这些问题常常被用户埋怨。
-Docker Registry 作为镜像仓库、数据中心，在整个服务发布流程中是异常关键的一环。由于之前初期我们搭建的 Docker Registry 是通过 docker run 跑在单
+           写在前面
+在kubernetes集群中运维生成环境的服务已经长达半年多时间，我们遇到了很多问题，也踩到了很多坑，其中因为 Docker Registry 的故障而导致的不可用事件还是挺多的，这些问题常常被用户埋怨。
+Docker Registry 作为镜像仓库、数据中心，在整个服务发布流程中是异常关键的一环。由于之前初期我们搭建的 Docker Registry 是通过 docker run 跑
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1632,8 +1655,10 @@ Docker Registry 作为镜像仓库、数据中心，在整个服务发布流程�
       
         
           
-          背景简介组里目前支持了一个非常重要的业务，为了支持业务快速的扩展，更好的进行产品维护，决定成立一个虚拟化学习小组。主要宗旨就是为了提升大家对虚拟化、资源管理这方面知识的理解，共同调研生产环境下关于资源虚拟化方面的主流解决方案
-Borg论文解读先贴上原文的地址：http://static.googleusercontent.com/media/research.google.com/en//pubs
+           背景简介
+组里目前支持了一个非常重要的业务，为了支持业务快速的扩展，更好的进行产品维护，决定成立一个虚拟化学习小组。主要宗旨就是为了提升大家对虚拟化、资源管理这方面知识的理解，共同调研生产环境下关于资源虚拟化方面的主流解决方案
+ Borg论文解读
+先贴上原文的地址：http://static.googleusercontent.com/media/research.google.com/en//
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1780,8 +1805,9 @@ Borg论文解读先贴上原文的地址：http://static.googleusercontent.com/m
       
         
           
-          关于工作从6月8号开始实习，到现在近半年了。回想这半年的生活过得像研一的时候，每天早晨9点起床，晚10点半回家，不过唯一值得欣慰的是每周有2天可以放松一下，而且有工资加上学校的补助，过得还是挺好的。在这里技术氛围比较浓厚，没有明显的等级观念，唯一不太好的就是大家都比较忙，很难有时间、有兴趣聊聊自己喜欢的事情，很少有机会大家一起出去聚聚，加深感情。
-这半年来时间过得很快，成长的也很快，认识了很多优秀
+           关于工作
+从6月8号开始实习，到现在近半年了。回想这半年的生活过得像研一的时候，每天早晨9点起床，晚10点半回家，不过唯一值得欣慰的是每周有2天可以放松一下，而且有工资加上学校的补助，过得还是挺好的。在这里技术氛围比较浓厚，没有明显的等级观念，唯一不太好的就是大家都比较忙，很难有时间、有兴趣聊聊自己喜欢的事情，很少有机会大家一起出去聚聚，加深感情。
+这半年来时间过得很快，成长的也很快，认识了很多
           ...
           <!--noindex-->
           <div class="post-button text-center">

@@ -396,7 +396,8 @@
         
           
           本文简要的实现了平衡二叉树的插入、删除操作。为了更新节点的平衡度，新增了parent指针。
-简介这个平衡二叉树使用C语言实现的，因为写的匆忙，加上智商捉急，可能某些地方没有考虑周全，会有一点小bug，尚在排查中。本算法能基本的实现平衡二叉树的插入、删除操作，有关平衡二叉树的原理及实现，参考AVL树(一)之 图文解析 和 C语言的实现。这位博主讲解的非常详细！！虽然他给的代码中有一些错误，但从他的博
+ 简介
+这个平衡二叉树使用C语言实现的，因为写的匆忙，加上智商捉急，可能某些地方没有考虑周全，会有一点小bug，尚在排查中。本算法能基本的实现平衡二叉树的插入、删除操作，有关平衡二叉树的原理及实现，参考AVL树(一)之 图文解析 和 C语言的实现。这位博主讲解的非常详细！！虽然他给的代码中有一些错误，但从他
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -544,7 +545,7 @@
         
           
           This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts:
-Lab 3 :  Privilege Separa
+ Lab 3 :  Privilege Separ
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -691,9 +692,12 @@ Lab 3 :  Privilege Separa
       
         
           
-          本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C++盲点记录一下。这些都是C++的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点….
-2 从C到C++2.1 命名空间使用命名空间（namespace）时，结尾处不能添加分号。
-2.2 操作符使用不带参数的操作符，如(hex, endl)，必须包含头文件iostream；而使用带参数
+          本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C盲点记录一下。这些都是C的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…
+ 2 从C到C++
+ 2.1 命名空间
+使用命名空间（namespace）时，结尾处不能添加分号。
+ 2.2 操作符
+使用不带参数的操作符，如**(hex, endl)，必须包含头文件iostream**；而
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -841,11 +845,13 @@ Lab 3 :  Privilege Separa
         
           
           本文主要收集了一些很nice的方法，用来计算一个数，其二进制形式中1的位数。
-简介李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。
-简单相与法比如一个二进制数 0b 1111 1111 = 0xFF，只需要：  
+ 简介
+李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。
+ 简单相与法
+比如一个二进制数 0b 1111 1111 = 0xFF，只需要：
 
 1、与 0b 0000 0001 = 0x01 相与，如果为真，则个数加1；
-2、与 0b 0000 0010 = 0x02 相与，如果为真
+2、与 0b 0000 0010 = 0x02 相与，如果
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -992,9 +998,15 @@ Lab 3 :  Privilege Separa
       
         
           
-          简介李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为：1strcpy( char *dest, char *src )
-简单方法核心代码：1while( *dest++ = *src++ );
-增量值算法因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下：12int delta
+           简介
+李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为：
+1strcpy( char *dest, char *src )
+ 简单方法
+核心代码：
+1while( *dest++ = *src++ );
+ 增量值算法
+因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下：
+12
           ...
           <!--noindex-->
           <div class="post-button text-center">

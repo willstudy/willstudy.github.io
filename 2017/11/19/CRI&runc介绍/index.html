@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="kubernetes CRIkubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍，开">
+<meta name="description" content="kubernetes CRI kubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍">
 <meta name="keywords" content="docker,kubernetes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CRI &amp; runc 介绍">
 <meta property="og:url" content="https://blog.lecury.cn/2017/11/19/CRI&runc介绍/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="kubernetes CRIkubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍，开">
+<meta property="og:description" content="kubernetes CRI kubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/CRI_RUNC/CRI.png">
 <meta property="og:image" content="https://blog.lecury.cn/images/CRI_RUNC/containerd.png">
@@ -95,7 +95,7 @@
 <meta property="og:updated_time" content="2019-04-05T08:30:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CRI &amp; runc 介绍">
-<meta name="twitter:description" content="kubernetes CRIkubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍，开">
+<meta name="twitter:description" content="kubernetes CRI kubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/CRI_RUNC/CRI.png">
 
 
@@ -402,24 +402,38 @@
       
 
       
-        <h2 id="kubernetes-CRI"><a href="#kubernetes-CRI" class="headerlink" title="kubernetes CRI"></a>kubernetes CRI</h2><p>kubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍，开发者可以专注于构建他们的容器运行时，这个抽象层称作Container Runtime Interface(CRI)接口，下面介绍一下CRI这个概念。</p>
-<h4 id="CRI"><a href="#CRI" class="headerlink" title="CRI"></a>CRI</h4><p>CRI是一个插件接口，这个接口的引入使得kubelet不用重新编译的情况下管理多种容器类型。CRI主要由gRPC API和protocol buffers组成，它的架构图如下所示：<br><img src="/images/CRI_RUNC/CRI.png" alt><br>kubelet与容器运行时(或者是CRI shim)之间的通信是借助gRPC框架通过unix套接字完成的，kubelet作为client，CRI shim作为server来实现。对于docker容器而言，dockershim是kubelet的CRI shim，它负责与kubelet的gRPC客户端进行通信。</p>
+        <h2 id="kubernetes-cri"><a class="markdownIt-Anchor" href="#kubernetes-cri"></a> kubernetes CRI</h2>
+<p>kubernetes是一个容器编排系统，可以便捷的部署容器，它同时支持Docker和Rocket两种容器类型。然而不管是Docker还是Rocket都需要通过内部、不太稳定的接口直接集成到kubelet的源码中，这样的集成过程需要开发者十分熟悉kubelet内部原理，同时维护起来也非常麻烦。在kubernetes1.5版本中，提供了一个清晰定义的抽象层消除了这些障碍，开发者可以专注于构建他们的容器运行时，这个抽象层称作Container Runtime Interface(CRI)接口，下面介绍一下CRI这个概念。</p>
+<h4 id="cri"><a class="markdownIt-Anchor" href="#cri"></a> CRI</h4>
+<p>CRI是一个插件接口，这个接口的引入使得kubelet不用重新编译的情况下管理多种容器类型。CRI主要由gRPC API和protocol buffers组成，它的架构图如下所示：<br>
+<img src="/images/CRI_RUNC/CRI.png" alt><br>
+kubelet与容器运行时(或者是CRI shim)之间的通信是借助gRPC框架通过unix套接字完成的，kubelet作为client，CRI shim作为server来实现。对于docker容器而言，dockershim是kubelet的CRI shim，它负责与kubelet的gRPC客户端进行通信。</p>
 <p>CRI shim的gRPC API主要包括Image Service和Runtime Service两部分，其中Image Service主要用来拉取、检查和删除镜像文件，而Runtime Service主要用来管理Pod和container的整个生命周期。</p>
-<h4 id="kubernetes拉起Docker的过程"><a href="#kubernetes拉起Docker的过程" class="headerlink" title="kubernetes拉起Docker的过程"></a>kubernetes拉起Docker的过程</h4><p>在kubernetes中，是由kubelet组件来完成启动Docker容器的过程。在老版本(v1.5.6)的kubelet中，CRI作为一个可选项使用的，如果没有启用CRI功能，那么kubelet在执行容器时，需要经过如下调用：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet-&gt;docker-client(http api)-&gt;docker daemon-&gt;containerd-&gt;shim-&gt;runc</span><br></pre></td></tr></table></figure></p>
-<p>容器启动后的进程关系如下图所示：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dockerd -H fd://</span><br><span class="line">  |-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --shim containerd-shim --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --runtime runc</span><br><span class="line">  |   |-containerd-shim 512353b8e356c26728f10350af91dc68704cb23264e02975d6a8e938bc8f3a12 /var/run/docker/libcontainerd/512353b8e356c26728f10350af91dc68704cb23264e02975d6a8e938bc8f3a12 runc</span><br><span class="line">  |   |   |-app</span><br></pre></td></tr></table></figure></p>
-<p>如果启用了CRI功能，kubelet在执行容器时，则经过了下面的调用:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet-&gt;dockershim-&gt;docker-client(http api)-&gt;docker daemon-&gt;containerd-&gt;shim-&gt;runc</span><br></pre></td></tr></table></figure></p>
-<p>其中containerd的架构图如下所示:  </p>
-<p><img src="/images/CRI_RUNC/containerd.png" alt><br>containerd与docker的关系如下图所示：<br><img src="/images/CRI_RUNC/containerd-runc.jpg" alt><br>contained向上为Docker Daemon提供了gRPC接口，使得Docker Daemon屏蔽下面的结构变化，确保原有接口向下兼容，向下通过containerd-shim结合runc，实际的创建容器、运行容器，这样使得引擎可以独立升级，避免之前Docker Daemon升级导致所有容器不可用的问题。</p>
+<h4 id="kubernetes拉起docker的过程"><a class="markdownIt-Anchor" href="#kubernetes拉起docker的过程"></a> kubernetes拉起Docker的过程</h4>
+<p>在kubernetes中，是由kubelet组件来完成启动Docker容器的过程。在老版本(v1.5.6)的kubelet中，CRI作为一个可选项使用的，如果没有启用CRI功能，那么kubelet在执行容器时，需要经过如下调用：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet-&gt;docker-client(http api)-&gt;docker daemon-&gt;containerd-&gt;shim-&gt;runc</span><br></pre></td></tr></table></figure>
+<p>容器启动后的进程关系如下图所示：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dockerd -H fd://</span><br><span class="line">  |-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --shim containerd-shim --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --runtime runc</span><br><span class="line">  |   |-containerd-shim 512353b8e356c26728f10350af91dc68704cb23264e02975d6a8e938bc8f3a12 /var/run/docker/libcontainerd/512353b8e356c26728f10350af91dc68704cb23264e02975d6a8e938bc8f3a12 runc</span><br><span class="line">  |   |   |-app</span><br></pre></td></tr></table></figure>
+<p>如果启用了CRI功能，kubelet在执行容器时，则经过了下面的调用:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet-&gt;dockershim-&gt;docker-client(http api)-&gt;docker daemon-&gt;containerd-&gt;shim-&gt;runc</span><br></pre></td></tr></table></figure>
+<p>其中containerd的架构图如下所示:</p>
+<p><img src="/images/CRI_RUNC/containerd.png" alt><br>
+containerd与docker的关系如下图所示：<br>
+<img src="/images/CRI_RUNC/containerd-runc.jpg" alt><br>
+contained向上为Docker Daemon提供了gRPC接口，使得Docker Daemon屏蔽下面的结构变化，确保原有接口向下兼容，向下通过containerd-shim结合runc，实际的创建容器、运行容器，这样使得引擎可以独立升级，避免之前Docker Daemon升级导致所有容器不可用的问题。</p>
 <p>而dockershim是一个封装了docker-client的gRPC server，它和kubelet一起启动，kubelet将创建容器的请求以gPRC的方式发送给dockershim，然后dockershim调用docker-client将创建容器的请求发送给docker daemon。</p>
-<h4 id="容器间如何组成一个Pod"><a href="#容器间如何组成一个Pod" class="headerlink" title="容器间如何组成一个Pod"></a>容器间如何组成一个Pod</h4><p>Pod是kubernetes中的一个概念，它由一个或多个容器组成。在创建Pod的时候，过程主要如下：  </p>
+<h4 id="容器间如何组成一个pod"><a class="markdownIt-Anchor" href="#容器间如何组成一个pod"></a> 容器间如何组成一个Pod</h4>
+<p>Pod是kubernetes中的一个概念，它由一个或多个容器组成。在创建Pod的时候，过程主要如下：</p>
 <ul>
 <li>创建一个Pod sandbox，也称为pod container，镜像是pause，它保持着net namespace打开，同一个Pod内的其他容器通过Docker的<code>--net=container:&lt;id&gt;</code>加入到这个net namespace中，同一个Pod中容器间也共享着IPC namespace，这意味着同一个Pod内的容器可以通过localhost互相访问，同时共享同一套IPC进程间通信，在新版本的kubernetes中也实现了 pid namespace的共享。</li>
 <li>创建init container(可选)</li>
 <li>创建正常的container，将新container加入到pod container的net、ipc、pid(当前版本1.7.3有)namespace中，同时从 pod container 中继承来了 cgroup parent、seccomp等。</li>
 </ul>
 <p>在当前版本(v1.7.3)的kubelet中，CRI已成为了缺省选项。为了进一步的降低kubernetes对容器管理的复杂性，引入了CRI-O项目，下面简单的介绍一下CRI-O。</p>
-<h4 id="CRI-O"><a href="#CRI-O" class="headerlink" title="CRI-O"></a>CRI-O</h4><p>kubernetes支持了Docker等多种容器类型，由于docker等容器项目变化太快，导致了kubernetes中对容器的管理部分经常修改，进而造成k8s整体的不稳定性。为了使得kubernetes从各种容器的管理工作中解脱出来，kubernetes孵化了CRI-O这个项目，CRI-O旨在不依赖传统容器引擎的前提下，使得Kubernetes调用框架可以管理和启动容器化的服务类型。</p>
-<p>CRI-O是kubernetes CRI接口的一个实现，通过使用OCI标准来兼容各种容器类型，它是kubernetes使用docker运行环境的一个轻量级的替代方案，它允许kubernetes使用任何支持OCI标准的容器类型运行Pod。它的架构图如下：<br><img src="/images/CRI_RUNC/architecture.png" alt>   </p>
+<h4 id="cri-o"><a class="markdownIt-Anchor" href="#cri-o"></a> CRI-O</h4>
+<p>kubernetes支持了Docker等多种容器类型，由于docker等容器项目变化太快，导致了kubernetes中对容器的管理部分经常修改，进而造成k8s整体的不稳定性。为了使得kubernetes从各种容器的管理工作中解脱出来，kubernetes孵化了CRI-O这个项目，CRI-O旨在不依赖传统容器引擎的前提下，使得Kubernetes调用框架可以管理和启动容器化的服务类型。</p>
+<p>CRI-O是kubernetes CRI接口的一个实现，通过使用OCI标准来兼容各种容器类型，它是kubernetes使用docker运行环境的一个轻量级的替代方案，它允许kubernetes使用任何支持OCI标准的容器类型运行Pod。它的架构图如下：<br>
+<img src="/images/CRI_RUNC/architecture.png" alt></p>
 <ul>
 <li>kubernetes通过kubelet来运行一个Pod(Pod是由一个或多个容器组成的容器集合，它们共享相同的IPC、NET、PID Namespace)</li>
 <li>kubelet创建Pod时，通过CRI接口将请求转发给CRI-O daemon</li>
@@ -432,90 +446,129 @@
 </ul>
 <p>如果k8s使用的容器运行环境为CRI-O，那么在拉起docker类型的Pod时，不需要借助docker daemon了。</p>
 <p>runc在整个容器的生命周期中占据了非常重要的部分，它是容器的执行引擎，下面介绍一下runc。</p>
-<h2 id="runc"><a href="#runc" class="headerlink" title="runc"></a>runc</h2><p>runc概括的来说是Docker容器的执行引擎，可以通过runc这个工具创建、启动和停止Docker容器，本文从runc的概念、用法、与kubernetes的关系以及运行原理四个方面对runc进行介绍。</p>
-<h2 id="runc的概念"><a href="#runc的概念" class="headerlink" title="runc的概念"></a>runc的概念</h2><p>runc是libcontainer的封装，而libcontainer是对操作系统关于容器方面的一些接口。runc运行容器需要两部分信息：</p>
+<h2 id="runc"><a class="markdownIt-Anchor" href="#runc"></a> runc</h2>
+<p>runc概括的来说是Docker容器的执行引擎，可以通过runc这个工具创建、启动和停止Docker容器，本文从runc的概念、用法、与kubernetes的关系以及运行原理四个方面对runc进行介绍。</p>
+<h2 id="runc的概念"><a class="markdownIt-Anchor" href="#runc的概念"></a> runc的概念</h2>
+<p>runc是libcontainer的封装，而libcontainer是对操作系统关于容器方面的一些接口。runc运行容器需要两部分信息：</p>
 <ul>
 <li>一个OCI配置(JSON)</li>
 <li>一个rootfs文件系统</li>
 </ul>
 <p>这两部分信息简称bundle，其中OCI(Open Container Initiative)是一个开放容器标准组织，旨在围绕容器格式和运行时制定一个开放的工业化标准OCF(Open Container Format)。runc是由Docker贡献出来的，按照OCF的标准制定的一种具体实现。下面接单的介绍一下runc的用法。</p>
-<h2 id="runc的使用"><a href="#runc的使用" class="headerlink" title="runc的使用"></a>runc的使用</h2><p>runc包括两部分，首先是一个OCI配置，可以通过<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runc spec</span><br></pre></td></tr></table></figure></p>
-<p>生成一份缺省的OCI配置，这里简单的浏览一下OCI中各个配置项。容器的创建除了OCI配置之外，还需要一个rootfs文件系统，这个文件系统可以通过docker export的方式获取到<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull busybox</span><br><span class="line">docker <span class="built_in">export</span> $(docker create busybox) &gt; busybox.tar</span><br><span class="line">mkdir busybox</span><br><span class="line">tar -C busybox -xf busybox.tar</span><br></pre></td></tr></table></figure></p>
-<p>有了这两部分东西之后，就可以实际的运行一个容器了，bundle包括一份OCI配置和一个rootfs，通过在bundle的目录下运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runc run busybox</span><br></pre></td></tr></table></figure></p>
-<p>可以运行一个busybox的容器。下面演示一下不同的配置对容器实际运行的影响，包括三个方面:   </p>
+<h2 id="runc的使用"><a class="markdownIt-Anchor" href="#runc的使用"></a> runc的使用</h2>
+<p>runc包括两部分，首先是一个OCI配置，可以通过</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runc spec</span><br></pre></td></tr></table></figure>
+<p>生成一份缺省的OCI配置，这里简单的浏览一下OCI中各个配置项。容器的创建除了OCI配置之外，还需要一个rootfs文件系统，这个文件系统可以通过docker export的方式获取到</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull busybox</span><br><span class="line">docker <span class="built_in">export</span> $(docker create busybox) &gt; busybox.tar</span><br><span class="line">mkdir busybox</span><br><span class="line">tar -C busybox -xf busybox.tar</span><br></pre></td></tr></table></figure>
+<p>有了这两部分东西之后，就可以实际的运行一个容器了，bundle包括一份OCI配置和一个rootfs，通过在bundle的目录下运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runc run busybox</span><br></pre></td></tr></table></figure>
+<p>可以运行一个busybox的容器。下面演示一下不同的配置对容器实际运行的影响，包括三个方面:</p>
 <ul>
 <li>capability中的<code>CAP_SYS_ADMIN</code>权限对hostname的影响</li>
 <li>通过mounts中的一些选项为新容器挂载一些设备</li>
 <li>通过指定namespaces中的<code>path</code>将容器放在一个已有的namespace中</li>
 </ul>
 <p>代码和配置放在了Github <a href="https://github.com/willstudy/runc-demo" target="_blank">runc-demo</a>。</p>
-<h4 id="capability-in-docker"><a href="#capability-in-docker" class="headerlink" title="capability in docker"></a>capability in docker</h4><p>下面介绍一下docker中的capability，可以通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">capsh --print</span><br></pre></td></tr></table></figure></p>
-<p>查看容器所拥有的capability，也可以通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect $container_id | grep Cap</span><br></pre></td></tr></table></figure></p>
+<h4 id="capability-in-docker"><a class="markdownIt-Anchor" href="#capability-in-docker"></a> capability in docker</h4>
+<p>下面介绍一下docker中的capability，可以通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">capsh --print</span><br></pre></td></tr></table></figure>
+<p>查看容器所拥有的capability，也可以通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect $container_id | grep Cap</span><br></pre></td></tr></table></figure>
 <p>查看容器Add和Drop的capability权限。其中<a href="https://github.com/moby/moby/blob/master/oci/defaults.go#L14-L30" target="_blank">缺省capability</a>记录了容器在启动时有一些默认开启的capability，在<a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities" target="_blank">Docker文档</a>中描述了容器全部的capability。</p>
-<p>同时在docker容器启动时可以通过<code>--cap-add</code>和<code>--cap-drop</code>来动态的增加和去掉capability，比如为busybox容器增加<code>SYS_PTRACE</code>权限，这样的话，容器内可以使用<code>ptrace</code>这个命令了。在Docker中有一种privileged容器，通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --privileged</span><br></pre></td></tr></table></figure></p>
+<p>同时在docker容器启动时可以通过<code>--cap-add</code>和<code>--cap-drop</code>来动态的增加和去掉capability，比如为busybox容器增加<code>SYS_PTRACE</code>权限，这样的话，容器内可以使用<code>ptrace</code>这个命令了。在Docker中有一种privileged容器，通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --privileged</span><br></pre></td></tr></table></figure>
 <p>可以运行一个特权的容器，这个容器共享本机拥有的全部权限，这些权限定义在主机的appArmor和SELinux中。</p>
-<h2 id="runc-run运行过程分析"><a href="#runc-run运行过程分析" class="headerlink" title="runc run运行过程分析"></a>runc run运行过程分析</h2><p>通过容器标准包bundle来运行一个容器实例，容器bundle是一个文件目录，它包括容器配置的spec文件和一个rootfs文件系统，下面是运行容器时的简要流程图：<br><img src="/images/CRI_RUNC/runc-run.png" alt><br>接下来简单的叙述一下容器运行的过程。</p>
-<h4 id="新建notifySocket"><a href="#新建notifySocket" class="headerlink" title="新建notifySocket"></a>新建notifySocket</h4><p>首先是新建一个通知套接字notifySocket，然后将notifySocket的信息写入到容器的OCI配置中，包括Mounts配置和进程的环境信息。</p>
-<h4 id="创建容器实例"><a href="#创建容器实例" class="headerlink" title="创建容器实例"></a>创建容器实例</h4><p><b>createContainer</b>：根据命令行参数和容器配置的spec文件初始化libcontainer config对象，根据命令行参数来初始化<code>factory</code>对象，然后factory依据libcontainer config来创建具体的容器实例。  </p>
-<h4 id="设置notifySocket套接字"><a href="#设置notifySocket套接字" class="headerlink" title="设置notifySocket套接字"></a>设置notifySocket套接字</h4><p>创建unixgram套接字，完成notifySocket的初始化过程</p>
-<h4 id="初始化runner对象，启动容器"><a href="#初始化runner对象，启动容器" class="headerlink" title="初始化runner对象，启动容器"></a>初始化runner对象，启动容器</h4><p>通过传入文件描述符给容器的<code>init</code>进程来按需激活socket套接字，然后初始化<code>runner</code>对象，执行<code>runner</code>对象的run方法。</p>
-<h5 id="检查terminal"><a href="#检查terminal" class="headerlink" title="检查terminal"></a>检查terminal</h5><p>检查terminal(如果配置了<code>detach</code>或者action是Create，那么分配终端的时候必须设置console socket,相应的如果没有分配终端或者没有<code>detach</code>，则不能使用console socket)</p>
-<h5 id="初始化libcontainer-process进程对象"><a href="#初始化libcontainer-process进程对象" class="headerlink" title="初始化libcontainer process进程对象"></a>初始化libcontainer process进程对象</h5><p><b>newProcess</b>：根据配置文件新建libcontainer的进程对象process，简称LP</p>
-<h5 id="初始化信号处理程序"><a href="#初始化信号处理程序" class="headerlink" title="初始化信号处理程序"></a>初始化信号处理程序</h5><p>初始化信号处理程序(处理SIGCHILD、SIGWINCH信号，并且转发所有的信号到这个LP进程，如果设置了notifySocket，那么可以通过它来读取容器里的<code>systemd</code>的通知，并且将通知转发给notifySocketHost)</p>
-<h5 id="设置IO，返回tty终端"><a href="#设置IO，返回tty终端" class="headerlink" title="设置IO，返回tty终端"></a>设置IO，返回tty终端</h5><ul>
+<h2 id="runc-run运行过程分析"><a class="markdownIt-Anchor" href="#runc-run运行过程分析"></a> runc run运行过程分析</h2>
+<p>通过容器标准包bundle来运行一个容器实例，容器bundle是一个文件目录，它包括容器配置的spec文件和一个rootfs文件系统，下面是运行容器时的简要流程图：<br>
+<img src="/images/CRI_RUNC/runc-run.png" alt><br>
+接下来简单的叙述一下容器运行的过程。</p>
+<h4 id="新建notifysocket"><a class="markdownIt-Anchor" href="#新建notifysocket"></a> 新建notifySocket</h4>
+<p>首先是新建一个通知套接字notifySocket，然后将notifySocket的信息写入到容器的OCI配置中，包括Mounts配置和进程的环境信息。</p>
+<h4 id="创建容器实例"><a class="markdownIt-Anchor" href="#创建容器实例"></a> 创建容器实例</h4>
+<p><b>createContainer</b>：根据命令行参数和容器配置的spec文件初始化libcontainer config对象，根据命令行参数来初始化<code>factory</code>对象，然后factory依据libcontainer config来创建具体的容器实例。</p>
+<h4 id="设置notifysocket套接字"><a class="markdownIt-Anchor" href="#设置notifysocket套接字"></a> 设置notifySocket套接字</h4>
+<p>创建unixgram套接字，完成notifySocket的初始化过程</p>
+<h4 id="初始化runner对象启动容器"><a class="markdownIt-Anchor" href="#初始化runner对象启动容器"></a> 初始化runner对象，启动容器</h4>
+<p>通过传入文件描述符给容器的<code>init</code>进程来按需激活socket套接字，然后初始化<code>runner</code>对象，执行<code>runner</code>对象的run方法。</p>
+<h5 id="检查terminal"><a class="markdownIt-Anchor" href="#检查terminal"></a> 检查terminal</h5>
+<p>检查terminal(如果配置了<code>detach</code>或者action是Create，那么分配终端的时候必须设置console socket,相应的如果没有分配终端或者没有<code>detach</code>，则不能使用console socket)</p>
+<h5 id="初始化libcontainer-process进程对象"><a class="markdownIt-Anchor" href="#初始化libcontainer-process进程对象"></a> 初始化libcontainer process进程对象</h5>
+<p><b>newProcess</b>：根据配置文件新建libcontainer的进程对象process，简称LP</p>
+<h5 id="初始化信号处理程序"><a class="markdownIt-Anchor" href="#初始化信号处理程序"></a> 初始化信号处理程序</h5>
+<p>初始化信号处理程序(处理SIGCHILD、SIGWINCH信号，并且转发所有的信号到这个LP进程，如果设置了notifySocket，那么可以通过它来读取容器里的<code>systemd</code>的通知，并且将通知转发给notifySocketHost)</p>
+<h5 id="设置io返回tty终端"><a class="markdownIt-Anchor" href="#设置io返回tty终端"></a> 设置IO，返回tty终端</h5>
+<ul>
 <li>1、如果配置文件需要创建终端的话，那么需要设置进程的0,1,2三个IO</li>
-<li>2、不detach的时候，需要新建一个<code>console</code>套接字对(parent和child)，其中child分配给LP,用于本进程的tty对象和LP的tty通信  </li>
-<li>3、如果detach的话，consoleSocket会通过unix套接字的形式保持通信，runc的调用方会处理从console master收到的信息  </li>
+<li>2、不detach的时候，需要新建一个<code>console</code>套接字对(parent和child)，其中child分配给LP,用于本进程的tty对象和LP的tty通信</li>
+<li>3、如果detach的话，consoleSocket会通过unix套接字的形式保持通信，runc的调用方会处理从console master收到的信息</li>
 <li>4、如果detach的话，还需要继承本进程的标准IO 0，1，2 那么容器会继承runc的标准IO</li>
 <li>5、设置LP进程的管道，这样可以不借助特定路径和设备的情况下，便捷的快照和恢复进程的IO。</li>
 </ul>
-<h5 id="启动容器实例"><a href="#启动容器实例" class="headerlink" title="启动容器实例"></a>启动容器实例</h5><p>1、首先判断当前容器的状态，如果状态是STOPPED(需要初始化)，那么还需要创建一个Fifo，并将属主改成容器进程的uid和gid账户    </p>
-<p>2、开始启动容器实例  </p>
-<p>(1) 新建一个parent process [initProcess(STOPPED) 或者 setnsProcess(!STOPPED)]  </p>
+<h5 id="启动容器实例"><a class="markdownIt-Anchor" href="#启动容器实例"></a> 启动容器实例</h5>
+<p>1、首先判断当前容器的状态，如果状态是STOPPED(需要初始化)，那么还需要创建一个Fifo，并将属主改成容器进程的uid和gid账户</p>
+<p>2、开始启动容器实例</p>
+<p>(1) 新建一个parent process [initProcess(STOPPED) 或者 setnsProcess(!STOPPED)]</p>
 <ul>
 <li>创建一个<code>init</code>的套接字对，用于父子进程通信，并将childPipe分配给LP</li>
 <li>然后初始化执行LP进程的命令cmd，这个会调用<code>runc init</code>，会勾起<code>nsenter</code>这个cgo程序</li>
 <li>如果状态不是STOPPPED，那么不需要初始化，返回一个<code>setnsProcess</code>进程</li>
-<li>如果我们不执行<code>runc exec</code>才可以设置fifoFd，历史原因是通过传入一个目录的dirfd来允许容器的rootfs逃逸，<br>对于<code>runc exec</code>不需要做这些，然后返回一个<code>initProcess</code>进程</li>
+<li>如果我们不执行<code>runc exec</code>才可以设置fifoFd，历史原因是通过传入一个目录的dirfd来允许容器的rootfs逃逸，<br>
+对于<code>runc exec</code>不需要做这些，然后返回一个<code>initProcess</code>进程</li>
 </ul>
-<p>(2) 执行parent进程(用Golang的cmd执行进程)  </p>
+<p>(2) 执行parent进程(用Golang的cmd执行进程)</p>
 <ul>
 <li>启动LP进程，将进程的Pid写入到cgroup中，如果配置了intelRdtManager，将Pid也写进Rdt中</li>
 <li>将bootstrap的数据 [namespace path，clone flags，uid mapping…] 传入到管道中，让nsenter进程可以接收到</li>
 <li>执行<code>execSetns()</code>函数，主要等待执行LP的进程结束，并收割它的子进程，通过管道接收子进程的pid</li>
 <li>创建网络接口</li>
 <li>将LP的配置发送给容器的初始进程</li>
-<li>与容器的<code>init</code>进程通信，如果程序已经<code>procReady</code>了，那么需要设置rlimits，<br>如果配置Mount Namespace的情况下，需要配置cgroup和intelRdt，然后运行启动前的钩子函数</li>
+<li>与容器的<code>init</code>进程通信，如果程序已经<code>procReady</code>了，那么需要设置rlimits，<br>
+如果配置Mount Namespace的情况下，需要配置cgroup和intelRdt，然后运行启动前的钩子函数</li>
 <li>如果管道传来的类型是<code>procHooks</code>，需要配置cgroup和intelRdt，然后运行钩子函数。</li>
 <li>最后关闭父子进程的管道描述符</li>
 </ul>
-<p>(3) 收割parent进程<br>(4) 如果是初始化<code>init</code>进程的话，需要更新状态，并执行启动后的钩子函数<br>(5) 如果不是初始化的话，直接将容器的状态改为<code>Running</code>  </p>
-<p>3、等待Console的控制<br>4、关掉Console，并执行一些钩子函数<br>5、进行信号处理，分别处理SIGWINCH和SIGCHLD两种信号<br>6、最后将<code>runner</code>销毁</p>
-<h2 id="runc中对Namespace的应用"><a href="#runc中对Namespace的应用" class="headerlink" title="runc中对Namespace的应用"></a>runc中对Namespace的应用</h2><p>这里介绍一下runc中对Namespace的应用</p>
-<h4 id="Mount-Namespace"><a href="#Mount-Namespace" class="headerlink" title="Mount Namespace"></a>Mount Namespace</h4><p>1、容器配置中需要创建一个Mount Namespce，需要为新容器准备一个<code>rootfs</code>。首先是根路径’/‘的挂载，配置文件中如果配置了根路径’/‘的传播属性，那么将 <code>/</code> 根目录以此传播属性挂载，否则以<code>MS_SLAVE</code>和<code>MS_REC</code>方式挂载。</p>
-<p>2、将本进程也就是容器的父进程(parent)的挂载点设置成<code>私有挂载</code>属性，也就是将挂载属性为<code>:shared</code>的’/‘根路径重新挂载成<code>MS_PRIVATE</code>, 以此来确保接下来的<code>绑定挂载</code>不会传播到其他Namespace中，这也可以帮助内核调用<code>pivot_root</code>的检查通过。</p>
+<p>(3) 收割parent进程<br>
+(4) 如果是初始化<code>init</code>进程的话，需要更新状态，并执行启动后的钩子函数<br>
+(5) 如果不是初始化的话，直接将容器的状态改为<code>Running</code></p>
+<p>3、等待Console的控制<br>
+4、关掉Console，并执行一些钩子函数<br>
+5、进行信号处理，分别处理SIGWINCH和SIGCHLD两种信号<br>
+6、最后将<code>runner</code>销毁</p>
+<h2 id="runc中对namespace的应用"><a class="markdownIt-Anchor" href="#runc中对namespace的应用"></a> runc中对Namespace的应用</h2>
+<p>这里介绍一下runc中对Namespace的应用</p>
+<h4 id="mount-namespace"><a class="markdownIt-Anchor" href="#mount-namespace"></a> Mount Namespace</h4>
+<p>1、容器配置中需要创建一个Mount Namespce，需要为新容器准备一个<code>rootfs</code>。首先是根路径’/‘的挂载，配置文件中如果配置了根路径’/'的传播属性，那么将 <code>/</code> 根目录以此传播属性挂载，否则以<code>MS_SLAVE</code>和<code>MS_REC</code>方式挂载。</p>
+<p>2、将本进程也就是容器的父进程(parent)的挂载点设置成<code>私有挂载</code>属性，也就是将挂载属性为<code>:shared</code>的’/'根路径重新挂载成<code>MS_PRIVATE</code>, 以此来确保接下来的<code>绑定挂载</code>不会传播到其他Namespace中，这也可以帮助内核调用<code>pivot_root</code>的检查通过。</p>
 <p>3、将<code>rootfs</code>绑定挂载起来，挂载属性为<code>MS_BIND</code>和<code>MS_REC</code>。</p>
 <p>注意<code>MS_REC</code>含义是: 通常和<code>MS_BIND</code>结合使用，用来创建一个递归的绑定挂载，同时也可以和<code>传播类型</code>进行结合，可以递归的将挂载事件递归的传播到所有的挂载树上。</p>
-<p>然后执行配置中的一些<code>Mount</code>操作，主要包括以下操作：  </p>
+<p>然后执行配置中的一些<code>Mount</code>操作，主要包括以下操作：</p>
 <ul>
 <li>包括挂载前的操作命令 pre-mount-cmd</li>
 <li>将配置文件中的一些挂载点挂载到<code>rootfs</code>上，比如<code>proc</code>、<code>mqueue</code>、<code>tmpfs</code>等</li>
 <li>挂载后的操作命令 post-mount-cmd</li>
 </ul>
-<p>不需要启动dev文件的条件：<code>/dev</code>设备是<code>bind</code>类型，如果需要启动设备文件的时：<br>1、如果container运行在一个<code>User Namespace</code>那么不允许使用<code>mknod</code>来创建一个设备，因此只需要通过<code>bind</code>来进行绑定挂载操作，否则需要通过<code>mknod</code>在容器里面创建设备，并进行<code>bind</code>操作。<br>2、设置<code>ptmx</code>和<code>/dev</code>符号链接。</p>
+<p>不需要启动dev文件的条件：<code>/dev</code>设备是<code>bind</code>类型，如果需要启动设备文件的时：<br>
+1、如果container运行在一个<code>User Namespace</code>那么不允许使用<code>mknod</code>来创建一个设备，因此只需要通过<code>bind</code>来进行绑定挂载操作，否则需要通过<code>mknod</code>在容器里面创建设备，并进行<code>bind</code>操作。<br>
+2、设置<code>ptmx</code>和<code>/dev</code>符号链接。</p>
 <p>通过管道给父进程发送<code>JSON playload</code>，这可以使得父进程执行一些前置的钩子。在切换到新的root时，对于任何挂载操作，老的root的钩子仍然是可以用的。</p>
-<p>然后将文件目录切换到<code>rootfs</code>目录下面：  </p>
+<p>然后将文件目录切换到<code>rootfs</code>目录下面：</p>
 <ul>
 <li>如果配置中没有<code>pivotRoot</code>操作，那么将<code>/</code>解挂载，通过<code>chroot</code>来设置新的<code>root</code>目录</li>
 <li>如果配置中有<code>pivotRoot</code>操作，那么通过<code>pivotRoot</code>操作来切换<code>root</code>目录视图。</li>
 </ul>
 <p>如果需要设置dev文件的话，在切换完<code>root</code>目录之后，再次打开<code>/dev/null</code>。</p>
-<h4 id="User-Namespace"><a href="#User-Namespace" class="headerlink" title="User Namespace"></a>User Namespace</h4><p>在创建容器的时候需要初始化安全计算模型，简称seccomp，seccomp控制着容器所拥有的细粒度的操作系统权限。在完成最终的初始化seccomp之前，还需要设置容器的用户和用户组。</p>
-<p>容器默认的执行用户情况是:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;uid: 0, gid: 0, Home: &quot;/&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="user-namespace"><a class="markdownIt-Anchor" href="#user-namespace"></a> User Namespace</h4>
+<p>在创建容器的时候需要初始化安全计算模型，简称seccomp，seccomp控制着容器所拥有的细粒度的操作系统权限。在完成最终的初始化seccomp之前，还需要设置容器的用户和用户组。</p>
+<p>容器默认的执行用户情况是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;uid: 0, gid: 0, Home: &quot;/&quot;&#125;</span><br></pre></td></tr></table></figure>
 <p>然后根据配置文件中配置的uid和gid信息，更新容器的uid和gid信息，这里要/etc/passwd和/etc/group中的信息来判断用户设置的uid和gid的合法性。</p>
 <p>当设置完用户和用户组id之后，在真正执行容器命令前，根据配置文件生效一下容器的Cap。</p>
-<h4 id="Network-Namespace"><a href="#Network-Namespace" class="headerlink" title="Network Namespace"></a>Network Namespace</h4><p>根据配置文件创建网卡、配置路由。<br>1、主要创建两种网卡设备：loopback和veth，为容器创建网卡设备，配置网关。<br>2、从配置文件中读取路由策略，然后构成路由规则写入到系统中。</p>
-<h4 id="UTS-Namespace"><a href="#UTS-Namespace" class="headerlink" title="UTS Namespace"></a>UTS Namespace</h4><p>设置配置文件中的主机名</p>
+<h4 id="network-namespace"><a class="markdownIt-Anchor" href="#network-namespace"></a> Network Namespace</h4>
+<p>根据配置文件创建网卡、配置路由。<br>
+1、主要创建两种网卡设备：loopback和veth，为容器创建网卡设备，配置网关。<br>
+2、从配置文件中读取路由策略，然后构成路由规则写入到系统中。</p>
+<h4 id="uts-namespace"><a class="markdownIt-Anchor" href="#uts-namespace"></a> UTS Namespace</h4>
+<p>设置配置文件中的主机名</p>
 
       
     </div>
@@ -704,7 +757,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#kubernetes-CRI"><span class="nav-number">1.</span> <span class="nav-text">kubernetes CRI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CRI"><span class="nav-number">1.0.1.</span> <span class="nav-text">CRI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kubernetes拉起Docker的过程"><span class="nav-number">1.0.2.</span> <span class="nav-text">kubernetes拉起Docker的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器间如何组成一个Pod"><span class="nav-number">1.0.3.</span> <span class="nav-text">容器间如何组成一个Pod</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CRI-O"><span class="nav-number">1.0.4.</span> <span class="nav-text">CRI-O</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#runc"><span class="nav-number">2.</span> <span class="nav-text">runc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc的概念"><span class="nav-number">3.</span> <span class="nav-text">runc的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc的使用"><span class="nav-number">4.</span> <span class="nav-text">runc的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#capability-in-docker"><span class="nav-number">4.0.1.</span> <span class="nav-text">capability in docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc-run运行过程分析"><span class="nav-number">5.</span> <span class="nav-text">runc run运行过程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建notifySocket"><span class="nav-number">5.0.1.</span> <span class="nav-text">新建notifySocket</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建容器实例"><span class="nav-number">5.0.2.</span> <span class="nav-text">创建容器实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置notifySocket套接字"><span class="nav-number">5.0.3.</span> <span class="nav-text">设置notifySocket套接字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化runner对象，启动容器"><span class="nav-number">5.0.4.</span> <span class="nav-text">初始化runner对象，启动容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#检查terminal"><span class="nav-number">5.0.4.1.</span> <span class="nav-text">检查terminal</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#初始化libcontainer-process进程对象"><span class="nav-number">5.0.4.2.</span> <span class="nav-text">初始化libcontainer process进程对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#初始化信号处理程序"><span class="nav-number">5.0.4.3.</span> <span class="nav-text">初始化信号处理程序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置IO，返回tty终端"><span class="nav-number">5.0.4.4.</span> <span class="nav-text">设置IO，返回tty终端</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动容器实例"><span class="nav-number">5.0.4.5.</span> <span class="nav-text">启动容器实例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc中对Namespace的应用"><span class="nav-number">6.</span> <span class="nav-text">runc中对Namespace的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mount-Namespace"><span class="nav-number">6.0.1.</span> <span class="nav-text">Mount Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User-Namespace"><span class="nav-number">6.0.2.</span> <span class="nav-text">User Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Network-Namespace"><span class="nav-number">6.0.3.</span> <span class="nav-text">Network Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UTS-Namespace"><span class="nav-number">6.0.4.</span> <span class="nav-text">UTS Namespace</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#kubernetes-cri"><span class="nav-number">1.</span> <span class="nav-text"> kubernetes CRI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cri"><span class="nav-number">1.0.1.</span> <span class="nav-text"> CRI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kubernetes拉起docker的过程"><span class="nav-number">1.0.2.</span> <span class="nav-text"> kubernetes拉起Docker的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器间如何组成一个pod"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 容器间如何组成一个Pod</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cri-o"><span class="nav-number">1.0.4.</span> <span class="nav-text"> CRI-O</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#runc"><span class="nav-number">2.</span> <span class="nav-text"> runc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc的概念"><span class="nav-number">3.</span> <span class="nav-text"> runc的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc的使用"><span class="nav-number">4.</span> <span class="nav-text"> runc的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#capability-in-docker"><span class="nav-number">4.0.1.</span> <span class="nav-text"> capability in docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc-run运行过程分析"><span class="nav-number">5.</span> <span class="nav-text"> runc run运行过程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建notifysocket"><span class="nav-number">5.0.1.</span> <span class="nav-text"> 新建notifySocket</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建容器实例"><span class="nav-number">5.0.2.</span> <span class="nav-text"> 创建容器实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置notifysocket套接字"><span class="nav-number">5.0.3.</span> <span class="nav-text"> 设置notifySocket套接字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化runner对象启动容器"><span class="nav-number">5.0.4.</span> <span class="nav-text"> 初始化runner对象，启动容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#检查terminal"><span class="nav-number">5.0.4.1.</span> <span class="nav-text"> 检查terminal</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#初始化libcontainer-process进程对象"><span class="nav-number">5.0.4.2.</span> <span class="nav-text"> 初始化libcontainer process进程对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#初始化信号处理程序"><span class="nav-number">5.0.4.3.</span> <span class="nav-text"> 初始化信号处理程序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置io返回tty终端"><span class="nav-number">5.0.4.4.</span> <span class="nav-text"> 设置IO，返回tty终端</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动容器实例"><span class="nav-number">5.0.4.5.</span> <span class="nav-text"> 启动容器实例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runc中对namespace的应用"><span class="nav-number">6.</span> <span class="nav-text"> runc中对Namespace的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mount-namespace"><span class="nav-number">6.0.1.</span> <span class="nav-text"> Mount Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#user-namespace"><span class="nav-number">6.0.2.</span> <span class="nav-text"> User Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#network-namespace"><span class="nav-number">6.0.3.</span> <span class="nav-text"> Network Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uts-namespace"><span class="nav-number">6.0.4.</span> <span class="nav-text"> UTS Namespace</span></a></li></ol></li></div>
             
 
           </div>

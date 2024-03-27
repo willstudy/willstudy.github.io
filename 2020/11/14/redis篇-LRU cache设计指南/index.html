@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. LRU cache是什么？LRU cache是一个缓存系统，特殊之处在于缓存的容量是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。 在很多架构设计中，常常出现LRU cache的身影，它是用来平衡成本和缓存命中率矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。 2. 基于redis实现LRU cacheredis是开源的、内存型的存储系统，其内置了">
+<meta name="description" content="1. LRU cache是什么？ LRU cache是一个缓存系统，特殊之处在于缓存的容量是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。 在很多架构设计中，常常出现LRU cache的身影，它是用来平衡成本和缓存命中率矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。  2. 基于redis实现LRU cache redis是开源的、内存型的存储系统，">
 <meta name="keywords" content="架构设计,redis,LRU,缓存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis篇——LRU cache设计指南">
 <meta property="og:url" content="https://blog.lecury.cn/2020/11/14/redis篇-LRU cache设计指南/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. LRU cache是什么？LRU cache是一个缓存系统，特殊之处在于缓存的容量是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。 在很多架构设计中，常常出现LRU cache的身影，它是用来平衡成本和缓存命中率矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。 2. 基于redis实现LRU cacheredis是开源的、内存型的存储系统，其内置了">
+<meta property="og:description" content="1. LRU cache是什么？ LRU cache是一个缓存系统，特殊之处在于缓存的容量是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。 在很多架构设计中，常常出现LRU cache的身影，它是用来平衡成本和缓存命中率矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。  2. 基于redis实现LRU cache redis是开源的、内存型的存储系统，">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2024-03-27T11:22:50.507Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis篇——LRU cache设计指南">
-<meta name="twitter:description" content="1. LRU cache是什么？LRU cache是一个缓存系统，特殊之处在于缓存的容量是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。 在很多架构设计中，常常出现LRU cache的身影，它是用来平衡成本和缓存命中率矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。 2. 基于redis实现LRU cacheredis是开源的、内存型的存储系统，其内置了">
+<meta name="twitter:description" content="1. LRU cache是什么？ LRU cache是一个缓存系统，特殊之处在于缓存的容量是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。 在很多架构设计中，常常出现LRU cache的身影，它是用来平衡成本和缓存命中率矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。  2. 基于redis实现LRU cache redis是开源的、内存型的存储系统，">
 
 
 
@@ -396,12 +396,17 @@
       
 
       
-        <h2 id="1-LRU-cache是什么？"><a href="#1-LRU-cache是什么？" class="headerlink" title="1. LRU cache是什么？"></a>1. LRU cache是什么？</h2><p>LRU cache是一个缓存系统，特殊之处在于<strong>缓存的容量</strong>是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。</p>
+        <h2 id="1-lru-cache是什么"><a class="markdownIt-Anchor" href="#1-lru-cache是什么"></a> 1. LRU cache是什么？</h2>
+<p>LRU cache是一个缓存系统，特殊之处在于<strong>缓存的容量</strong>是有限的，当缓存内容超出预设容量之后，会淘汰最久未访问的缓存内容。</p>
 <p>在很多架构设计中，常常出现LRU cache的身影，它是用来平衡<strong>成本和缓存命中率</strong>矛盾问题，采取的折中思路之一。在有限的缓存容量下，尽可能多的命中缓存内容。</p>
-<h2 id="2-基于redis实现LRU-cache"><a href="#2-基于redis实现LRU-cache" class="headerlink" title="2. 基于redis实现LRU cache"></a>2. 基于redis实现LRU cache</h2><p>redis是开源的、内存型的存储系统，其内置了多种常见的数据类型和丰富的淘汰策略，可以很方便的基于redis实现一个LRU cache系统。redis基本介绍见：<a href="https://zhuanlan.zhihu.com/p/132353640" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/132353640</a></p>
-<h4 id="2-1-redis设置cache最大容量"><a href="#2-1-redis设置cache最大容量" class="headerlink" title="2.1 redis设置cache最大容量"></a>2.1 redis设置cache最大容量</h4><p>假设限制redis最大cache容量为100mb，那么在redis.conf以下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxmemory 100mb</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-基于redis实现lru-cache"><a class="markdownIt-Anchor" href="#2-基于redis实现lru-cache"></a> 2. 基于redis实现LRU cache</h2>
+<p>redis是开源的、内存型的存储系统，其内置了多种常见的数据类型和丰富的淘汰策略，可以很方便的基于redis实现一个LRU cache系统。redis基本介绍见：<a href="https://zhuanlan.zhihu.com/p/132353640" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/132353640</a></p>
+<h4 id="21-redis设置cache最大容量"><a class="markdownIt-Anchor" href="#21-redis设置cache最大容量"></a> 2.1 redis设置cache最大容量</h4>
+<p>假设限制redis最大cache容量为100mb，那么在redis.conf以下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxmemory 100mb</span><br></pre></td></tr></table></figure>
 <p>当缓存内容持续上涨，突破到100mb之后，就会触发redis的数据驱除策略。</p>
-<h4 id="2-2-redis数据驱除策略"><a href="#2-2-redis数据驱除策略" class="headerlink" title="2.2 redis数据驱除策略"></a>2.2 redis数据驱除策略</h4><p>目前redis的数据驱除策略有以下几种：</p>
+<h4 id="22-redis数据驱除策略"><a class="markdownIt-Anchor" href="#22-redis数据驱除策略"></a> 2.2 redis数据驱除策略</h4>
+<p>目前redis的数据驱除策略有以下几种：</p>
 <ol>
 <li>noeviction：不驱除，新增数据会失败，无法再新增缓存。</li>
 <li>allkeys-lru: LRU方式驱除，将最久未访问的key清掉、释放空间。</li>
@@ -418,12 +423,16 @@
 <li>allkeys-random: 所有元素访问频率是相同的场景。</li>
 <li>volatile-ttl: 缓存内容均拥有不同的ttl的场景。</li>
 </ol>
-<h4 id="2-3-小结"><a href="#2-3-小结" class="headerlink" title="2.3 小结"></a>2.3 小结</h4><p>通过为redis设置最大容量和数据LRU驱除策略，就可以很方便的实现一个LRU系统。</p>
-<h2 id="3-redis-LRU算法简介"><a href="#3-redis-LRU算法简介" class="headerlink" title="3. redis LRU算法简介"></a>3. redis LRU算法简介</h2><p>redis的LRU算法并不是完全意义上的LRU，它只是一个近似实现，这再一次的体现了工程架构设计中的折中思想。</p>
-<h4 id="3-1-redis近似LRU算法"><a href="#3-1-redis近似LRU算法" class="headerlink" title="3.1 redis近似LRU算法"></a>3.1 redis近似LRU算法</h4><p>由于LRU算法需要保存每一个元素的访问时间，<strong>如果元素数量特别多、频繁驱除的情况下，是非常消耗计算和内存的</strong>。为了成本和效果之间的折中，redis实现一个近似的LRU算法。</p>
+<h4 id="23-小结"><a class="markdownIt-Anchor" href="#23-小结"></a> 2.3 小结</h4>
+<p>通过为redis设置最大容量和数据LRU驱除策略，就可以很方便的实现一个LRU系统。</p>
+<h2 id="3-redis-lru算法简介"><a class="markdownIt-Anchor" href="#3-redis-lru算法简介"></a> 3. redis LRU算法简介</h2>
+<p>redis的LRU算法并不是完全意义上的LRU，它只是一个近似实现，这再一次的体现了工程架构设计中的折中思想。</p>
+<h4 id="31-redis近似lru算法"><a class="markdownIt-Anchor" href="#31-redis近似lru算法"></a> 3.1 redis近似LRU算法</h4>
+<p>由于LRU算法需要保存每一个元素的访问时间，<strong>如果元素数量特别多、频繁驱除的情况下，是非常消耗计算和内存的</strong>。为了成本和效果之间的折中，redis实现一个近似的LRU算法。</p>
 <p>redis为对key集合进随机抽样，只对抽样集合中的key做LRU算法。样本集合小的情况下，计算和内存会极大降低，但是也会损失一点精度。可以通过这个配置来控制精度：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 每次驱除抽样的key数目，越大LRU越精准</span><br><span class="line">maxmemory-samples 5</span><br></pre></td></tr></table></figure>
-<h4 id="3-2-redis更高级的LFU算法"><a href="#3-2-redis更高级的LFU算法" class="headerlink" title="3.2 redis更高级的LFU算法"></a>3.2 redis更高级的LFU算法</h4><p>当<code>maxmemory-samples=10</code>之后就接近真实LRU的效果了，无法继续提升。为了进一步提升命中效果，redis的大佬们又想到了一种办法：LFU（最近不频繁访问的驱除算法，在redis 4.0版本）</p>
+<h4 id="32-redis更高级的lfu算法"><a class="markdownIt-Anchor" href="#32-redis更高级的lfu算法"></a> 3.2 redis更高级的LFU算法</h4>
+<p>当<code>maxmemory-samples=10</code>之后就接近真实LRU的效果了，无法继续提升。为了进一步提升命中效果，redis的大佬们又想到了一种办法：LFU（最近不频繁访问的驱除算法，在redis 4.0版本）</p>
 <p>LRU vs LFU：</p>
 <ol>
 <li>LRU: 只是针对访问时间，对于最近刚刚访问的冷门数据来说，是需要一段时间才能被驱除掉。</li>
@@ -433,7 +442,8 @@
 <p>除此之外为了控制访问频率计数器的增长和衰弱速度，redis又引入了两个配置:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 增长速度：越大越慢</span><br><span class="line">lfu-log-factor 10</span><br><span class="line"># 衰减速度: 分钟单位</span><br><span class="line">lfu-decay-time 1</span><br></pre></td></tr></table></figure>
 <p>LFU思想还是非常值得借鉴的，后面有机会再深入了解一下LFU算法。</p>
-<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>redis非常强大，在很多场景中均有不俗的表现，今天主要介绍了LRU cache场景。</p>
+<h2 id="4-总结"><a class="markdownIt-Anchor" href="#4-总结"></a> 4. 总结</h2>
+<p>redis非常强大，在很多场景中均有不俗的表现，今天主要介绍了LRU cache场景。</p>
 <p>redis的配置参数也非常的多，给予了用户非常大的灵活性，如果redis集群很大的情况下，值得折腾一下各个配置，整个玄学调参。</p>
 
       
@@ -627,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LRU-cache是什么？"><span class="nav-number">1.</span> <span class="nav-text">1. LRU cache是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-基于redis实现LRU-cache"><span class="nav-number">2.</span> <span class="nav-text">2. 基于redis实现LRU cache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-redis设置cache最大容量"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 redis设置cache最大容量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-redis数据驱除策略"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 redis数据驱除策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-小结"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 小结</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-redis-LRU算法简介"><span class="nav-number">3.</span> <span class="nav-text">3. redis LRU算法简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-redis近似LRU算法"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 redis近似LRU算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-redis更高级的LFU算法"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 redis更高级的LFU算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-lru-cache是什么"><span class="nav-number">1.</span> <span class="nav-text"> 1. LRU cache是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-基于redis实现lru-cache"><span class="nav-number">2.</span> <span class="nav-text"> 2. 基于redis实现LRU cache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-redis设置cache最大容量"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 redis设置cache最大容量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-redis数据驱除策略"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 redis数据驱除策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-小结"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 小结</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-redis-lru算法简介"><span class="nav-number">3.</span> <span class="nav-text"> 3. redis LRU算法简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-redis近似lru算法"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 redis近似LRU算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-redis更高级的lfu算法"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 redis更高级的LFU算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text"> 4. 总结</span></a></li></div>
             
 
           </div>

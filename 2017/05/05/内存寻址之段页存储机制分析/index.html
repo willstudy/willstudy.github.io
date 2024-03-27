@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
+<meta name="description" content="背景 学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。  内存寻址方式的发展历程 首先简单的介绍下内存寻址的概念，现代计算机是基于">
 <meta name="keywords" content="Linux,内存管理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="内存寻址之段页存储机制分析">
 <meta property="og:url" content="https://blog.lecury.cn/2017/05/05/内存寻址之段页存储机制分析/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
+<meta property="og:description" content="背景 学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。  内存寻址方式的发展历程 首先简单的介绍下内存寻址的概念，现代计算机是基于">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T08:26:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内存寻址之段页存储机制分析">
-<meta name="twitter:description" content="背景学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。 内存寻址方式的发展历程首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依">
+<meta name="twitter:description" content="背景 学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。 要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。  内存寻址方式的发展历程 首先简单的介绍下内存寻址的概念，现代计算机是基于">
 
 
 
@@ -396,47 +396,60 @@
       
 
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。</p>
+        <h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
+<p>学习操作系统这门课的时候，曾不止一次的接触到操作系统的段页式管理机制，但当是都是浅尝辄止，不知道操作系统为啥要有这个机制。如今时间过去很久，关于这个机制的背后的原理和实现机制，早已忘记很久了。。最近在看操作系统方面的知识，借此把自己的理解记录一下。</p>
 <p>要理解段页式管理机制的发展历程，还得从早期的处理器的寻址方式说起。</p>
-<h2 id="内存寻址方式的发展历程"><a href="#内存寻址方式的发展历程" class="headerlink" title="内存寻址方式的发展历程"></a>内存寻址方式的发展历程</h2><p>首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依曼的体系结构，这个体系结构是以存储为中心的，也就是说所有的运算的前提都是先从内存中取得数据，所以内存寻址技术从某种程度上代表了计算机技术。</p>
-<h4 id="直接寻址"><a href="#直接寻址" class="headerlink" title="直接寻址"></a>直接寻址</h4><p>在处理器发展的早期阶段，Intel 公司推出了第一款8位的处理器–8080，它的内存寻址的方式简单粗暴，程序都是通过硬编码的形式绝对定位到内存地址。这种情况下的程序都有明显的缺点：可控性弱、难以重定位、难以维护等。</p>
-<h4 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h4><p>很快在 Intel 推出的另一款处理器 8086 中，它可以寻址空间达到 1M，即地址线扩展到了 20 位，由于当时制造20位的寄存器比较困难，为了能在 16 位的寄存器的基础上寻址 20 位的地址空间，引入了一个重要的概念——<code>段</code>，段的地址存放在寄存器中，换句话说把 1M 的空间分成数个 64K（16位寄存器可寻址）的段来管理。所以8086中的分段机制的内存寻址为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">段基址左移4位 + 偏移 = 物理地址</span><br></pre></td></tr></table></figure></p>
+<h2 id="内存寻址方式的发展历程"><a class="markdownIt-Anchor" href="#内存寻址方式的发展历程"></a> 内存寻址方式的发展历程</h2>
+<p>首先简单的介绍下内存寻址的概念，现代计算机是基于冯.诺依曼的体系结构，这个体系结构是以存储为中心的，也就是说所有的运算的前提都是先从内存中取得数据，所以内存寻址技术从某种程度上代表了计算机技术。</p>
+<h4 id="直接寻址"><a class="markdownIt-Anchor" href="#直接寻址"></a> 直接寻址</h4>
+<p>在处理器发展的早期阶段，Intel 公司推出了第一款8位的处理器–8080，它的内存寻址的方式简单粗暴，程序都是通过硬编码的形式绝对定位到内存地址。这种情况下的程序都有明显的缺点：可控性弱、难以重定位、难以维护等。</p>
+<h4 id="分段"><a class="markdownIt-Anchor" href="#分段"></a> 分段</h4>
+<p>很快在 Intel 推出的另一款处理器 8086 中，它可以寻址空间达到 1M，即地址线扩展到了 20 位，由于当时制造20位的寄存器比较困难，为了能在 16 位的寄存器的基础上寻址 20 位的地址空间，引入了一个重要的概念——<code>段</code>，段的地址存放在寄存器中，换句话说把 1M 的空间分成数个 64K（16位寄存器可寻址）的段来管理。所以8086中的分段机制的内存寻址为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">段基址左移4位 + 偏移 = 物理地址</span><br></pre></td></tr></table></figure>
 <p>为了很好的支持分段机制，8086 处理器为程序使用的代码段、数据段、堆栈段分别提供了专门的 16 位寄存器用于保存这些段的段基址。引入了分段机制后，程序的地址不再需要硬编码了，调试错误也更加容易定位，同时更加重要的是支持了更大的内存地址空间。</p>
-<h4 id="分页与虚拟内存"><a href="#分页与虚拟内存" class="headerlink" title="分页与虚拟内存"></a>分页与虚拟内存</h4><p>分页机制第一次出现在 80386 的处理器中，这是内存寻址方式的一个重大突破，对后来的计算机系统产生了很大影响。80386处理器寻址空间达到 32 位，是为了配合<code>虚拟内存</code>技术而引入了分页机制，接下来简单的说下虚拟内存技术。</p>
+<h4 id="分页与虚拟内存"><a class="markdownIt-Anchor" href="#分页与虚拟内存"></a> 分页与虚拟内存</h4>
+<p>分页机制第一次出现在 80386 的处理器中，这是内存寻址方式的一个重大突破，对后来的计算机系统产生了很大影响。80386处理器寻址空间达到 32 位，是为了配合<code>虚拟内存</code>技术而引入了分页机制，接下来简单的说下虚拟内存技术。</p>
 <p>简单的来说，<code>虚拟内存</code>技术<b>允许程序使用的内存大于计算机的实际内存</b>。举个简单例子来说，运行一个大型游戏的时候，它需要 5G 内存，但是 32 位的笔记本最大支持 4G 内存，而冯.诺依曼体系告诉我们，程序运行的时候，需要将程序装载到内存中才可以运行，那么难道这个游戏就玩不了了么？不是的，借助虚拟内存技术就可以运行这个程序了，只不过可能会卡点。</p>
 <p>虚拟内存技术本质上将部分硬盘空间映射到内存中的一种技术，这样使得程序可以使用的内存空间变大了。简单的做法是如果程序访问的地址不在内存中时（放在外部磁盘空间中），就需要将访问地址所对应磁盘空间的程序内容加载到内存中，在加载的过程中可能面临着旧程序内容的置换。如何方便的管理这些<code>置换</code>或者<code>加载</code>的内容呢？操作系统引入了<code>页</code>的概念，页是一个存储单位，一般为4K 大小。</p>
 <p>话说回来能通过<code>段机制</code>管理这些被置换和加载的内容么？因为段的大小不定，因此不方便把整段大小的虚拟空间在内存和磁盘之间调来调去，需要一个更小更灵活的存储单位——页，管理换进换出的机制称为<code>页机制</code>。</p>
-<p>引入分页机制后，通过段机制转换得到的地址仅仅是一个中间地址——线性地址，线性地址还需要通过页机制来转变成实际的物理地址。总结一下内存寻址过程，程序中使用的逻辑地址到最后的物理地址的转换过程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">逻辑地址 --&gt;(分段机制)  线性地址  --&gt;(分页机制) 物理地址</span><br></pre></td></tr></table></figure></p>
-<h2 id="内存寻址过程分析"><a href="#内存寻址过程分析" class="headerlink" title="内存寻址过程分析"></a>内存寻址过程分析</h2><p>简单的介绍了一下操作系统内存寻址的发展历程，接下来细致的分析一下分段和分页机制内存寻址的过程。首先先简单的说下逻辑地址、线性地址、物理地址的概念：</p>
+<p>引入分页机制后，通过段机制转换得到的地址仅仅是一个中间地址——线性地址，线性地址还需要通过页机制来转变成实际的物理地址。总结一下内存寻址过程，程序中使用的逻辑地址到最后的物理地址的转换过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">逻辑地址 --&gt;(分段机制)  线性地址  --&gt;(分页机制) 物理地址</span><br></pre></td></tr></table></figure>
+<h2 id="内存寻址过程分析"><a class="markdownIt-Anchor" href="#内存寻址过程分析"></a> 内存寻址过程分析</h2>
+<p>简单的介绍了一下操作系统内存寻址的发展历程，接下来细致的分析一下分段和分页机制内存寻址的过程。首先先简单的说下逻辑地址、线性地址、物理地址的概念：</p>
 <ul>
 <li>逻辑地址：程序代码中一个操作数或者一条指令的地址</li>
 <li>线性地址：虚拟地址可映射 4G 内存空间（分页机制的产物，逻辑上连续）</li>
 <li>物理地址：处理器的引脚发送到内存总线上的电信号相对应</li>
 </ul>
-<h2 id="分段机制详解"><a href="#分段机制详解" class="headerlink" title="分段机制详解"></a>分段机制详解</h2><p>代码中使用到的逻辑地址由两部分组成：</p>
+<h2 id="分段机制详解"><a class="markdownIt-Anchor" href="#分段机制详解"></a> 分段机制详解</h2>
+<p>代码中使用到的逻辑地址由两部分组成：</p>
 <ul>
 <li><code>段选择符</code>: 16 位长的字段</li>
 <li><code>段内偏移地址</code>：32 位长的字段（最大的段大小为 4GB）</li>
 </ul>
 <p>为了快速找到<code>段选择符</code>所指定的段的位置，处理器提供了段寄存器（<code>cs</code>、<code>ss</code>、<code>ds</code>、<code>es</code>、<code>fs</code>、<code>gs</code>），相比于 8086 来说，80386 新增了 <code>fs</code>、<code>gs</code> 附加段寄存器，主要是为了减少 <code>es</code> 这个寄存器的负担引入的。</p>
 <p>值得注意的是 <code>cs</code> 寄存器，它含有一个 2 位的字段，用以指定当前 CPU 的特权等级 DPL，3 为用户态，0 为内核态。</p>
-<h4 id="段描述符"><a href="#段描述符" class="headerlink" title="段描述符"></a>段描述符</h4><p>前面说到<code>段选择符</code>是一个 16 位的字段，格式如下：</p>
+<h4 id="段描述符"><a class="markdownIt-Anchor" href="#段描述符"></a> 段描述符</h4>
+<p>前面说到<code>段选择符</code>是一个 16 位的字段，格式如下：</p>
 <ul>
 <li>15 ~ 3 位：Index 索引号</li>
 <li>2 位：TI 标志，指明段描述符在 GDT（TI=0）中或者 LDT（TI=1）中</li>
 <li>1 ~ 0 位：RPL 标志，请求者的特权级</li>
 </ul>
 <p>由<code>段选择符</code>中的索引号可以索引到段的信息，段的信息是由8字节的<code>段描述符</code>表示，<code>段描述符</code>存放在<code>全局描述符表</code>（GDT）和<code>局部描述符表</code>（LDT）中。同样 GDT 和 LDT 的地址也是存放在寄存器中的，通常系统初始化的时候会初始化 <code>gdtr</code> 控制寄存器，写入 GDT 表的地址，如果每个进程除了存放 GDT 外，还需要自己的附加的段，就可以创建一个 <code>LDT</code>，将 <code>LDT</code> 表的地址写进 <code>ldtr</code> 寄存器中。</p>
-<h4 id="快速访问段描述符"><a href="#快速访问段描述符" class="headerlink" title="快速访问段描述符"></a>快速访问段描述符</h4><p>因为段寄存器中存放的只是<code>段选择符</code>的地址，由<code>段选择符</code>来索引实际的<code>段描述符</code>还需要查找 GDT 或者 LDT 表。为了加速逻辑地址到线性地址的转换过程，80x86提供了一种附加的非编程寄存器，即每当一个<code>段选择符</code>装入寄存器时，相对应的<code>段描述符</code>就由内存装入到这个非编程寄存器中。</p>
+<h4 id="快速访问段描述符"><a class="markdownIt-Anchor" href="#快速访问段描述符"></a> 快速访问段描述符</h4>
+<p>因为段寄存器中存放的只是<code>段选择符</code>的地址，由<code>段选择符</code>来索引实际的<code>段描述符</code>还需要查找 GDT 或者 LDT 表。为了加速逻辑地址到线性地址的转换过程，80x86提供了一种附加的非编程寄存器，即每当一个<code>段选择符</code>装入寄存器时，相对应的<code>段描述符</code>就由内存装入到这个非编程寄存器中。</p>
 <p>这样当针对那个段的逻辑地址转换线性地址时，就不用访问 GDT 或者 LDT 表，直接引用存放这个<code>段描述符</code>的非编程寄存器就好了。</p>
-<h4 id="分段机制下地址转换的过程"><a href="#分段机制下地址转换的过程" class="headerlink" title="分段机制下地址转换的过程"></a>分段机制下地址转换的过程</h4><p>一个逻辑地址由<code>段选择符</code>和<code>段内偏移组成</code>，在转换成线性地址时，分段单元执行以下操作：</p>
+<h4 id="分段机制下地址转换的过程"><a class="markdownIt-Anchor" href="#分段机制下地址转换的过程"></a> 分段机制下地址转换的过程</h4>
+<p>一个逻辑地址由<code>段选择符</code>和<code>段内偏移组成</code>，在转换成线性地址时，分段单元执行以下操作：</p>
 <ul>
 <li>先检查段<code>选择符</code>的 TI 字段，判断这个段的<code>段描述符</code>是存放在 GDT 中还是 LDT 中</li>
 <li>然后由<code>段选择符</code>中的 Index 索引到实际的<code>段描述符</code></li>
 <li>将 Index 索引到实际的<code>段描述符</code>的地址✖️8，再加上 <code>gdtr</code> 或者 <code>ldtr</code> 寄存器中的值。这个过程就完成了<code>段</code>起始的位置的计算</li>
 <li>最后把计算的结果加上逻辑地址中的<code>段内偏移</code>就得到了线性地址</li>
 </ul>
-<h4 id="Linux中的分段"><a href="#Linux中的分段" class="headerlink" title="Linux中的分段"></a>Linux中的分段</h4><p>Linux 以非常有限的方式使用分段，更偏向使用分页的形式管理内存，因为：</p>
+<h4 id="linux中的分段"><a class="markdownIt-Anchor" href="#linux中的分段"></a> Linux中的分段</h4>
+<p>Linux 以非常有限的方式使用分段，更偏向使用分页的形式管理内存，因为：</p>
 <ul>
 <li>当所有进程使用相同的段寄存器时，内存管理将变得简单，也就是说它们可以共享同一组线性地址</li>
 <li>Linux 的设计目标是可以移植到大部分平台上，然而 RISC 对分段支持有限</li>
@@ -450,17 +463,21 @@
 </ul>
 <p>也就是说对内核代码段寻址时，只需要将 __KERNEL_CS 的值装入 <code>cs</code> 段寄存器即可，其中 <code>cs</code> 段寄存器中的段选择符所指定的 RPL 值，表明了当前进程是属于用户态还是内核态。</p>
 <p>对于 GDT 表来说，在 Linux 中每个 CPU 对应一个 GDT 表，所有的 GDT 都存放在 <code>cpu_gdt_table</code> 中，而 GDT 的地址和它们的大小，则存放在 <code>cpu_gdt_descr</code> 数组中，这些都将在系统启动之前初始化。</p>
-<h2 id="分页机制详解"><a href="#分页机制详解" class="headerlink" title="分页机制详解"></a>分页机制详解</h2><p>前面提到分页机制是为了配合操作系统中的虚拟内存管理而引入的，分页机制目的是为了将线性地址转换成物理地址。</p>
-<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>简要讲述一下<code>页</code>、<code>页框</code>、<code>页表</code>的概念</p>
+<h2 id="分页机制详解"><a class="markdownIt-Anchor" href="#分页机制详解"></a> 分页机制详解</h2>
+<p>前面提到分页机制是为了配合操作系统中的虚拟内存管理而引入的，分页机制目的是为了将线性地址转换成物理地址。</p>
+<h4 id="基本概念"><a class="markdownIt-Anchor" href="#基本概念"></a> 基本概念</h4>
+<p>简要讲述一下<code>页</code>、<code>页框</code>、<code>页表</code>的概念</p>
 <ul>
 <li>页：对应着线性地址，线性地址被分成以固定大小为单位的组，称为页，页大小一般为4K</li>
 <li>页框：对应着物理地址，物理地址也就是 RAM，被分成固定大小的页框，每个页框对应一个实际的页</li>
 <li>页表：用来将页映射到具体的页框中的数据结构</li>
 </ul>
-<h4 id="常规分页"><a href="#常规分页" class="headerlink" title="常规分页"></a>常规分页</h4><p>因为每个页的大小为 4KB，为了映射 4GB 的物理空间，页表中将会有 1MB（2^20） 的映射项，对应每个程序来都要保存一个这么大的页表项是难以接受的，所以引出了多级页表的概念，也称为<code>页目录</code>。</p>
+<h4 id="常规分页"><a class="markdownIt-Anchor" href="#常规分页"></a> 常规分页</h4>
+<p>因为每个页的大小为 4KB，为了映射 4GB 的物理空间，页表中将会有 1MB（2^20） 的映射项，对应每个程序来都要保存一个这么大的页表项是难以接受的，所以引出了多级页表的概念，也称为<code>页目录</code>。</p>
 <p>也就是说线性地址的转换过程需要两步，首先是查找<code>页目录</code>找到具体的页表，然后查找页表，找到具体的页。如果这个页不存在 RAM 中，即缺页，还会引发缺页中断，申请调页；如果存在 RAM 就可以完成线性地址到具体物理地址的转换了。</p>
 <p>分页机制中每个活动进程必须有一个页目录，不必为进程的所有页表都分配 RAM，只有实际使用到时才分配，这样才会更有效率，进程正在使用的<code>页目录</code>地址存放在 <code>cr3</code> 寄存器中。</p>
-<h4 id="线性地址字段分析"><a href="#线性地址字段分析" class="headerlink" title="线性地址字段分析"></a>线性地址字段分析</h4><p>线性地址分成3部分，如下所示：</p>
+<h4 id="线性地址字段分析"><a class="markdownIt-Anchor" href="#线性地址字段分析"></a> 线性地址字段分析</h4>
+<p>线性地址分成3部分，如下所示：</p>
 <ul>
 <li>Directory：决定页目录中的目录项，10位大小</li>
 <li>Table：决定页表中的表项，10位大小</li>
@@ -477,9 +494,11 @@
 <li>Page Size标志：只用于页目录项，如果设置为1，那么页框的大小为2MB或者4MB</li>
 <li>Global标志：只用于页表项，防止常用页从 TLB 高速缓存中刷新出去</li>
 </ul>
-<h4 id="转换后援缓冲器-TLB"><a href="#转换后援缓冲器-TLB" class="headerlink" title="转换后援缓冲器 TLB"></a>转换后援缓冲器 TLB</h4><p>除了内部的硬件高速缓存外，还包含了一个转换后援缓冲器 TLB 的高速缓存用以加快线性地址的转换。当一个线性地址第一次使用时，通过慢速访问 RAM 中的页表计算出相应的物理地址，同时物理地址被存放到 TLB 的表项中，以便下次对同一个物理地址的引用可以快速的得到转换。</p>
+<h4 id="转换后援缓冲器-tlb"><a class="markdownIt-Anchor" href="#转换后援缓冲器-tlb"></a> 转换后援缓冲器 TLB</h4>
+<p>除了内部的硬件高速缓存外，还包含了一个转换后援缓冲器 TLB 的高速缓存用以加快线性地址的转换。当一个线性地址第一次使用时，通过慢速访问 RAM 中的页表计算出相应的物理地址，同时物理地址被存放到 TLB 的表项中，以便下次对同一个物理地址的引用可以快速的得到转换。</p>
 <p>在多处理器中，每个 CPU 都有自己的 TLB。当 CPU 的 <code>cr3</code> 寄存器被修改时，那么 TLB 的所有项都变得无效了，因为当前使用的是新的<code>页目录</code>了。</p>
-<h4 id="Linux中的分页"><a href="#Linux中的分页" class="headerlink" title="Linux中的分页"></a>Linux中的分页</h4><p>两级页表对 32 位系统是足够了，但为了支持 64 位系统，还需要引入多级页表，Linux 从 2.6.11 版本开始引入四级页表：</p>
+<h4 id="linux中的分页"><a class="markdownIt-Anchor" href="#linux中的分页"></a> Linux中的分页</h4>
+<p>两级页表对 32 位系统是足够了，但为了支持 64 位系统，还需要引入多级页表，Linux 从 2.6.11 版本开始引入四级页表：</p>
 <ul>
 <li>页全局目录</li>
 <li>页上级目录</li>
@@ -685,7 +704,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存寻址方式的发展历程"><span class="nav-number">2.</span> <span class="nav-text">内存寻址方式的发展历程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接寻址"><span class="nav-number">2.0.1.</span> <span class="nav-text">直接寻址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分段"><span class="nav-number">2.0.2.</span> <span class="nav-text">分段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页与虚拟内存"><span class="nav-number">2.0.3.</span> <span class="nav-text">分页与虚拟内存</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#内存寻址过程分析"><span class="nav-number">3.</span> <span class="nav-text">内存寻址过程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分段机制详解"><span class="nav-number">4.</span> <span class="nav-text">分段机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符"><span class="nav-number">4.0.1.</span> <span class="nav-text">段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速访问段描述符"><span class="nav-number">4.0.2.</span> <span class="nav-text">快速访问段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分段机制下地址转换的过程"><span class="nav-number">4.0.3.</span> <span class="nav-text">分段机制下地址转换的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux中的分段"><span class="nav-number">4.0.4.</span> <span class="nav-text">Linux中的分段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页机制详解"><span class="nav-number">5.</span> <span class="nav-text">分页机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">5.0.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常规分页"><span class="nav-number">5.0.2.</span> <span class="nav-text">常规分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线性地址字段分析"><span class="nav-number">5.0.3.</span> <span class="nav-text">线性地址字段分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转换后援缓冲器-TLB"><span class="nav-number">5.0.4.</span> <span class="nav-text">转换后援缓冲器 TLB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux中的分页"><span class="nav-number">5.0.5.</span> <span class="nav-text">Linux中的分页</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text"> 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存寻址方式的发展历程"><span class="nav-number">2.</span> <span class="nav-text"> 内存寻址方式的发展历程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接寻址"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 直接寻址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分段"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 分段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页与虚拟内存"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 分页与虚拟内存</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#内存寻址过程分析"><span class="nav-number">3.</span> <span class="nav-text"> 内存寻址过程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分段机制详解"><span class="nav-number">4.</span> <span class="nav-text"> 分段机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#段描述符"><span class="nav-number">4.0.1.</span> <span class="nav-text"> 段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速访问段描述符"><span class="nav-number">4.0.2.</span> <span class="nav-text"> 快速访问段描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分段机制下地址转换的过程"><span class="nav-number">4.0.3.</span> <span class="nav-text"> 分段机制下地址转换的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#linux中的分段"><span class="nav-number">4.0.4.</span> <span class="nav-text"> Linux中的分段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页机制详解"><span class="nav-number">5.</span> <span class="nav-text"> 分页机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">5.0.1.</span> <span class="nav-text"> 基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常规分页"><span class="nav-number">5.0.2.</span> <span class="nav-text"> 常规分页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线性地址字段分析"><span class="nav-number">5.0.3.</span> <span class="nav-text"> 线性地址字段分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转换后援缓冲器-tlb"><span class="nav-number">5.0.4.</span> <span class="nav-text"> 转换后援缓冲器 TLB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#linux中的分页"><span class="nav-number">5.0.5.</span> <span class="nav-text"> Linux中的分页</span></a></li></ol></li></div>
             
 
           </div>
