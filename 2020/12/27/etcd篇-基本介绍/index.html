@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="etcd,架构设计,配置中心,服务注册,">
+  <meta name="keywords" content="架构设计,etcd,配置中心,服务注册,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. etcd简介 etcd是一个非常可靠的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：  简单：提供定义明确且面向用户的API 安全：支持SSL证书验证 性能：基准压测支持1w+/sec写入 可靠：采用Raft协议保证分布式系统数据的可用性和一致性。  etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。  1">
-<meta name="keywords" content="etcd,架构设计,配置中心,服务注册">
+<meta name="description" content="1. etcd简介 etcd是一个非常可靠的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：  简单：提供定义明确且面向用户的API 安全：支持SSL证书验证 性能：基准压测支持1w+/sec写入 可靠：采用Raft协议保证分布式系统数据的可用性和一致性。  etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。 1.1">
+<meta name="keywords" content="架构设计,etcd,配置中心,服务注册">
 <meta property="og:type" content="article">
 <meta property="og:title" content="etcd篇——基本介绍">
 <meta property="og:url" content="https://blog.lecury.cn/2020/12/27/etcd篇-基本介绍/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. etcd简介 etcd是一个非常可靠的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：  简单：提供定义明确且面向用户的API 安全：支持SSL证书验证 性能：基准压测支持1w+/sec写入 可靠：采用Raft协议保证分布式系统数据的可用性和一致性。  etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。  1">
+<meta property="og:description" content="1. etcd简介 etcd是一个非常可靠的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：  简单：提供定义明确且面向用户的API 安全：支持SSL证书验证 性能：基准压测支持1w+/sec写入 可靠：采用Raft协议保证分布式系统数据的可用性和一致性。  etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。 1.1">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2024-03-27T11:24:48.149Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="etcd篇——基本介绍">
-<meta name="twitter:description" content="1. etcd简介 etcd是一个非常可靠的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：  简单：提供定义明确且面向用户的API 安全：支持SSL证书验证 性能：基准压测支持1w+/sec写入 可靠：采用Raft协议保证分布式系统数据的可用性和一致性。  etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。  1">
+<meta name="twitter:description" content="1. etcd简介 etcd是一个非常可靠的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：  简单：提供定义明确且面向用户的API 安全：支持SSL证书验证 性能：基准压测支持1w+/sec写入 可靠：采用Raft协议保证分布式系统数据的可用性和一致性。  etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。 1.1">
 
 
 
@@ -396,7 +396,7 @@
       
 
       
-        <h2 id="1-etcd简介"><a class="markdownIt-Anchor" href="#1-etcd简介"></a> 1. etcd简介</h2>
+        <h2 id="1-etcd简介">1. etcd简介</h2>
 <p>etcd是一个<strong>非常可靠</strong>的kv存储系统，常在分布式系统中存储着关键的数据。它是由coreos团队开发并开源的分布式键值存储系统，具备以下特点：</p>
 <ul>
 <li>简单：提供定义明确且面向用户的API</li>
@@ -405,7 +405,7 @@
 <li>可靠：采用Raft协议保证分布式系统数据的可用性和一致性。</li>
 </ul>
 <p>etcd的这些特性，使得它常常出现在分布式设计场景下的工具集中。</p>
-<h4 id="11-etcd常见功能"><a class="markdownIt-Anchor" href="#11-etcd常见功能"></a> 1.1 etcd常见功能</h4>
+<h4 id="1-1-etcd常见功能">1.1 etcd常见功能</h4>
 <ul>
 <li>键值存储、查询功能：支持精准查询、range操作、ttl机制、key版本等。</li>
 <li>一致性机制：采用raft协议保证强一致性。</li>
@@ -413,7 +413,7 @@
 <li>SSL认证机制。</li>
 <li>watch机制。</li>
 </ul>
-<h4 id="12-etcd常见应用场景"><a class="markdownIt-Anchor" href="#12-etcd常见应用场景"></a> 1.2 etcd常见应用场景</h4>
+<h4 id="1-2-etcd常见应用场景">1.2 etcd常见应用场景</h4>
 <p><strong>1. 配置中心</strong></p>
 <p>etcd是一个分布式的键值存储系统，其优秀的读写性能、一致性和可用性的机制，非常适合用来做配置中心角色。</p>
 <p><strong>2. 分布式锁</strong></p>
@@ -426,21 +426,21 @@
 <p>etcd内置watch机制，完全可以实现一个小型的消息订阅和发布组件。</p>
 <p><strong>6. more and more</strong></p>
 <p>etcd优秀的特性，适合的场景很多。</p>
-<h2 id="2-etcd和同类型产品的对比"><a class="markdownIt-Anchor" href="#2-etcd和同类型产品的对比"></a> 2. etcd和同类型产品的对比</h2>
-<h4 id="21-etcd-vs-redis"><a class="markdownIt-Anchor" href="#21-etcd-vs-redis"></a> 2.1 etcd vs redis</h4>
+<h2 id="2-etcd和同类型产品的对比">2. etcd和同类型产品的对比</h2>
+<h4 id="2-1-etcd-vs-redis">2.1 etcd vs redis</h4>
 <p>etcd诞生之日起，就定位成一种分布式存储系统，并在k8s 服务注册和服务发现中，为大家所认识。它偏重的是节点之间的通信和一致性的机制保证，并不强调单节点的读写性能。</p>
 <p>而redis最早作为缓存系统出现在大众视野，也注定了redis需要更加侧重于读写性能和支持更多的存储模式，它不需要care一致性，也不需要侧重事务，因此可以达到很高的读写性能。</p>
 <p>总结一下，redis常用来做缓存系统，etcd常用来做分布式系统中一些关键数据的存储服务，比如服务注册和服务发现。</p>
-<h4 id="22-etcd-vs-consul"><a class="markdownIt-Anchor" href="#22-etcd-vs-consul"></a> 2.2 etcd vs consul</h4>
+<h4 id="2-2-etcd-vs-consul">2.2 etcd vs consul</h4>
 <p>consul定位是一个端到端的服务框架，提供了内置的监控检查、DNS服务等，除此之外，还提供了HTTP API和Web UI，如果要实现简单的服务发现，基本上可以开箱即用。</p>
 <p>但是缺点同样也存在，封装有利有弊，就导致灵活性弱了不少。除此之外，consul还比较年轻，暂未在大型项目中实践，可靠性还未可知。</p>
-<h4 id="23-etcd-vs-zookeeper"><a class="markdownIt-Anchor" href="#23-etcd-vs-zookeeper"></a> 2.3 etcd vs zookeeper</h4>
+<h4 id="2-3-etcd-vs-zookeeper">2.3 etcd vs zookeeper</h4>
 <p>etcd站在了巨人的肩膀上。。zookeeper有如下局限性：</p>
 <ul>
 <li>不能动态的变更节点，需要人工修改配置 &amp; 重启进程。</li>
 <li>大规模链接时，读写性能表现差。</li>
 </ul>
-<h2 id="3-etcd性能表现"><a class="markdownIt-Anchor" href="#3-etcd性能表现"></a> 3. etcd性能表现</h2>
+<h2 id="3-etcd性能表现">3. etcd性能表现</h2>
 <p>来自于官网介绍：<a href="https://etcd.io/docs/v3.4.0/op-guide/performance/" target="_blank" rel="noopener">https://etcd.io/docs/v3.4.0/op-guide/performance/</a> 大致总结一下：</p>
 <ul>
 <li>读：1w ~ 10w 之间</li>
@@ -453,10 +453,10 @@
 <li>非必要情况下，避免range操作。</li>
 </ul>
 <p>etcd集群更偏重一致性和稳定性，并不强调高性能，在绝大部分场景下均不会到达etcd性能瓶颈，如果出现瓶颈的话，需要重新review架构设计，比如拆分或者优化流程。</p>
-<h2 id="4-总结"><a class="markdownIt-Anchor" href="#4-总结"></a> 4. 总结</h2>
+<h2 id="4-总结">4. 总结</h2>
 <p>etcd是一个分布式的可靠的键值存储系统，是分布式架构设计的常见组件。</p>
 <p>每个轮子都有好有坏，正是坏的那一点的存在，才能将好的那一点发挥到极致。在架构设计中，需要根据业务场景选择适合的轮子，避免坏的那一面，并将好的那一面发挥到极致。</p>
-<h2 id="5-推荐"><a class="markdownIt-Anchor" href="#5-推荐"></a> 5. 推荐</h2>
+<h2 id="5-推荐">5. 推荐</h2>
 <ul>
 <li><a href="https://github.com/etcd-io/etcd" target="_blank" rel="noopener">https://github.com/etcd-io/etcd</a></li>
 <li><a href="https://etcd.io/docs/v3.4.0/" target="_blank" rel="noopener">https://etcd.io/docs/v3.4.0/</a></li>
@@ -478,9 +478,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/etcd/" rel="tag"># etcd</a>
-          
             <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
+          
+            <a href="/tags/etcd/" rel="tag"># etcd</a>
           
             <a href="/tags/配置中心/" rel="tag"># 配置中心</a>
           
@@ -591,7 +591,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -604,7 +604,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -653,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-etcd简介"><span class="nav-number">1.</span> <span class="nav-text"> 1. etcd简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-etcd常见功能"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 1.1 etcd常见功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-etcd常见应用场景"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 1.2 etcd常见应用场景</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-etcd和同类型产品的对比"><span class="nav-number">2.</span> <span class="nav-text"> 2. etcd和同类型产品的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-etcd-vs-redis"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 etcd vs redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-etcd-vs-consul"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 etcd vs consul</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-etcd-vs-zookeeper"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 etcd vs zookeeper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-etcd性能表现"><span class="nav-number">3.</span> <span class="nav-text"> 3. etcd性能表现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text"> 4. 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-推荐"><span class="nav-number">5.</span> <span class="nav-text"> 5. 推荐</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-etcd简介"><span class="nav-number">1.</span> <span class="nav-text">1. etcd简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-etcd常见功能"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 etcd常见功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-etcd常见应用场景"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 etcd常见应用场景</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-etcd和同类型产品的对比"><span class="nav-number">2.</span> <span class="nav-text">2. etcd和同类型产品的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-etcd-vs-redis"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 etcd vs redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-etcd-vs-consul"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 etcd vs consul</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-etcd-vs-zookeeper"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 etcd vs zookeeper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-etcd性能表现"><span class="nav-number">3.</span> <span class="nav-text">3. etcd性能表现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-推荐"><span class="nav-number">5.</span> <span class="nav-text">5. 推荐</span></a></li></div>
             
 
           </div>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Linux,内核,Cgroups,">
+  <meta name="keywords" content="Linux,Cgroups,内核,">
 
 
 
@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="1. cgroups简介  1.1 功能和定位 Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。 Cgroup是于2.6内核由Google公司主导引">
-<meta name="keywords" content="Linux,内核,Cgroups">
+<meta name="description" content="1. cgroups简介 1.1 功能和定位 Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。 Cgroup是于2.6内核由Google公司主导引入的">
+<meta name="keywords" content="Linux,Cgroups,内核">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈Linux Cgroups机制">
 <meta property="og:url" content="https://blog.lecury.cn/2019/09/08/浅谈Linux Cgroups机制/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. cgroups简介  1.1 功能和定位 Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。 Cgroup是于2.6内核由Google公司主导引">
+<meta property="og:description" content="1. cgroups简介 1.1 功能和定位 Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。 Cgroup是于2.6内核由Google公司主导引入的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/linux/cgroup/task_group.png">
 <meta property="og:image" content="https://blog.lecury.cn/images/linux/cgroup/before_cpu_limit.png">
@@ -93,7 +93,7 @@
 <meta property="og:updated_time" content="2019-09-12T05:45:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈Linux Cgroups机制">
-<meta name="twitter:description" content="1. cgroups简介  1.1 功能和定位 Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。 Cgroup是于2.6内核由Google公司主导引">
+<meta name="twitter:description" content="1. cgroups简介 1.1 功能和定位 Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。 Cgroup是于2.6内核由Google公司主导引入的">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/linux/cgroup/task_group.png">
 
 
@@ -400,11 +400,11 @@
       
 
       
-        <h2 id="1-cgroups简介"><a class="markdownIt-Anchor" href="#1-cgroups简介"></a> 1. cgroups简介</h2>
-<h4 id="11-功能和定位"><a class="markdownIt-Anchor" href="#11-功能和定位"></a> 1.1 功能和定位</h4>
+        <h2 id="1-cgroups简介">1. cgroups简介</h2>
+<h4 id="1-1-功能和定位">1.1 功能和定位</h4>
 <p>Cgroups全称Control Groups，是Linux内核提供的物理资源隔离机制，通过这种机制，可以实现对Linux进程或者进程组的资源限制、隔离和统计功能。比如可以通过cgroup限制特定进程的资源使用，比如使用特定数目的cpu核数和特定大小的内存，如果资源超限的情况下，会被暂停或者杀掉。</p>
 <p>Cgroup是于2.6内核由Google公司主导引入的，它是Linux内核实现资源虚拟化的技术基石，LXC(Linux Containers)和docker容器所用到的资源隔离技术，正是Cgroup。</p>
-<h4 id="12-相关概念介绍"><a class="markdownIt-Anchor" href="#12-相关概念介绍"></a> 1.2 相关概念介绍</h4>
+<h4 id="1-2-相关概念介绍">1.2 相关概念介绍</h4>
 <ul>
 <li>任务(task): 在cgroup中，任务就是一个进程。</li>
 <li>控制组(control group): cgroup的资源控制是以控制组的方式实现，控制组指明了资源的配额限制。进程可以加入到某个控制组，也可以迁移到另一个控制组。</li>
@@ -421,7 +421,7 @@
 <p>cgroup关系图如下：</p>
 <p><img src="/images/linux/cgroup/task_group.png" alt></p>
 <p>两个任务组成了一个 Task Group，并使用了 CPU 和 Memory 两个子系统的 cgroup，用于控制 CPU 和 MEM 的资源隔离。</p>
-<h4 id="13-子系统"><a class="markdownIt-Anchor" href="#13-子系统"></a> 1.3 子系统</h4>
+<h4 id="1-3-子系统">1.3 子系统</h4>
 <ul>
 <li>cpu: 限制进程的 cpu 使用率。</li>
 <li>cpuacct 子系统，可以统计 cgroups 中的进程的 cpu 使用报告。</li>
@@ -435,14 +435,14 @@
 <li>freezer:挂起或者恢复cgroups中的进程。</li>
 <li>ns: 控制cgroups中的进程使用不同的namespace。</li>
 </ul>
-<h4 id="14-cgroups文件系统"><a class="markdownIt-Anchor" href="#14-cgroups文件系统"></a> 1.4 cgroups文件系统</h4>
+<h4 id="1-4-cgroups文件系统">1.4 cgroups文件系统</h4>
 <p>Linux通过文件的方式，将cgroups的功能和配置暴露给用户，这得益于Linux的虚拟文件系统（VFS）。VFS将具体文件系统的细节隐藏起来，给用户态提供一个统一的文件系统API接口，cgroups和VFS之间的链接部分，称之为cgroups文件系统。</p>
 <p>比如挂在 cpu、cpuset、memory 三个子系统到 /cgroups/cpu_mem 目录下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t cgroup -o cpu,cpuset,memory cpu_mem /cgroups/cpu_mem</span><br></pre></td></tr></table></figure>
 <p>关于虚拟文件系统机制，见<a href>浅谈Linux虚拟文件系统机制</a></p>
-<h2 id="2-cgroups子系统"><a class="markdownIt-Anchor" href="#2-cgroups子系统"></a> 2. cgroups子系统</h2>
+<h2 id="2-cgroups子系统">2. cgroups子系统</h2>
 <p>这里简单介绍几个常见子系统的概念和用法，包括cpu、cpuacct、cpuset、memory、blkio。</p>
-<h4 id="21-cpu子系统"><a class="markdownIt-Anchor" href="#21-cpu子系统"></a> 2.1 cpu子系统</h4>
+<h4 id="2-1-cpu子系统">2.1 cpu子系统</h4>
 <p>cpu子系统限制对CPU的访问，每个参数独立存在于cgroups虚拟文件系统的伪文件中，参数解释如下：</p>
 <ul>
 <li><strong>cpu.shares</strong>: cgroup对时间的分配。比如cgroup A设置的是1，cgroup B设置的是2，那么B中的任务获取cpu的时间，是A中任务的2倍。</li>
@@ -456,7 +456,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="22-cpuacct子系统"><a class="markdownIt-Anchor" href="#22-cpuacct子系统"></a> 2.2 cpuacct子系统</h4>
+<h4 id="2-2-cpuacct子系统">2.2 cpuacct子系统</h4>
 <p>子系统生成cgroup任务所使用的CPU资源报告，不做资源限制功能。</p>
 <ul>
 <li><strong>cpuacct.usage</strong>: 该cgroup中所有任务总共使用的CPU时间（ns纳秒）</li>
@@ -465,7 +465,7 @@
 </ul>
 <p>通过cpuacct如何计算CPU利用率呢？可以通过<code>cpuacct.usage</code>来计算整体的CPU利用率，计算如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 1. 获取当前时间（纳秒）</span><br><span class="line">tstart=$(date +%s%N)</span><br><span class="line"># 2. 获取cpuacct.usage</span><br><span class="line">cstart=$(cat /xxx/cpuacct.usage)</span><br><span class="line"># 3. 间隔5s统计一下</span><br><span class="line">sleep 5</span><br><span class="line"># 4. 再次采点</span><br><span class="line">tstop=$(date +%s%N)</span><br><span class="line">cstop=$(cat /xxx/cpuacct.usage)</span><br><span class="line"># 5. 计算利用率</span><br><span class="line">($cstop - $cstart) / ($tstop - $tstart) * 100</span><br></pre></td></tr></table></figure>
-<h4 id="23-cpuset子系统"><a class="markdownIt-Anchor" href="#23-cpuset子系统"></a> 2.3 cpuset子系统</h4>
+<h4 id="2-3-cpuset子系统">2.3 cpuset子系统</h4>
 <p>适用于分配独立的CPU节点和Mem节点，比如将进程绑定在指定的CPU或者内存节点上运行，各参数解释如下：</p>
 <ul>
 <li>cpuset.cpus: 可以使用的cpu节点</li>
@@ -481,7 +481,7 @@
 <li>cpuset.sched_relax_domain_level: the searching range when migrating tasks</li>
 <li>cpuset.memory_pressure_enabled: 是否需要计算 memory_pressure?</li>
 </ul>
-<h4 id="24-memory子系统"><a class="markdownIt-Anchor" href="#24-memory子系统"></a> 2.4 memory子系统</h4>
+<h4 id="2-4-memory子系统">2.4 memory子系统</h4>
 <p>memory子系统主要涉及内存一些的限制和操作，主要有以下参数：</p>
 <ul>
 <li>memory.usage_in_bytes # 当前内存中的使用量</li>
@@ -510,7 +510,7 @@
 <li>memory.kmem.tcp.failcnt # tcp 缓存内存分配的受限次数</li>
 <li>memory.kmem.tcp.max_usage_in_bytes # tcp 缓存内存的最大使用量</li>
 </ul>
-<h4 id="25-blkio子系统-block-io"><a class="markdownIt-Anchor" href="#25-blkio子系统-block-io"></a> 2.5 blkio子系统 - block io</h4>
+<h4 id="2-5-blkio子系统-block-io">2.5 blkio子系统 - block io</h4>
 <p>主要用于控制设备IO的访问。有两种限制方式：权重和上限，权重是给不同的应用一个权重值，按百分比使用IO资源，上限是控制应用读写速率的最大值。</p>
 <p>按权重分配IO资源：</p>
 <ul>
@@ -529,9 +529,9 @@
 <li>blkio.throttle.io_serviced：针对特定操作按每秒操作次数设定上限，格式device_types:node_numbers operation operations_per_second</li>
 <li>blkio.throttle.io_service_bytes：针对特定操作按每秒数据量设定上限，格式device_types:node_numbers operation bytes_per_second</li>
 </ul>
-<h2 id="3-cgroups的安装和使用"><a class="markdownIt-Anchor" href="#3-cgroups的安装和使用"></a> 3. cgroups的安装和使用</h2>
+<h2 id="3-cgroups的安装和使用">3. cgroups的安装和使用</h2>
 <p>测试环境为 ubuntu 18.10</p>
-<h4 id="31-cgroups的安装"><a class="markdownIt-Anchor" href="#31-cgroups的安装"></a> 3.1 cgroups的安装</h4>
+<h4 id="3-1-cgroups的安装">3.1 cgroups的安装</h4>
 <ol>
 <li>安装 cgroups</li>
 </ol>
@@ -545,7 +545,7 @@
 <li>创建mem资源控制组，限制内存最大使用为100MB</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd /sys/fs/cgroup/memory</span><br><span class="line">$ sudo mkdir test_mem</span><br><span class="line">$ sudo echo &apos;104857600&apos; &gt; test_mem/memory.limit_in_bytes</span><br></pre></td></tr></table></figure>
-<h4 id="32-将进程加入到资源限制组"><a class="markdownIt-Anchor" href="#32-将进程加入到资源限制组"></a> 3.2 将进程加入到资源限制组</h4>
+<h4 id="3-2-将进程加入到资源限制组">3.2 将进程加入到资源限制组</h4>
 <p>测试代码<code>test.cc</code>如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;cstring&gt;</span><br><span class="line">#include &lt;thread&gt;</span><br><span class="line"></span><br><span class="line">void test_cpu() &#123;</span><br><span class="line">    printf(&quot;thread: test_cpu start\n&quot;);</span><br><span class="line">    int total = 0;</span><br><span class="line">    while (1) &#123;</span><br><span class="line">        ++total;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test_mem() &#123;</span><br><span class="line">    printf(&quot;thread: test_mem start\n&quot;);</span><br><span class="line">    int step = 20;</span><br><span class="line">    int size = 10 * 1024 * 1024; // 10Mb</span><br><span class="line">    for (int i = 0; i &lt; step; ++i) &#123;</span><br><span class="line">        char* tmp = new char[size];</span><br><span class="line">        memset(tmp, i, size);</span><br><span class="line">        sleep(1);</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot;thread: test_mem done\n&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv) &#123;</span><br><span class="line">    std::thread t1(test_cpu);</span><br><span class="line">    std::thread t2(test_mem);</span><br><span class="line">    t1.join();</span><br><span class="line">    t2.join();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>1. 编译该程序</strong></p>
@@ -557,10 +557,10 @@
 <p><img src="/images/linux/cgroup/after_cpu_limit.png" alt><br>
 cpu使用率降低了一半。</p>
 <p>除了使用 cgexec 限制进程外，还可以通过将进程号加入到<code>cgroup.procs</code>的方式，来达到限制目的。</p>
-<h2 id="4-总结"><a class="markdownIt-Anchor" href="#4-总结"></a> 4. 总结</h2>
+<h2 id="4-总结">4. 总结</h2>
 <p>本文简单介绍了Cgroups的概念和使用，通过Cgroups可以实现资源限制和隔离。在实际的生产环境中，Cgroups技术被大量应用在各种容器技术中，包括docker、rocket等。</p>
 <p>这种资源限制和隔离技术的出现，使得模块间相互混部成为可能，大大提高了机器资源利用率，这也是云计算的关键技术之一。</p>
-<h2 id="5-参考"><a class="markdownIt-Anchor" href="#5-参考"></a> 5. 参考</h2>
+<h2 id="5-参考">5. 参考</h2>
 <ul>
 <li><a href="https://www.ibm.com/developerworks/cn/linux/1506_cgroup/index.h" target="_blank" rel="noopener">CGroup 介绍、应用实例及原理描述</a></li>
 <li><a href="https://tech.meituan.com/2015/03/31/cgroups.html" target="_blank" rel="noopener">Linux资源管理之cgroups简介</a></li>
@@ -585,9 +585,9 @@ cpu使用率降低了一半。</p>
           
             <a href="/tags/Linux/" rel="tag"># Linux</a>
           
-            <a href="/tags/内核/" rel="tag"># 内核</a>
-          
             <a href="/tags/Cgroups/" rel="tag"># Cgroups</a>
+          
+            <a href="/tags/内核/" rel="tag"># 内核</a>
           
         </div>
       
@@ -694,7 +694,7 @@ cpu使用率降低了一半。</p>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -707,7 +707,7 @@ cpu使用率降低了一半。</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -756,7 +756,7 @@ cpu使用率降低了一半。</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-cgroups简介"><span class="nav-number">1.</span> <span class="nav-text"> 1. cgroups简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-功能和定位"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 1.1 功能和定位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-相关概念介绍"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 1.2 相关概念介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-子系统"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 1.3 子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-cgroups文件系统"><span class="nav-number">1.0.4.</span> <span class="nav-text"> 1.4 cgroups文件系统</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-cgroups子系统"><span class="nav-number">2.</span> <span class="nav-text"> 2. cgroups子系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-cpu子系统"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 cpu子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-cpuacct子系统"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 cpuacct子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-cpuset子系统"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 cpuset子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#24-memory子系统"><span class="nav-number">2.0.4.</span> <span class="nav-text"> 2.4 memory子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#25-blkio子系统-block-io"><span class="nav-number">2.0.5.</span> <span class="nav-text"> 2.5 blkio子系统 - block io</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-cgroups的安装和使用"><span class="nav-number">3.</span> <span class="nav-text"> 3. cgroups的安装和使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-cgroups的安装"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 cgroups的安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-将进程加入到资源限制组"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 将进程加入到资源限制组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text"> 4. 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text"> 5. 参考</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-cgroups简介"><span class="nav-number">1.</span> <span class="nav-text">1. cgroups简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-功能和定位"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 功能和定位</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-相关概念介绍"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 相关概念介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-子系统"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.3 子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-cgroups文件系统"><span class="nav-number">1.0.4.</span> <span class="nav-text">1.4 cgroups文件系统</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-cgroups子系统"><span class="nav-number">2.</span> <span class="nav-text">2. cgroups子系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-cpu子系统"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 cpu子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-cpuacct子系统"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 cpuacct子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-cpuset子系统"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 cpuset子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-memory子系统"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 memory子系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-blkio子系统-block-io"><span class="nav-number">2.0.5.</span> <span class="nav-text">2.5 blkio子系统 - block io</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-cgroups的安装和使用"><span class="nav-number">3.</span> <span class="nav-text">3. cgroups的安装和使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-cgroups的安装"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 cgroups的安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-将进程加入到资源限制组"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 将进程加入到资源限制组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5. 参考</span></a></li></div>
             
 
           </div>

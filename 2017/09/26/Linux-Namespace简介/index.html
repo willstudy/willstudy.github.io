@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="Linux Namespace简介 Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：  Mount: 隔离文件系统挂载点 UTS: 隔离主机名和域名信息 IPC: 隔离进程间通信 PID: 隔">
+<meta name="description" content="Linux Namespace简介 Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：  Mount: 隔离文件系统挂载点 UTS: 隔离主机名和域名信息 IPC: 隔离进程间通信 PID: 隔离">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux Namespae介绍">
 <meta property="og:url" content="https://blog.lecury.cn/2017/09/26/Linux-Namespace简介/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="Linux Namespace简介 Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：  Mount: 隔离文件系统挂载点 UTS: 隔离主机名和域名信息 IPC: 隔离进程间通信 PID: 隔">
+<meta property="og:description" content="Linux Namespace简介 Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：  Mount: 隔离文件系统挂载点 UTS: 隔离主机名和域名信息 IPC: 隔离进程间通信 PID: 隔离">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/Linux_Namespace/1.png">
 <meta property="og:image" content="https://blog.lecury.cn/images/Linux_Namespace/2.png">
 <meta property="og:updated_time" content="2019-04-05T08:27:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux Namespae介绍">
-<meta name="twitter:description" content="Linux Namespace简介 Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：  Mount: 隔离文件系统挂载点 UTS: 隔离主机名和域名信息 IPC: 隔离进程间通信 PID: 隔">
+<meta name="twitter:description" content="Linux Namespace简介 Linux Namespace提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的Namespace中，来实现资源隔离的目的。不同Namespace的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：  Mount: 隔离文件系统挂载点 UTS: 隔离主机名和域名信息 IPC: 隔离进程间通信 PID: 隔离">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/Linux_Namespace/1.png">
 
 
@@ -399,7 +399,7 @@
       
 
       
-        <h2 id="linux-namespace简介"><a class="markdownIt-Anchor" href="#linux-namespace简介"></a> Linux Namespace简介</h2>
+        <h2 id="Linux-Namespace简介">Linux Namespace简介</h2>
 <p>Linux <code>Namespace</code>提供了一种内核级别隔离系统资源的方法，通过将系统的全局资源放在不同的<code>Namespace</code>中，来实现资源隔离的目的。不同<code>Namespace</code>的程序，可以享有一份独立的系统资源。目前Linux中提供了六类系统资源的隔离机制，分别是：</p>
 <ul>
 <li><code>Mount</code>: 隔离文件系统挂载点</li>
@@ -410,7 +410,7 @@
 <li><code>User</code>: 隔离用户和用户组的ID</li>
 </ul>
 <p>下面简单的介绍一下这些<code>Namespace</code>的使用和功能。</p>
-<h3 id="namespace的使用"><a class="markdownIt-Anchor" href="#namespace的使用"></a> Namespace的使用</h3>
+<h3 id="Namespace的使用">Namespace的使用</h3>
 <p>涉及到<code>Namespace</code>的操作接口包括<code>clone()</code>、<code>setns()</code>、<code>unshare()</code>以及还有<code>/proc</code>下的部分文件。为了使用特定的<code>Namespace</code>，在使用这些接口的时候需要指定以下一个或多个参数：</p>
 <ul>
 <li><code>CLONE_NEWNS</code>: 用于指定<code>Mount Namespace</code></li>
@@ -421,20 +421,20 @@
 <li><code>CLONE_NEWUSER</code>: 用于指定<code>User Namespace</code></li>
 </ul>
 <p>下面简单概述一下这几个接口的用法。</p>
-<h4 id="clone系统调用"><a class="markdownIt-Anchor" href="#clone系统调用"></a> clone系统调用</h4>
+<h4 id="clone系统调用">clone系统调用</h4>
 <p>可以通过<code>clone</code>系统调用来创建一个独立<code>Namespace</code>的进程，它的函数描述如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">clone</span><span class="params">(<span class="keyword">int</span> (*child_func)(<span class="keyword">void</span> *), <span class="keyword">void</span> *child_stack, <span class="keyword">int</span> flags, <span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>它通过<code>flags</code>参数来控制创建进程时的特性，比如新创建的进程是否与父进程共享虚拟内存等。比如可以传入<code>CLONE_NEWNS</code>标志使得新创建的进程拥有独立的<code>Mount Namespace</code>，也可以传入多个flags使得新创建的进程拥有多种特性，比如：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flags = CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC;</span><br></pre></td></tr></table></figure>
 <p>传入这个flags那么新创建的进程将同时拥有独立的<code>Mount Namespace</code>、<code>UTS Namespace</code>和<code>IPC Namespace</code>。</p>
-<h4 id="通过proc文件查看namespace的存在"><a class="markdownIt-Anchor" href="#通过proc文件查看namespace的存在"></a> 通过/proc文件查看Namespace的存在</h4>
+<h4 id="通过-proc文件查看Namespace的存在">通过/proc文件查看Namespace的存在</h4>
 <p>在3.8内核开始，用户可以在<code>/proc/$pid/ns</code>文件下看到本进程所属的<code>Namespace</code>的文件信息。例如PID为2704进程的情况如下图所示：<br>
 <img src="/images/Linux_Namespace/1.png" alt><br>
 其中4026531839表明是<code>Namespace</code>的ID，如果两个进程的<code>Namespace</code> ID相同表明两个进程同处于一个命名空间中。</p>
 <p><b>这里需要注意的是</b>：只<code>/proc/$pid/ns/</code>对应的<code>Namespace</code>文件被打开，并且该文件描述符存在，即使该PID所属的进程被销毁，这个<code>Namespace</code>会依然存在。可以通过挂载的方式打开文件描述符：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch ~/mnt</span><br><span class="line">mount --<span class="built_in">bind</span> /proc/2704/mnt ~/mnt</span><br></pre></td></tr></table></figure>
 <p>这样就可以保留住PID为2704的进程的<code>Mount Namespace</code>了，即使2704进程被销毁或者退出，ID为4026531840的<code>Mount Namespace</code>依然会存在。</p>
-<h4 id="setns用来加入已存在的namepspace"><a class="markdownIt-Anchor" href="#setns用来加入已存在的namepspace"></a> setns用来加入已存在的Namepspace</h4>
+<h4 id="setns用来加入已存在的Namepspace">setns用来加入已存在的Namepspace</h4>
 <p><code>setns()</code>函数可以把进程加入到指定的<code>Namespace</code>中，它的函数描述如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setns</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> nstype)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>它的参数描述如下：</p>
@@ -443,7 +443,7 @@
 <li><code>nstype</code>参数：用来检查<code>fd</code>关联<code>Namespace</code>是否与<code>nstype</code>表明的<code>Namespace</code>一致，如果填0的话表示不进行该项检查。</li>
 </ul>
 <p>通过在程序中调用<code>setns</code>来将进程加入到指定的<code>Namespace</code>中。</p>
-<h4 id="unshare创建新的namespace"><a class="markdownIt-Anchor" href="#unshare创建新的namespace"></a> unshare创建新的Namespace</h4>
+<h4 id="unshare创建新的Namespace">unshare创建新的Namespace</h4>
 <p><code>unshare()</code>系统调用用于将当前进程和所在的<code>Namespace</code>分离，并加入到一个新的<code>Namespace</code>中，相对于<code>setns()</code>系统调用来说，<code>unshare()</code>不用关联之前存在的<code>Namespace</code>，只需要指定需要分离的<code>Namespace</code>就行，该调用会自动创建一个新的<code>Namespace</code>。</p>
 <p><code>unshare()</code>的函数描述如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unshare</span><span class="params">(<span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
@@ -454,11 +454,11 @@
 <li><code>CLONE_SYSVSEM</code>: 取消与其他进程共享SYS V信号量。</li>
 <li><code>CLONE_NEWIPC</code>: 创建新的<code>IPC Namespace</code>，并将该进程加入进来。</li>
 </ul>
-<h4 id="注意事项"><a class="markdownIt-Anchor" href="#注意事项"></a> 注意事项</h4>
+<h4 id="注意事项">注意事项</h4>
 <p><b>这里需要注意的是</b>：<code>unshare()</code>和<code>setns()</code>系统调用对<code>PID Namespace</code>的处理不太相同，当unshare PID namespace时，调用进程会为它的子进程分配一个新的<code>PID Namespace</code>，但是调用进程本身不会被移到新的<code>Namespace</code>中。而且调用进程第一个创建的子进程在新<code>Namespace</code>中的PID为1，并成为新<code>Namespace</code>中的init进程。</p>
 <p><code>setns()</code>系统调用也是类似的，调用者进程并不会进入新的PID Namespace，而是随后创建的子进程会进入。</p>
 <p>为什么创建其他的Namespace时<code>unshare()</code>和<code>setns()</code>会直接进入新的Namespace，而唯独PID Namespace不是如此呢？因为调用<code>getpid()</code>函数得到的PID是根据调用者所在的PID Namespace而决定返回哪个PID，进入新的PID namespace会导致PID产生变化。而对用户态的程序和库函数来说，他们都认为进程的PID是一个常量，PID的变化会引起这些进程奔溃。换句话说，一旦程序进程创建以后，那么它的PID namespace的关系就确定下来了，进程不会变更他们对应的PID namespace。</p>
-<h4 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h4>
+<h4 id="小结">小结</h4>
 <p>通过上面简单的概述，对于<code>Namespace</code>的操作有以下方式：</p>
 <ul>
 <li>1、可以在进程刚创建的时候通过<code>clone</code>系统调用为新进程分配一个或多个新的<code>Namespace</code>。</li>
@@ -466,9 +466,9 @@
 <li>3、通过<code>unshare()</code>为已存在的进程创建一个或多个新的<code>Namespace</code>。</li>
 </ul>
 <p>接下来详细的介绍一下各个<code>Namespace</code>的功能和特性。</p>
-<h3 id="mount-namespace"><a class="markdownIt-Anchor" href="#mount-namespace"></a> Mount Namespace</h3>
+<h3 id="Mount-Namespace">Mount Namespace</h3>
 <p><code>Mount Namespace</code>用来隔离文件系统的挂载点，不同<code>Mount Namespace</code>的进程拥有不同的挂载点，同时也拥有了不同的文件系统视图。<code>Mount Namespace</code>是历史上第一个支持的<code>Namespace</code>，它通过<code>CLONE_NEWNS</code>来标识的。</p>
-<h4 id="挂载的概念"><a class="markdownIt-Anchor" href="#挂载的概念"></a> 挂载的概念</h4>
+<h4 id="挂载的概念">挂载的概念</h4>
 <p>挂载的过程是通过<code>mount</code>系统调用完成的，它有两个参数：一个是已存在的普通文件名，一个是可以直接访问的特殊文件，一个是特殊文件的名字。这个特殊文件一般用来关联一些存储卷，这个存储卷可以包含自己的目录层级和文件系统结构。<code>mount</code>所达到的效果是：像访问一个普通的文件一样访问位于其他设备上文件系统的根目录，也就是将该设备上目录的根节点挂到了另外一个文件系统的页节点上，达到了给这个文件系统扩充容量的目的。</p>
 <p>可以通过<code>/proc</code>文件系统查看一个进程的挂载信息，具体做法如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/<span class="variable">$pid</span>/mountinfo</span><br></pre></td></tr></table></figure>
@@ -491,7 +491,7 @@
 <li>(10) mount source: 文件系统相关的信息，或者none</li>
 <li>(11) super options: 一些高级选项（文件系统超级块的选项）</li>
 </ul>
-<h4 id="挂载传播"><a class="markdownIt-Anchor" href="#挂载传播"></a> 挂载传播</h4>
+<h4 id="挂载传播">挂载传播</h4>
 <p>进程在创建<code>Mount Namespace</code>时，会把当前的文件结构复制给新的<code>Namespace</code>，新的<code>Namespace</code>中的所有<code>mount</code>操作仅影响自身的文件系统。但随着引入<b>挂载传播</b>的特性，<code>Mount Namespace</code>变得并不是完全意义上的资源隔离，这种传播特性使得多<code>Mount Namespace</code>之间的挂载事件可以相互影响。</p>
 <p>挂载传播定义了挂载对象之间的关系，系统利用这些关系来决定挂载对象中的挂载事件对其他挂载对象的影响。其中挂载对象之间的关系描述如下：</p>
 <ul>
@@ -503,7 +503,7 @@
 <p>其中给挂载点设置挂载关系的例子如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mount --make-shared /mntS      <span class="comment"># 将挂载点设置为共享关系属性</span></span><br><span class="line">mount --make-private /mntP     <span class="comment"># 将挂载点设置为私有关系属性</span></span><br><span class="line">mount --make-slave /mntY       <span class="comment"># 将挂载点设置为从属关系属性</span></span><br><span class="line">mount --make-unbindable /mntU  <span class="comment"># 将挂载点设置为不可绑定属性</span></span><br></pre></td></tr></table></figure>
 <p>注意在设置私有关系属性时，在本命名空间下的这个挂载点是Slave，而父命名空间下这个挂载点是Master，挂载传播的方向只能由Master传给Slave。</p>
-<h4 id="绑定挂载"><a class="markdownIt-Anchor" href="#绑定挂载"></a> 绑定挂载</h4>
+<h4 id="绑定挂载">绑定挂载</h4>
 <p>绑定挂载的引入使得<code>mount</code>的其中一个参数不一定要是一个特殊文件，也可以是该文件系统上的一个普通文件目录。Linux中绑定挂载的用法如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount --<span class="built_in">bind</span> /home/work /home/qiniu</span><br><span class="line">mount -o <span class="built_in">bind</span> /home/work /home/qiniu</span><br></pre></td></tr></table></figure>
 <p>其中<code>/home/work</code>是磁盘上的存在的一个目录，而不是一个文件设备(比如磁盘分区)。如果需要将Linux中两个文件目录链接起来，可以通过绑定挂载的方式，挂载后的效果类似于在两个文件目录上建立了硬链接。</p>
@@ -511,23 +511,23 @@
 <!--
 这里简要的叙述一下绑定挂载中的挂载传播特性。假设有两个文件目录`A/a`和`B/b`，其中`A`是源挂载点，`a`是`A`的一个目录，`B`是目的挂载点，`b`是`B`的一个目录。进行了如下的绑定挂载操作：
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount --<span class="built_in">bind</span> A/a  B/b</span><br></pre></td></tr></table></figure>
-<p>那么绑定挂载的结果取决于<code>A</code>和<code>B</code>的挂载传播类型，有以下几种情况：<br />
+<p>那么绑定挂载的结果取决于<code>A</code>和<code>B</code>的挂载传播类型，有以下几种情况：<br>
 1、<code>A</code>和<code>B</code>都是共享挂载点(<code>MS_SHARED</code>)：一个新的挂载点<code>C</code>是<code>A</code>的一个拷贝，它的根目录是<code>a</code>，那么<code>C</code>会挂载到<code>B</code>的<code>b</code>目录下，最后<code>C</code>会和<code>A</code>成为同组，传播事件和<code>A</code>相互影响。</p>
-<p>2、<code>A</code>是私有挂载点(<code>MS_SLAVE</code>)，<code>B</code>是共享挂载点(<code>MS_SHARED</code>)：一个新的挂载点<code>C</code>是<code>A</code>的一个拷贝，它的根目录是<code>a</code>，那么<code>C</code>会挂载<br />
+<p>2、<code>A</code>是私有挂载点(<code>MS_SLAVE</code>)，<code>B</code>是共享挂载点(<code>MS_SHARED</code>)：一个新的挂载点<code>C</code>是<code>A</code>的一个拷贝，它的根目录是<code>a</code>，那么<code>C</code>会挂载<br>
 –&gt;</p>
-<h3 id="uts-namespace"><a class="markdownIt-Anchor" href="#uts-namespace"></a> UTS Namespace</h3>
+<h3 id="UTS-Namespace">UTS Namespace</h3>
 <p><code>UTS Namespace</code>提供了主机名和域名的隔离，也就是<code>struct utsname</code>里的<code>nodename</code>和<code>domainname</code>两个字段。不同<code>Namespace</code>中可以拥有独立的主机名和域名。</p>
 <p>那么为什么需要对主机名和域名进行隔离呢？因为主机名和域名可以用来代替IP地址，如果没有这一层隔离，同一主机上不同的容器的网络访问就可能出问题。</p>
-<h3 id="ipc-namespace"><a class="markdownIt-Anchor" href="#ipc-namespace"></a> IPC Namespace</h3>
+<h3 id="IPC-Namespace">IPC Namespace</h3>
 <p><code>IPC Namespace</code>是对进程间通信的隔离，进程间通信常见的方法有信号量、消息队列和共享内存。<code>IPC Namespace</code>主要针对的是SystemV IPC和Posix消息队列，这些IPC机制都会用到标识符，比如用标识符来区分不同的消息队列，<code>IPC Namespace</code>要达到的目标是相同的标识符在不同的<code>Namepspace</code>中代表不同的通信介质(比如信号量、消息队列和共享内存)。</p>
-<h3 id="pid-namespace"><a class="markdownIt-Anchor" href="#pid-namespace"></a> PID Namespace</h3>
+<h3 id="PID-Namespace">PID Namespace</h3>
 <p><code>PID Namespace</code>对进程PID重新标号，即不同的<code>Namespace</code>下的进程可以有同一个PID。内核为所有的<code>PID Namespace</code>维护了一个树状结构，最顶层的是系统初始化创建的，被称为<code>Root Namespace</code>，由它创建的新的<code>PID Namespace</code>成为它的<code>Child namespace</code>，原先的<code>PID Namespace</code>成为新创建的<code>Parent Namespace</code>，这种情况下不同的<code>PID Namespace</code>形成一个等级体系：<b>父节点可以看到子节点中的进程，可以通过信号对子节点的进程产生影响，反过来子节点无法看到父节点<code>PID Namespace</code>里面的进程。</b></p>
 <p>有一点需要注意的是，在新创建的<code>PID Namespace</code>中通过<code>ps</code>命令仍有可能看到<code>Parent Namespace</code>中的进程，这是因为<code>ps</code>命令是从<code>/proc</code>文件系统下读取进程的信息，如果只想看到本Namespace具有的进程信息，还需要重新挂载<code>/proc</code>文件系统：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t proc proc /proc</span><br></pre></td></tr></table></figure>
 <p>此外新创建的<code>PID Namespace</code>中的第一个进程PID为1，成为新Namespace的<code>init</code>进程，在Linux中<code>init</code>进程有着特殊的意义。其特殊之处有一下几点：</p>
 <p>1、在Linux中当一个进程收到一个信号时，内核首先会检查这个进程的信号处理程序，否则会执行默认的行为（比如当收到<code>SIGTERM</code>信号时，默认行为是杀死这个进程），但是对于<code>init</code>进程来说，如果它没有注册信号处理函数，内核并不会执行该信号的缺省行为，也就是什么都不做，比如说当<code>init</code>进程收到<code>SIGTERM</code>信号时，如果没有为<code>init</code>进程注册信号处理函数，那么什么也不会发生，进程直接忽略掉这个信号了。如果信号来自于父节点Namespace的进程发出的，除了<code>SIGKILL</code>(销毁进程)和<code>SIGSTOP</code>(暂停进程)也会被<code>init</code>进程忽略的，但如果发送的是<code>SIGKILL</code>或者<code>SIGSTOP</code>那么子节点的<code>init</code>进程会强制执行，也就是说父节点Namespace的进程有权终止子节点Namespace中的进程。</p>
 <p>2、在Linux中，当一个子进程退出时，它首先会变成一个<code>defunct</code>进程，也称为’僵尸进程’，等待父进程或者系统来进行回收工作。在内核中会维护关于’僵尸进程’的一组信息，从而允许父进程或者系统能够在获取子进程的退出信息。如果父进程已经退出，那些依然运行中的子进程会成为’孤儿进程’，在Linux中由<code>init</code>进程作为所有进程的’父进程’，维护进程树的状态，一旦当某个子进程成为’孤儿进程’之后，<code>init</code>进程就会接管这个子进程，并负责收割这些’僵尸进程’，释放系统资源。</p>
-<h3 id="network-namespace"><a class="markdownIt-Anchor" href="#network-namespace"></a> Network Namespace</h3>
+<h3 id="Network-Namespace">Network Namespace</h3>
 <p><code>Network Namespace</code>主要是用来提供关于网络资源的隔离，包括网络设备（网卡、网桥）、IPV4或IPV6协议栈、路由表、防火墙、端口等信息，不同Namespace种可以拥有独立的网络资源。</p>
 <p>一个物理网络设备最多只能存在一个<code>Network Namespace</code>中，如果该<code>Namespace</code>被销毁后，这个物理设备不会回到它的<code>Parent Namespace</code>，而是会回到<code>Root Namespace</code>中。</p>
 <p>如果需要打通不同<code>Namespace</code>的通信，可以通过创建<code>vnet pair</code>虚拟网络设备对的形式。虚拟网络设备对：有两端，类似于管道，分别放置在不同的Namespace中，从一端传入的数据，可以从另一端读取。</p>
@@ -536,7 +536,7 @@
 <p>当使用<code>ip</code>命令创建这个Network Namespace时，它会在<code>/var/run/netns</code>下为这个命名空间创建一个绑定挂载，这可以保证即使没有进程运行在这个Namespace下面，但这个Namespace依然存在。也可以通过<code>ip</code>在指定的Namespace中执行命令，操作如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ip netns <span class="built_in">exec</span> netns-demo ping 127.0.0.1</span><br><span class="line">ip netns <span class="built_in">exec</span> netns-demo ip link list</span><br></pre></td></tr></table></figure>
 <p>这个命令是在<code>netns-demo</code>命名空间中发出ping的命令和查看网卡设备情况。</p>
-<h3 id="user-namespace"><a class="markdownIt-Anchor" href="#user-namespace"></a> User Namespace</h3>
+<h3 id="User-Namespace">User Namespace</h3>
 <p><code>User Namespace</code>允许Namespace间可以映射用户和用户组ID，这意味着一个进程在Namespace里面的用户和用户组ID可以与Namespace外面的用户和用户组ID不同。值得一提的是，一个普通进程(Namespace外面的用户ID非0)在Namespace里面的用户和用户组ID可以为0，换句话说这个普通进程在Namespace里面可以拥有root特权的权限。</p>
 <p>当创建一个<code>User Namespace</code>时，有以下几点值得提一下:</p>
 <ul>
@@ -556,17 +556,17 @@
 <ul>
 <li>写入<code>uid_map/gid_map</code>的进程，必须对PID进程所属<code>User Namespace</code>拥有<code>CAP_SETUID/CAP_SETGID</code>权限。</li>
 <li>写入<code>uid_map/gid_map</code>的进程，必须位于PID进程的Parent或者Child User Namespace。</li>
-<li>满足如下条件之一: ① 写入的数据将写入进程在Parent Namespace中的有效<code>uid/gid</code>映射到Child Namespace。此条规则允许Child Namespace中的进程为自己设置<code>uid/gid</code><br />
+<li>满足如下条件之一: ① 写入的数据将写入进程在Parent Namespace中的有效<code>uid/gid</code>映射到Child Namespace。此条规则允许Child Namespace中的进程为自己设置<code>uid/gid</code><br>
 ② 进程在Parent Namespace拥有<code>CAP_SETUID/CAP_SETGID</code>权限，那么它将可以映射到Parent Namespace中的任一<code>uid/gid</code>。不过由于Child Namespace中新创建的进程是没有在Parent Namespace中的权限的，那么此条规则仅用于，位于具有相应权限的Parent Namespace中的进程，来映射同namespace内的任一IDs。</li>
 </ul>
 <p><code>User Namespace</code>除了隔离用户ID和用户组ID之外，还对每个<code>Namespace</code>进行了<code>Capability</code>的隔离和控制，可以通过添加和删除相应的<code>Capability</code>来控制新<code>Namespace</code>中进程所拥有的权限，比如为新的<code>Namespace</code>中增加<code>CAP_CHOWN</code>权限，那么在这个<code>Namespace</code>的进程拥有改变文件属主的权限。</p>
-<h2 id="namespace-demo程序"><a class="markdownIt-Anchor" href="#namespace-demo程序"></a> Namespace Demo程序</h2>
+<h2 id="Namespace-Demo程序">Namespace Demo程序</h2>
 <p>程序的地址放在了<code>https://github.com/willstudy/namespace-demo.git</code>上，主要涉及到了<code>pid</code>、<code>uts</code>和<code>user</code>三个Namespace的一些操作，Demo程序来源于<a href="https://lwn.net/Articles/531114/#series_index" target="_blank">LWN.net Namespace API</a>中。</p>
-<h2 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后</h2>
+<h2 id="最后">最后</h2>
 <p>本文以内核引入不同<code>Namespace</code>的时间顺序，概述了每个<code>Namespace</code>的功能和特性，同时介绍<code>Namespace</code>的操作方法。目前为止内核共引入了六类<code>Namespace</code>，它们的隔离特性是Docker容器的技术基石，为了更好的理解<code>Namespace</code>和容器技术，后续需要进一步学习Docker容器中是如何使用这些<code>Namespace</code>。</p>
-<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
-<p>[1] <a href="https://lwn.net/Articles/531114/#series_index" target="_blank">LWN.net Namespace API</a><br />
-[2] <a href="http://www.infoq.com/cn/articles/docker-kernel-knowledge-namespace-resource-isolation" target="_blank">Docker背后的Namespace知识</a><br />
+<h2 id="参考">参考</h2>
+<p>[1] <a href="https://lwn.net/Articles/531114/#series_index" target="_blank">LWN.net Namespace API</a><br>
+[2] <a href="http://www.infoq.com/cn/articles/docker-kernel-knowledge-namespace-resource-isolation" target="_blank">Docker背后的Namespace知识</a><br>
 [3] <a href="http://blog.lucode.net/linux/intro-Linux-namespace-6.html" target="_blank">Linux Namespace简介</a></p>
 -->
       
@@ -692,7 +692,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -705,7 +705,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -754,7 +754,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux-namespace简介"><span class="nav-number">1.</span> <span class="nav-text"> Linux Namespace简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace的使用"><span class="nav-number">1.1.</span> <span class="nav-text"> Namespace的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#clone系统调用"><span class="nav-number">1.1.1.</span> <span class="nav-text"> clone系统调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过proc文件查看namespace的存在"><span class="nav-number">1.1.2.</span> <span class="nav-text"> 通过/proc文件查看Namespace的存在</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setns用来加入已存在的namepspace"><span class="nav-number">1.1.3.</span> <span class="nav-text"> setns用来加入已存在的Namepspace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unshare创建新的namespace"><span class="nav-number">1.1.4.</span> <span class="nav-text"> unshare创建新的Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意事项"><span class="nav-number">1.1.5.</span> <span class="nav-text"> 注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">1.1.6.</span> <span class="nav-text"> 小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mount-namespace"><span class="nav-number">1.2.</span> <span class="nav-text"> Mount Namespace</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载的概念"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 挂载的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载传播"><span class="nav-number">1.2.2.</span> <span class="nav-text"> 挂载传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定挂载"><span class="nav-number">1.2.3.</span> <span class="nav-text"> 绑定挂载</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-Namespace简介"><span class="nav-number">1.</span> <span class="nav-text">Linux Namespace简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Namespace的使用"><span class="nav-number">1.1.</span> <span class="nav-text">Namespace的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#clone系统调用"><span class="nav-number">1.1.1.</span> <span class="nav-text">clone系统调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过-proc文件查看Namespace的存在"><span class="nav-number">1.1.2.</span> <span class="nav-text">通过/proc文件查看Namespace的存在</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setns用来加入已存在的Namepspace"><span class="nav-number">1.1.3.</span> <span class="nav-text">setns用来加入已存在的Namepspace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unshare创建新的Namespace"><span class="nav-number">1.1.4.</span> <span class="nav-text">unshare创建新的Namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意事项"><span class="nav-number">1.1.5.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小结"><span class="nav-number">1.1.6.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mount-Namespace"><span class="nav-number">1.2.</span> <span class="nav-text">Mount Namespace</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载的概念"><span class="nav-number">1.2.1.</span> <span class="nav-text">挂载的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挂载传播"><span class="nav-number">1.2.2.</span> <span class="nav-text">挂载传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定挂载"><span class="nav-number">1.2.3.</span> <span class="nav-text">绑定挂载</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

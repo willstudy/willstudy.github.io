@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="容器编排服务变更策略调研 本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。 其中它们的版本信息如下: 平台|版本 kubernetes|v1.8 swarm|v1.2.8 nomad|v0.6.3 下面分别介绍一下这些平台的服务变更策略。  kubernetes 在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目">
+<meta name="description" content="容器编排服务变更策略调研 本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。 其中它们的版本信息如下: 平台|版本 kubernetes|v1.8 swarm|v1.2.8 nomad|v0.6.3 下面分别介绍一下这些平台的服务变更策略。 kubernetes 在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目前提">
 <meta name="keywords" content="调研">
 <meta property="og:type" content="article">
 <meta property="og:title" content="容器编排服务变更策略调研">
 <meta property="og:url" content="https://blog.lecury.cn/2017/10/27/容器编排服务变更策略调研/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="容器编排服务变更策略调研 本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。 其中它们的版本信息如下: 平台|版本 kubernetes|v1.8 swarm|v1.2.8 nomad|v0.6.3 下面分别介绍一下这些平台的服务变更策略。  kubernetes 在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目">
+<meta property="og:description" content="容器编排服务变更策略调研 本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。 其中它们的版本信息如下: 平台|版本 kubernetes|v1.8 swarm|v1.2.8 nomad|v0.6.3 下面分别介绍一下这些平台的服务变更策略。 kubernetes 在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目前提">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T08:29:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="容器编排服务变更策略调研">
-<meta name="twitter:description" content="容器编排服务变更策略调研 本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。 其中它们的版本信息如下: 平台|版本 kubernetes|v1.8 swarm|v1.2.8 nomad|v0.6.3 下面分别介绍一下这些平台的服务变更策略。  kubernetes 在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目">
+<meta name="twitter:description" content="容器编排服务变更策略调研 本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。 其中它们的版本信息如下: 平台|版本 kubernetes|v1.8 swarm|v1.2.8 nomad|v0.6.3 下面分别介绍一下这些平台的服务变更策略。 kubernetes 在Kubernetes中，是由deployment控制器来控制服务变更的过程，它目前提">
 
 
 
@@ -396,7 +396,7 @@
       
 
       
-        <h2 id="容器编排服务变更策略调研"><a class="markdownIt-Anchor" href="#容器编排服务变更策略调研"></a> 容器编排服务变更策略调研</h2>
+        <h2 id="容器编排服务变更策略调研">容器编排服务变更策略调研</h2>
 <p>本文调研目前流行的三款容器编排平台的服务变更策略，包括kubernetes、swarm、nomad。<br>
 其中它们的版本信息如下:</p>
 <p>平台|版本<br>
@@ -404,25 +404,25 @@ kubernetes|v1.8<br>
 swarm|v1.2.8<br>
 nomad|v0.6.3</p>
 <p>下面分别介绍一下这些平台的服务变更策略。</p>
-<h2 id="kubernetes"><a class="markdownIt-Anchor" href="#kubernetes"></a> kubernetes</h2>
+<h2 id="kubernetes">kubernetes</h2>
 <p>在Kubernetes中，是由<code>deployment</code>控制器来控制服务变更的过程，它目前提供了两种服务变更策略，分别是：</p>
 <ul>
 <li>Recreate</li>
 <li>RollingUpdate</li>
 </ul>
 <p>下面分别介绍一下这两种服务变更策略。</p>
-<h3 id="recreate"><a class="markdownIt-Anchor" href="#recreate"></a> Recreate</h3>
+<h3 id="Recreate">Recreate</h3>
 <p>Recreate这种服务变更策略非常简单粗暴，要把<code>deployment</code>关联的现存Pod全部杀掉之后，才能进行升级。</p>
-<h3 id="rollingupdate"><a class="markdownIt-Anchor" href="#rollingupdate"></a> RollingUpdate</h3>
+<h3 id="RollingUpdate">RollingUpdate</h3>
 <p><code>RollingUpdate</code>是滚动更新的意思，可以通过这种策略来精确的控制服务变更的过程。在<code>deployment</code>中有两个字段是与服务变更的过程有关，分别是<code>Max Unavailable</code>和<code>Max Surge</code>，下面分别介绍一下这两个字段的含义。</p>
-<h4 id="max-unavailable"><a class="markdownIt-Anchor" href="#max-unavailable"></a> Max Unavailable</h4>
+<h4 id="Max-Unavailable">Max Unavailable</h4>
 <p><code>.spec.strategy.rollingUpdate.maxUnavailable</code>是一个可选的字段，用来表明在升级过程中Pod的最大不可用数目，如果超过这个数目的话，<code>deployment</code>便不会销毁旧的实例，停止更新的过程。</p>
 <p>这个值可以是一个绝对数值，也可以是一个百分比，默认值是<code>25%</code>。有一点需要注意的是，当<code>.spec.strategy.rollingUpdate.maxSurge</code>为0时，<code>.spec.strategy.rollingUpdate.maxUnavailable</code>不能为0。</p>
 <p>举个例子当该值设置成<code>30%</code>时，<code>deployment</code>会立马将旧的ReplicaSet缩减为原来的<code>70%</code>，然后新建新的ReplicaSet，当新的ReplicaSet已经ready之后才能继续完成升级操作。</p>
-<h3 id="max-surge"><a class="markdownIt-Anchor" href="#max-surge"></a> Max Surge</h3>
+<h3 id="Max-Surge">Max Surge</h3>
 <p><code>.spec.strategy.rollingUpdate.maxSurge</code>是一个可选字段，它表明了可以创建超过期望Pod个数的最大数目，它可以是一个绝对值，也可以是一个百分比形式。它的值和<code>.spec.strategy.rollingUpdate.maxUnavailable</code>不能同时为0。</p>
 <p>举个例子，当这个值设置成<code>30%</code>时，当滚动更新开始时，新的ReplicaSet可以立马开始扩容，但是要保证新的ReplicaSet和旧的ReplicaSet的Pod数目不能超过Pod期望数目的<code>130%</code>。</p>
-<h3 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 小结</h3>
+<h3 id="小结">小结</h3>
 <p>比如<code>deployment</code>的定义如下:</p>
 <ul>
 <li>.spec.replicas: 10</li>
@@ -431,7 +431,7 @@ nomad|v0.6.3</p>
 </ul>
 <p>那么在更新过程中，旧的ReplicaSet会缩容到<code>70%</code>，也就是7个Pod，新的ReplicaSet会扩容到6个Pod，要同时保证不可用的数目在<code>30%</code>以下，总的Pod数目在<code>130%</code>以下，当新的ReplicaSet有Pod启动好了，那么会继续缩容旧的ReplicaSet。<br>
 <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/" target="_blank">kubernetes Deployment</a></p>
-<h2 id="swarm"><a class="markdownIt-Anchor" href="#swarm"></a> swarm</h2>
+<h2 id="swarm">swarm</h2>
 <p>swarm是docker官方推出的一款容器编排管理工具，它通过docker service的形式来管理容器实例的变更过程。在创建docker service前，必须先初始化swarm集群，比如创建一个http服务：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker swarm init &amp;&amp; docker service create --name http --replicas 2 -p 80:80 katacoda/docker-http-server:v1</span></span><br></pre></td></tr></table></figure>
 <p>可以通过docker service的方式来滚动更新和弹性扩展服务。涉及到服务的更新过程是通过docker service update来实现的，它有以下字段控制着实例的变更过程。</p>
@@ -448,7 +448,7 @@ nomad|v0.6.3</p>
 <li><code>--rollback-parallelism</code>: 回滚的并发度</li>
 </ul>
 <p><a href="https://docs.docker.com/engine/reference/commandline/service_update/" target="_blank">Docker Service</a></p>
-<h2 id="nomad"><a class="markdownIt-Anchor" href="#nomad"></a> Nomad</h2>
+<h2 id="Nomad">Nomad</h2>
 <p><code>Nomad</code>是Hashicorp设计的一款容器编排系统，它拥有服务变更策略多种多样，包括了：</p>
 <ul>
 <li><code>Rolling Upgrades</code>: 滚动升级</li>
@@ -456,12 +456,12 @@ nomad|v0.6.3</p>
 <li><code>Handling Signals</code>: 信号处理方式</li>
 </ul>
 <p>下面分别简单的介绍一下这几种服务变更策略。</p>
-<h3 id="rollingupdate-2"><a class="markdownIt-Anchor" href="#rollingupdate-2"></a> RollingUpdate</h3>
+<h3 id="RollingUpdate-2">RollingUpdate</h3>
 <p><code>RollingUpdate</code>是滚动变更的意思，它是<code>nomad</code>第一个支持的服务变更策略，为了在<code>job</code>和<code>task</code>中使用这种服务变更策略，需要在更新策略中使用<code>update</code>这个配置，也叫<a href="https://www.nomadproject.io/docs/job-specification/update.html" target="_blank">update stanza</a>类似如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">job <span class="string">"geo-api-server"</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">  group <span class="string">"api-server"</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment"># Add an update stanza to enable rolling updates of the service</span></span><br><span class="line">    update &#123;</span><br><span class="line">      max_parallel = 2</span><br><span class="line">      min_healthy_time = <span class="string">"30s"</span></span><br><span class="line">      healthy_deadline = <span class="string">"10m"</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在这个例子中通过增加<code>update stanza</code>为<code>api-server</code>这个任务组增加了服务变更策略，当<code>api-server</code>这个任务组需要更新时，会首先创建2个新版本的实例，并且要求新版本的实例要保持Health状态30秒，才可以继续进行服务变更。</p>
 <p>也就是说<code>nomad</code>的<code>RollingUpdate</code>的服务更新策略与<code>update stanza</code>息息相关，下面简单的介绍一下<code>update stanza</code>。</p>
-<h4 id="update-stanza"><a class="markdownIt-Anchor" href="#update-stanza"></a> update Stanza</h4>
+<h4 id="update-Stanza">update Stanza</h4>
 <p>update Stanza指明了任务组的更新策略，如果不指定的话那么服务变更时将不会出发滚动升级和<code>Cannary</code>，主要一下更新参数：</p>
 <ul>
 <li><code>max_parallel</code>: 指明任务组同时可以更新的数目</li>
@@ -473,7 +473,7 @@ nomad|v0.6.3</p>
 <li><code>canary</code>: 在进行job升级时，会创建指定数目的<code>canary</code>实例，只有这些<code>canary</code>实例是health状态，才可以开始进行服务变更过程，这个过程是通过<code>max_parallel</code>来触发的。</li>
 <li><code>stagger</code>: 指明实例在node间故障迁移的时间间隔。</li>
 </ul>
-<h4 id="bluegreen-canary-deployments"><a class="markdownIt-Anchor" href="#bluegreen-canary-deployments"></a> Blue/Green &amp; Canary Deployments</h4>
+<h4 id="Blue-Green-Canary-Deployments">Blue/Green &amp; Canary Deployments</h4>
 <p>有时候<code>rolling upgrades</code>在生产环境中没有提供足够的灵活性，很多企业在生产环境更新时，会通过部署一个<code>canary</code>，技术上叫做蓝绿部署，这种方式来确保服务能够稳定的变更，以减少不可用的时间。</p>
 <p>这个是通过<code>update stanza</code>中的<code>canary</code>配置来实现的，假如配置如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">job <span class="string">"docs"</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">  group <span class="string">"api"</span> &#123;</span><br><span class="line">    count = 5</span><br><span class="line"></span><br><span class="line">    update &#123;</span><br><span class="line">      max_parallel     = 1</span><br><span class="line">      canary           = 5</span><br><span class="line">      min_healthy_time = <span class="string">"30s"</span></span><br><span class="line">      healthy_deadline = <span class="string">"10m"</span></span><br><span class="line">      auto_revert      = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -484,7 +484,7 @@ nomad|v0.6.3</p>
 <p>如果升级出现异常，可以回滚上个版本</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nomad deployment fail 32a080c1</span><br></pre></td></tr></table></figure>
 <p>这样新版本的5个实例会被下掉，本次上线服务主体不受影响。</p>
-<h4 id="handling-signals"><a class="markdownIt-Anchor" href="#handling-signals"></a> Handling Signals</h4>
+<h4 id="Handling-Signals">Handling Signals</h4>
 <p>现代操作系统支持信号机制，<code>nomad</code>在杀掉一个应用之前，会给这个应用发送一个信号，这个信号是可以配置的，这种方式允许一些应用当被<code>nomad</code>杀掉的时候，有机会进行优雅的退出、销毁资源操作等等。同时<code>nomad</code>允许指定一个时间，在杀死该应用时，等待用户程序的退出。</p>
 <p>在<code>nomad</code>终结一个进程时，会给该进程发送<code>SIGINT</code>信号，在<code>nomad</code>下的进程应该响应这个信号，以优雅的退出，如果超过配置的时间内还没有处理该信号，那么这个进程会被强制杀掉。</p>
 
@@ -611,7 +611,7 @@ nomad|v0.6.3</p>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -624,7 +624,7 @@ nomad|v0.6.3</p>
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -673,7 +673,7 @@ nomad|v0.6.3</p>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#容器编排服务变更策略调研"><span class="nav-number">1.</span> <span class="nav-text"> 容器编排服务变更策略调研</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kubernetes"><span class="nav-number">2.</span> <span class="nav-text"> kubernetes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#recreate"><span class="nav-number">2.1.</span> <span class="nav-text"> Recreate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rollingupdate"><span class="nav-number">2.2.</span> <span class="nav-text"> RollingUpdate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#max-unavailable"><span class="nav-number">2.2.1.</span> <span class="nav-text"> Max Unavailable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-surge"><span class="nav-number">2.3.</span> <span class="nav-text"> Max Surge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">2.4.</span> <span class="nav-text"> 小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#swarm"><span class="nav-number">3.</span> <span class="nav-text"> swarm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nomad"><span class="nav-number">4.</span> <span class="nav-text"> Nomad</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rollingupdate-2"><span class="nav-number">4.1.</span> <span class="nav-text"> RollingUpdate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#update-stanza"><span class="nav-number">4.1.1.</span> <span class="nav-text"> update Stanza</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bluegreen-canary-deployments"><span class="nav-number">4.1.2.</span> <span class="nav-text"> Blue/Green &amp; Canary Deployments</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#handling-signals"><span class="nav-number">4.1.3.</span> <span class="nav-text"> Handling Signals</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#容器编排服务变更策略调研"><span class="nav-number">1.</span> <span class="nav-text">容器编排服务变更策略调研</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kubernetes"><span class="nav-number">2.</span> <span class="nav-text">kubernetes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Recreate"><span class="nav-number">2.1.</span> <span class="nav-text">Recreate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RollingUpdate"><span class="nav-number">2.2.</span> <span class="nav-text">RollingUpdate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Max-Unavailable"><span class="nav-number">2.2.1.</span> <span class="nav-text">Max Unavailable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Max-Surge"><span class="nav-number">2.3.</span> <span class="nav-text">Max Surge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">2.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#swarm"><span class="nav-number">3.</span> <span class="nav-text">swarm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nomad"><span class="nav-number">4.</span> <span class="nav-text">Nomad</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RollingUpdate-2"><span class="nav-number">4.1.</span> <span class="nav-text">RollingUpdate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#update-Stanza"><span class="nav-number">4.1.1.</span> <span class="nav-text">update Stanza</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Blue-Green-Canary-Deployments"><span class="nav-number">4.1.2.</span> <span class="nav-text">Blue/Green &amp; Canary Deployments</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Handling-Signals"><span class="nav-number">4.1.3.</span> <span class="nav-text">Handling Signals</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

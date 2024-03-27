@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Linux,IO,内核,">
+  <meta name="keywords" content="Linux,内核,IO,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. Linux IO简介  1.1 IO概述 IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。  1.2 Linux IO方式 Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：  阻塞IO：在IO">
-<meta name="keywords" content="Linux,IO,内核">
+<meta name="description" content="1. Linux IO简介 1.1 IO概述 IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。 1.2 Linux IO方式 Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：  阻塞IO：在IO事件发">
+<meta name="keywords" content="Linux,内核,IO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈Linux IO复用">
 <meta property="og:url" content="https://blog.lecury.cn/2019/11/20/浅谈Linux IO复用/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. Linux IO简介  1.1 IO概述 IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。  1.2 Linux IO方式 Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：  阻塞IO：在IO">
+<meta property="og:description" content="1. Linux IO简介 1.1 IO概述 IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。 1.2 Linux IO方式 Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：  阻塞IO：在IO事件发">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2024-03-27T11:18:02.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈Linux IO复用">
-<meta name="twitter:description" content="1. Linux IO简介  1.1 IO概述 IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。  1.2 Linux IO方式 Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：  阻塞IO：在IO">
+<meta name="twitter:description" content="1. Linux IO简介 1.1 IO概述 IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。 1.2 Linux IO方式 Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：  阻塞IO：在IO事件发">
 
 
 
@@ -396,10 +396,10 @@
       
 
       
-        <h2 id="1-linux-io简介"><a class="markdownIt-Anchor" href="#1-linux-io简介"></a> 1. Linux IO简介</h2>
-<h4 id="11-io概述"><a class="markdownIt-Anchor" href="#11-io概述"></a> 1.1 IO概述</h4>
+        <h2 id="1-Linux-IO简介">1. Linux IO简介</h2>
+<h4 id="1-1-IO概述">1.1 IO概述</h4>
 <p>IO是Input、Output的简称，也就是输入和输出。在计算机世界中，除了计算和存储，剩下的几乎都是IO，它包含硬件设备层面的数据交换，也包含软件层面的数据传输。</p>
-<h4 id="12-linux-io方式"><a class="markdownIt-Anchor" href="#12-linux-io方式"></a> 1.2 Linux IO方式</h4>
+<h4 id="1-2-Linux-IO方式">1.2 Linux IO方式</h4>
 <p>Linux IO方式表示Linux系统处理IO事件的方式，IO事件包括可读事件、可写事件、错误事件等。Linux IO方式主要包括：</p>
 <ul>
 <li>阻塞IO：在IO事件发生之前，会一直阻塞。</li>
@@ -409,8 +409,8 @@
 <li>信号驱动IO：利用Linux的信号机制，当IO事件发生时，触发信号处理程序。</li>
 <li>等。</li>
 </ul>
-<h2 id="2-io复用"><a class="markdownIt-Anchor" href="#2-io复用"></a> 2. IO复用</h2>
-<h4 id="21-概念"><a class="markdownIt-Anchor" href="#21-概念"></a> 2.1 概念</h4>
+<h2 id="2-IO复用">2. IO复用</h2>
+<h4 id="2-1-概念">2.1 概念</h4>
 <p>IO复用（I/O Multiplexing）通俗的来说：是<strong>同时处理多个描述符IO事件的一种技术手段</strong>。这些文件描述符包括：socket套接字、普通文件、设备文件等。</p>
 <p>举个简单例子：tcp server同时处理两个文件描述符，一个是标准输入，一个是tcp连接。当server接收标准输入时，可能会因调用<code>fgets()</code>而阻塞，从而无法及时处理另一个tcp连接的可读事件，比如有tcp client发送了数据。</p>
 <p>如果tcp server想要同时处理多个描述符的事件，可能的做法是开启多个线程或进程，各自等待描述符的可读可写事件，但这样一来，就需要引入线程间同步和通信问题，大大增加编程的复杂性。</p>
@@ -421,7 +421,7 @@
 <li>poll</li>
 <li>epoll</li>
 </ul>
-<h4 id="22-select"><a class="markdownIt-Anchor" href="#22-select"></a> 2.2 select</h4>
+<h4 id="2-2-select">2.2 select</h4>
 <p>select函数的函数签名如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);</span><br></pre></td></tr></table></figure>
 <p>它监听一组描述符，并在指定时间内选出可读、可写或者异常的描述符列表。参数介绍如下；</p>
@@ -437,11 +437,11 @@
 <li>检查超时、遍历完后，将满足条件的fd放入结果buffer中。</li>
 <li>拷贝结果到用户空间，并释放之前申请的内存。</li>
 </ul>
-<h4 id="23-poll"><a class="markdownIt-Anchor" href="#23-poll"></a> 2.3 poll</h4>
+<h4 id="2-3-poll">2.3 poll</h4>
 <p>poll和select的原理没啥本质不同，只是实现的方式更加优雅，封装了很多细节。其函数签名如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;poll.h&gt;</span><br><span class="line">int poll(struct pollfd fds[], nfds_t nfds, int timeout);</span><br><span class="line"></span><br><span class="line">struct pollfd &#123;</span><br><span class="line">   int fd;</span><br><span class="line">   short events;</span><br><span class="line">   short revents;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>将监听的描述符以数组的方式传入，并为每个描述符绑定了监听事件。</p>
-<h4 id="24-epoll"><a class="markdownIt-Anchor" href="#24-epoll"></a> 2.4 epoll</h4>
+<h4 id="2-4-epoll">2.4 epoll</h4>
 <p>select和poll在描述符集合量级较小的情况下，性能表现还可以，但如果监听的描述符集合太大，就需要考虑epoll了。epoll的用法如下：</p>
 <ol>
 <li>创建epoll的句柄，size是监听描述符的个数。</li>
@@ -485,7 +485,7 @@
 <li>当描述符ready后，会调用回调函数<code>ep_poll_callback</code>，它会将描述符对应的<code>epitem</code>拷贝到<code>rdllist</code>中。</li>
 <li>调用<code>epoll_wait</code>其实是检查<code>rdllist</code>的过程。</li>
 </ul>
-<h4 id="25-select-vs-epoll"><a class="markdownIt-Anchor" href="#25-select-vs-epoll"></a> 2.5 select vs epoll</h4>
+<h4 id="2-5-select-vs-epoll">2.5 select vs epoll</h4>
 <p>从工作原理中，也可以看出select与epoll的诸多不同，优缺点对比如下：</p>
 <ul>
 <li>支持监听的描述符数量
@@ -507,7 +507,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="3-总结"><a class="markdownIt-Anchor" href="#3-总结"></a> 3. 总结</h2>
+<h2 id="3-总结">3. 总结</h2>
 <p>IO模式多种多样，在软件开发过程中，不能唯一而论，要根据实际的应用场景，选择合适的IO技术，才能取得事半功倍的效果。</p>
 
       
@@ -528,9 +528,9 @@
           
             <a href="/tags/Linux/" rel="tag"># Linux</a>
           
-            <a href="/tags/IO/" rel="tag"># IO</a>
-          
             <a href="/tags/内核/" rel="tag"># 内核</a>
+          
+            <a href="/tags/IO/" rel="tag"># IO</a>
           
         </div>
       
@@ -637,7 +637,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -650,7 +650,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -699,7 +699,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-linux-io简介"><span class="nav-number">1.</span> <span class="nav-text"> 1. Linux IO简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-io概述"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 1.1 IO概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-linux-io方式"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 1.2 Linux IO方式</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-io复用"><span class="nav-number">2.</span> <span class="nav-text"> 2. IO复用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-概念"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-select"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 select</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-poll"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 poll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#24-epoll"><span class="nav-number">2.0.4.</span> <span class="nav-text"> 2.4 epoll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#25-select-vs-epoll"><span class="nav-number">2.0.5.</span> <span class="nav-text"> 2.5 select vs epoll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text"> 3. 总结</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Linux-IO简介"><span class="nav-number">1.</span> <span class="nav-text">1. Linux IO简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-IO概述"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 IO概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-Linux-IO方式"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 Linux IO方式</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-IO复用"><span class="nav-number">2.</span> <span class="nav-text">2. IO复用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-概念"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-select"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 select</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-poll"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 poll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-epoll"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 epoll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-select-vs-epoll"><span class="nav-number">2.0.5.</span> <span class="nav-text">2.5 select vs epoll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text">3. 总结</span></a></li></div>
             
 
           </div>

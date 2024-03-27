@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. 设计背景 许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。 kafka构建了一种新颖的消息">
+<meta name="description" content="1. 设计背景 许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。 kafka构建了一种新颖的消息系">
 <meta name="keywords" content="开源工具,kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kafka篇-设计思路">
 <meta property="og:url" content="https://blog.lecury.cn/2019/07/28/kafka篇-设计思路/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. 设计背景 许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。 kafka构建了一种新颖的消息">
+<meta property="og:description" content="1. 设计背景 许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。 kafka构建了一种新颖的消息系">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-07-29T14:27:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka篇-设计思路">
-<meta name="twitter:description" content="1. 设计背景 许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。 kafka构建了一种新颖的消息">
+<meta name="twitter:description" content="1. 设计背景 许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。 传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。 kafka构建了一种新颖的消息系">
 
 
 
@@ -396,29 +396,29 @@
       
 
       
-        <h2 id="1-设计背景"><a class="markdownIt-Anchor" href="#1-设计背景"></a> 1. 设计背景</h2>
+        <h2 id="1-设计背景">1. 设计背景</h2>
 <p>许多互联网公司，每天都会产生大量的日志数据，包括用户行为记录、运营指标、系统运行状况的监控数据等。为了分析用户的行为或者监控系统的状态，需要对这些数据进行周期性的分析和统计。</p>
 <p>传统的日志分析系统提供了一种离线处理日志信息的可扩展方案（类似于从生产环境的服务器上抓取日志文件，然后聚合到数据仓库进行离线分析），但如果要进行实时地处理，通常会有较大延迟。</p>
 <p>kafka构建了一种新颖的消息系统，提供了类似于消息传递系统的API，允许应用程序实时的订阅日志事件，做到实时或近实时分析。</p>
 <hr>
-<h2 id="2-持久化设计"><a class="markdownIt-Anchor" href="#2-持久化设计"></a> 2. 持久化设计</h2>
+<h2 id="2-持久化设计">2. 持久化设计</h2>
 <p>与传统消息系统不同的是，kafka会把消息持久化到磁盘上，以实现消息的回溯功能。</p>
 <p>磁盘总是给人们留下“慢速”的印象，事实上，磁盘的速度要比人们预想中的快得多，这取决于使用磁盘的姿势。常见的SATA磁盘随机读写性能，仅为100K/s，而顺序读写可达600MB/s，不同的使用姿势，性能差距可达到6000倍。</p>
 <p>kafka为了实现高吞吐的消息服务，充分借助了磁盘顺序读写的优势。</p>
-<h4 id="21-磁盘顺序读写"><a class="markdownIt-Anchor" href="#21-磁盘顺序读写"></a> 2.1 磁盘顺序读写</h4>
+<h4 id="2-1-磁盘顺序读写">2.1 磁盘顺序读写</h4>
 <p>磁盘的顺序读写是有规律的，并且操作系统进行了大量优化，包括<code>read-ahead</code>和<code>write-behind</code>技术，其中<code>read-ahead</code>是以大的data block为单位预先读取数据，而<code>write-behind</code>则是将多个小型的逻辑写操作，合并成一次大型的物理磁盘写入。</p>
 <p>除此之外，操作系统还对读写磁盘的内容进行cache，主动将系统空闲内存用作<code>page cache</code>，所有的磁盘读写操作都会通过这个<code>page cache</code>。</p>
 <p>kafka没有使用<code>in-process cache</code>来缓存磁盘数据，而是使用了<code>page cache</code>，因为即使进程维护了<code>in-process cache</code>，在读写磁盘时，该数据也会被复制到操作系统的<code>page cache</code>中。直接使用<code>page cache</code>一方面可以使得缓存容量大大增加，另一方面kafka服务重启的情况下，缓存依旧可用。</p>
 <p>为了充分利用磁盘顺序读写能力、实现消息存储时的高吞吐，kafka只是对消息进行<strong>简单的读取和追加</strong>，并没有使用类似于BTree的数据结构来索引数据和随机读写数据。</p>
 <p>消息系统一般都是顺序消费、依次推送消息，这种根据需求特定场景进行的简单读取和追加，既可以满足实际需求，又能大幅提升吞吐。</p>
-<h4 id="22-消息过期机制"><a class="markdownIt-Anchor" href="#22-消息过期机制"></a> 2.2 消息过期机制</h4>
+<h4 id="2-2-消息过期机制">2.2 消息过期机制</h4>
 <p>在 Kafka 中，可以让消息保留相对较长的一段时间(比如一周)，而不是试图在被消费后立即删除，也可以让消息保留到一定规模后，比如消息大小超出2G，再清除旧数据。</p>
 <hr>
-<h2 id="3-高吞吐设计"><a class="markdownIt-Anchor" href="#3-高吞吐设计"></a> 3. 高吞吐设计</h2>
+<h2 id="3-高吞吐设计">3. 高吞吐设计</h2>
 <p>kafka的吞吐表现是极为优秀的，在<a href="xxx">kafka篇-基本介绍</a>中也给出了吞吐性能的测试数据，这里简单谈一谈kafka高吞吐的设计要点。</p>
-<h4 id="31-本地io的优化"><a class="markdownIt-Anchor" href="#31-本地io的优化"></a> 3.1 本地IO的优化</h4>
+<h4 id="3-1-本地IO的优化">3.1 本地IO的优化</h4>
 <p>kafka强依赖操作系统提供的page cache功能，采用简单读取、顺序追加的方式，保证读写操作均属于Sequence I/O，从而充分利用了磁盘顺序读写的性能。</p>
-<h4 id="32-网络io的优化"><a class="markdownIt-Anchor" href="#32-网络io的优化"></a> 3.2 网络IO的优化</h4>
+<h4 id="3-2-网络IO的优化">3.2 网络IO的优化</h4>
 <p>kafka是一个分布式的消息系统，在消息的生产和消费过程中，不仅涉及到本地的IO，还涉及大量的网络IO，对于网络层IO的优化，主要涉及两个方面：</p>
 <ul>
 <li>避免大量小型的IO操作</li>
@@ -433,18 +433,18 @@
 <li>操作系统将数据从套接字缓冲区(内核空间) -&gt; 网络发送的 NIC 缓冲区</li>
 </ul>
 <p>中间涉及4次copy操作和两次系统调用，而通过sendfile的话，可以允许操作系统将数据从page cache直接发送到网络，即只需最后一步操作，可将数据复制到NIC缓冲区。</p>
-<h4 id="33-压缩"><a class="markdownIt-Anchor" href="#33-压缩"></a> 3.3 压缩</h4>
+<h4 id="3-3-压缩">3.3 压缩</h4>
 <p>kafka提供了端到端的数据压缩功能，将消息以压缩格式写入，并在日志中保持压缩，只在consumer消费时解压缩。</p>
 <hr>
-<h2 id="4-稳定性设计"><a class="markdownIt-Anchor" href="#4-稳定性设计"></a> 4. 稳定性设计</h2>
+<h2 id="4-稳定性设计">4. 稳定性设计</h2>
 <p>稳定性对每一个系统来说，都是尤为重要的，kafka为了保障稳定性，不仅为每个数据分区实现了副本的概念，而且为日志备份提供了一整套的保障机制。</p>
-<h4 id="41-分区和副本"><a class="markdownIt-Anchor" href="#41-分区和副本"></a> 4.1 分区和副本</h4>
+<h4 id="4-1-分区和副本">4.1 分区和副本</h4>
 <p>kafka将主题划分为多个分区，通过分区规则将消息存储到相应的分区，只要分区规则设置的合理，那么所有消息将会被均匀的分布到不同的分区中，从而实现负载均衡和水平扩展。kafka每个分区拥有若干副本，当集群部分节点出现问题时，可以进行故障转移，以保证数据的可用性。</p>
-<h4 id="42-日志备份-isr"><a class="markdownIt-Anchor" href="#42-日志备份-isr"></a> 4.2 日志备份 ISR</h4>
+<h4 id="4-2-日志备份-ISR">4.2 日志备份 ISR</h4>
 <p>kafka稳定性的核心是备份日志文件，正常情况下每个分区都有一个leader和零或多个followers，读写操作均由leader处理，followers节点同步leader节点的日志，保持消息和偏移量同leader一致。日志的读写操作均由leader完成，其他follower节点从leader同步日志。如果leader因意外而退出，kafka会通过ISR集合选出新的leader节点。</p>
 <p>ISR（a set of in-sync replicas）是kafka维护的同步状态集合，只有这个集合的成员才有资格被选为leader，并且一条消息需要被这个集合的所有节点读取并追加到日志，这条消息才可以被视为提交，ISR集合的变化会持久化到ZooKeeper中。</p>
 <hr>
-<h2 id="5-参考"><a class="markdownIt-Anchor" href="#5-参考"></a> 5. 参考</h2>
+<h2 id="5-参考">5. 参考</h2>
 <p><a href="http://kafka.apache.org/" target="_blank" rel="noopener">kafka官方文档</a></p>
 
       
@@ -572,7 +572,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -585,7 +585,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -634,7 +634,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-设计背景"><span class="nav-number">1.</span> <span class="nav-text"> 1. 设计背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-持久化设计"><span class="nav-number">2.</span> <span class="nav-text"> 2. 持久化设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-磁盘顺序读写"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 磁盘顺序读写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-消息过期机制"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 消息过期机制</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-高吞吐设计"><span class="nav-number">3.</span> <span class="nav-text"> 3. 高吞吐设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-本地io的优化"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 本地IO的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-网络io的优化"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 网络IO的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#33-压缩"><span class="nav-number">3.0.3.</span> <span class="nav-text"> 3.3 压缩</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-稳定性设计"><span class="nav-number">4.</span> <span class="nav-text"> 4. 稳定性设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#41-分区和副本"><span class="nav-number">4.0.1.</span> <span class="nav-text"> 4.1 分区和副本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#42-日志备份-isr"><span class="nav-number">4.0.2.</span> <span class="nav-text"> 4.2 日志备份 ISR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text"> 5. 参考</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-设计背景"><span class="nav-number">1.</span> <span class="nav-text">1. 设计背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-持久化设计"><span class="nav-number">2.</span> <span class="nav-text">2. 持久化设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-磁盘顺序读写"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 磁盘顺序读写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-消息过期机制"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 消息过期机制</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-高吞吐设计"><span class="nav-number">3.</span> <span class="nav-text">3. 高吞吐设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-本地IO的优化"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 本地IO的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-网络IO的优化"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 网络IO的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-压缩"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 压缩</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-稳定性设计"><span class="nav-number">4.</span> <span class="nav-text">4. 稳定性设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-分区和副本"><span class="nav-number">4.0.1.</span> <span class="nav-text">4.1 分区和副本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-日志备份-ISR"><span class="nav-number">4.0.2.</span> <span class="nav-text">4.2 日志备份 ISR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5. 参考</span></a></li></div>
             
 
           </div>

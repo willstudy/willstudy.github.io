@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="rpc,架构技术,协议设计,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. rpc是什么？ rpc是远程过程调用（remote procedure call）的缩写，大意是调用远程的函数并得到返回结果。比如远程服务集成了【人脸识别算法】，客户端通过与服务端的rpc调用即可获取人脸识别的能力，这种方式可以降低系统耦合度、简化开发成本等等。 rpc的网络交互大致流程：  client向server发送request后开始等待。 server收到、处理、回复client。">
+<meta name="keywords" content="rpc,架构技术,协议设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈rpc技术">
+<meta property="og:url" content="https://blog.lecury.cn/2021/12/19/浅谈rpc技术/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="1. rpc是什么？ rpc是远程过程调用（remote procedure call）的缩写，大意是调用远程的函数并得到返回结果。比如远程服务集成了【人脸识别算法】，客户端通过与服务端的rpc调用即可获取人脸识别的能力，这种方式可以降低系统耦合度、简化开发成本等等。 rpc的网络交互大致流程：  client向server发送request后开始等待。 server收到、处理、回复client。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://blog.lecury.cn/images/rpc/process.jpg">
+<meta property="og:image" content="https://blog.lecury.cn/images/rpc/arch.jpg">
+<meta property="og:image" content="https://blog.lecury.cn/images/rpc/brpc-arch.jpg">
+<meta property="og:updated_time" content="2024-03-27T14:56:20.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈rpc技术">
+<meta name="twitter:description" content="1. rpc是什么？ rpc是远程过程调用（remote procedure call）的缩写，大意是调用远程的函数并得到返回结果。比如远程服务集成了【人脸识别算法】，客户端通过与服务端的rpc调用即可获取人脸识别的能力，这种方式可以降低系统耦合度、简化开发成本等等。 rpc的网络交互大致流程：  client向server发送request后开始等待。 server收到、处理、回复client。">
+<meta name="twitter:image" content="https://blog.lecury.cn/images/rpc/process.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7626921954258592" crossorigin="anonymous"></script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2021/12/19/浅谈rpc技术/">
+
+
+
+
+
+  <title>浅谈rpc技术 | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2021/12/19/浅谈rpc技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅谈rpc技术</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-12-19T19:35:30+08:00">
+                2021-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/12/19/浅谈rpc技术/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/12/19/浅谈rpc技术/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2021/12/19/浅谈rpc技术/" class="leancloud_visitors" data-flag-title="浅谈rpc技术">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-rpc是什么？">1. rpc是什么？</h2>
+<p>rpc是远程过程调用（remote procedure call）的缩写，大意是调用远程的函数并得到返回结果。比如远程服务集成了【人脸识别算法】，客户端通过与服务端的rpc调用即可获取人脸识别的能力，这种方式可以降低系统耦合度、简化开发成本等等。</p>
+<p>rpc的网络交互大致流程：</p>
+<ol>
+<li>client向server发送request后开始等待。</li>
+<li>server收到、处理、回复client。</li>
+<li>client收到response做出反应。</li>
+</ol>
+<p>简单代码demo如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 1. client侧</span><br><span class="line">write(netfd, req_buf, req_size);</span><br><span class="line">... // wait response</span><br><span class="line">read(netfd, res_buf, res_size);</span><br><span class="line"></span><br><span class="line">// 2. server侧</span><br><span class="line">read(netfd, req_buf, req_size);</span><br><span class="line">... // 执行函数逻辑、业务逻辑等</span><br><span class="line">write(netfd, res_buf, res_size);</span><br></pre></td></tr></table></figure>
+<p>上述demo是操作系统级别比较原生的写法，对开发人员不太优化，比如无法对协议字段约束、没有较好的容错处理、缺乏便捷的序列化/反序列化方式、难以映射Call ID等问题。</p>
+<p>为了进一步降低rpc服务的开发门槛、提高rpc代码的质量等，大佬们对rpc的生命周期进行抽象、建模以及标准化，设计了各种各样的rpc框架。</p>
+<h2 id="2-rpc框架介绍">2. rpc框架介绍</h2>
+<p>rpc框架提供了一整套的技术栈，用来规范和解决rpc过程调用可能遇到的问题，比如：</p>
+<ul>
+<li>数据传输协议：不同机器、网络间可能是不同的字节序；如何快速序列化和反序列化？随着业务变化，数据字段往往要增加或删减，怎么兼容前后不同版本的格式？</li>
+<li>连接建立和管理：如何建立client/server的链接？如何从集群选择一台机器发出请求？如何建立短连接、长连接、连接池等。</li>
+<li>请求处理和响应：如何解析请求？如何处理业务逻辑？如何组装返回结果等。</li>
+<li>各种容错处理：下游迟迟不返回怎么办？找不到可用下游怎么处理？链接断开的异常处理等等</li>
+<li>监控和工具集（可选）：内置metrics指标监控，提供工具集用于性能分析&amp;问题追查等。</li>
+<li>等等</li>
+</ul>
+<p>简化的rpc架构demo图：<a href="https://www.guru99.com/remote-procedure-call-rpc.html" target="_blank" rel="noopener">https://www.guru99.com/remote-procedure-call-rpc.html</a></p>
+<p><img src="/images/rpc/process.jpg" alt></p>
+<p>主要包含：</p>
+<ol>
+<li>Client：发出请求包 &amp; 接收响应包，包括一些容错处理等等。</li>
+<li>Client Stub：用于序列化/反序列化消息包，并与rpc runtime做消息的交互。</li>
+<li>RPC Runtime：rpc框架核心运行环境，比如连接管理、容错处理等等</li>
+<li>Server Stub：和Client Stub功能类似</li>
+<li>Server：收到请求包并处理业务逻辑（比如执行人脸识别程序），组成返回结果等。</li>
+</ol>
+<p>工业级的rpc框架功能更加强大、架构设计也更加复杂，比如会支持：</p>
+<ul>
+<li>多协议：protobuf协议、json协议、redis协议、mysql协议等等</li>
+<li>多语言：C/C++/Golang/Java/PHP等等</li>
+<li>多平台：Linux/Mac/Windows等</li>
+<li>多服务发现策略：比如ipport、dns、etcd、k8s svc等等</li>
+<li>多负载均衡策略：round robin、random、weighted random（指定权重）、locality aware（延迟判断权重）</li>
+<li>等等</li>
+</ul>
+<h2 id="3-各大rpc框架的介绍">3. 各大rpc框架的介绍</h2>
+<h4 id="3-1-grpc简介（google-rpc）">3.1 grpc简介（google rpc）</h4>
+<p>grpc是google公司开源的高性能、多语言、跨平台的通用rpc框架，它依赖 HTTP/2、protobuf和其他现代技术堆来保证rpc的安全、高性能和可扩展性，大致流程如下：</p>
+<p><img src="/images/rpc/arch.jpg" alt></p>
+<p>核心概念包括：</p>
+<ul>
+<li>protobuf：一种序列化/反序列化协议，可以低成本定义service接口以及结构体，并自动产出语言相关的lib库。详细参考：<a href="https://zhuanlan.zhihu.com/p/435944782" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/435944782</a></li>
+<li>streaming：一次请求会包含多次处理过程，主要借助HTTP/2的能力实现，主要解决通信包体太大，难以一次传输完成处理的场景。
+<ul>
+<li>server streaming rpc：client发送单个请求 &amp; 接受一系列的数据包，消息是保序的，且一直持续到server无消息发送。</li>
+<li>client streaming rpc：client发送一系列的数据包 &amp; 得到一个响应包，grpc保证包的发送顺序和接收顺序。</li>
+<li>bidirectional streaming rpc：双向streaming，两路streaming操作是独立的。</li>
+</ul>
+</li>
+<li>HTTP/2：grpc基于HTTP/2开发，同时兼容了HTTP/1.1，<a href="https://developers.google.com/web/fundamentals/performance/http2?hl=zh-cn" target="_blank" rel="noopener">https://developers.google.com/web/fundamentals/performance/http2?hl=zh-cn</a> 优点如下：
+<ul>
+<li>二进制分帧层：提高消息传输的效率。</li>
+<li>支持流式传输</li>
+<li>支持流量控制</li>
+<li>header压缩</li>
+<li>等等</li>
+</ul>
+</li>
+<li>channels: HTTP/2支持一个链接上进行多个stream，channel通过多个stream实现了并发链接，提供了一种根据ip:port连接到 grpc server的方法。</li>
+</ul>
+<p>相比REST+JSON</p>
+<p>grpc优势：</p>
+<ul>
+<li>高性能：快10倍以上</li>
+<li>多种传输方式：普通请求、单向stream、双向stream</li>
+<li>代码自动生成：通过工具自动生成协议代码：包括数据结构定义、服务接口定义</li>
+<li>跨平台/多语言支持：Linux/Windows/Mac，C++/Golang/PHP等</li>
+<li>安全：支持TLS</li>
+<li>其他特性：加密、metdata、认证、拦截机制、服务发现、负载均衡等等</li>
+</ul>
+<p>grpc劣势：</p>
+<ul>
+<li>对浏览器支持不太优化：grpc严重依赖HTTP/2，浏览器需要web同时支持HTTP/1.1和HTTP/2。</li>
+<li>分析和调试较为麻烦：protobuf是二进制难以编辑、阅读。</li>
+<li>上手门槛较高</li>
+</ul>
+<h4 id="3-2-brpc简介（baidu-rpc）">3.2 brpc简介（baidu rpc）</h4>
+<p>brpc是百度开源的工业级rpc框架，被广泛应用在百度上百万实例、数千种服务端程序中。 为什么叫工业级rpc框架？因为它设计之初就考虑了生产环境遇到的各类问题，</p>
+<ul>
+<li>数据交换协议五花八门：http+json、protobuf、nshead+mcpack、自定义协议，那么服务端如何支持多种协议的访问？</li>
+<li>服务发现协议多种多样：ipport、dns、bns、xns、etcd等，如何支持多种协议的访问？</li>
+<li>密集IO场景下如何压榨CPU的极限？</li>
+<li>复杂调度场景下，如何选择合适的后端？</li>
+<li>全面的调试和监控手段：内置各种Metrcis、支持在线分析性能、race condition分析等等。</li>
+<li>等等</li>
+</ul>
+<p>此外brpc通过将策略和架构解耦的方式，实现了强大的定制能力，比如定制服务发现协议、定制数据交换协议等等，以支持更多更个性化的rpc场景。</p>
+<p>brpc框架组成大致为：</p>
+<p><img src="/images/rpc/brpc-arch.jpg" alt></p>
+<p>brpc vs grpc 的优势：</p>
+<ul>
+<li>功能方面：除了基础的rpc功能之外，brpc还扩展支持了多种数据交换协议、多种调度策略、多种服务发现方式等等。</li>
+<li>性能方面：brpc借助bthread、lock-free等技术，在某些场景下性能表现优异。</li>
+<li>定制方面：通过架构、策略解耦的方式，支持定制扩展rpc的功能。</li>
+<li>运维层面：内置了各种便捷服务（比如监控页面、性能分析、参数控制等）</li>
+</ul>
+<p>劣势：</p>
+<ul>
+<li>跨平台/跨语言能力不足</li>
+<li>上手门槛相对较高</li>
+</ul>
+<h2 id="4-参考">4. 参考</h2>
+<ul>
+<li><a href="https://www.wallarm.com/what/the-concept-of-grpc" target="_blank" rel="noopener">https://www.wallarm.com/what/the-concept-of-grpc</a></li>
+<li><a href="https://github.com/apache/incubator-brpc" target="_blank" rel="noopener">https://github.com/apache/incubator-brpc</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rpc/" rel="tag"># rpc</a>
+          
+            <a href="/tags/架构技术/" rel="tag"># 架构技术</a>
+          
+            <a href="/tags/协议设计/" rel="tag"># 协议设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/12/18/关于架构设计的一些思考/" rel="next" title="关于架构设计的一些思考">
+                <i class="fa fa-chevron-left"></i> 关于架构设计的一些思考
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/willstudy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:958823492@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-rpc是什么？"><span class="nav-number">1.</span> <span class="nav-text">1. rpc是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-rpc框架介绍"><span class="nav-number">2.</span> <span class="nav-text">2. rpc框架介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-各大rpc框架的介绍"><span class="nav-number">3.</span> <span class="nav-text">3. 各大rpc框架的介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-grpc简介（google-rpc）"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 grpc简介（google rpc）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-brpc简介（baidu-rpc）"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 brpc简介（baidu rpc）</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text">4. 参考</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz',
+        appKey: 'Ro8xPoiy3igQTMA4btTCXGPL',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz", "Ro8xPoiy3igQTMA4btTCXGPL");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
