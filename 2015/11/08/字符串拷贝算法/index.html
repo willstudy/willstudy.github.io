@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="简介 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为： 1strcpy( char *dest, char *src ) 简单方法 核心代码： 1while( *dest++ = *src++ ); 增量值算法 因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下： 12int">
+<meta name="description" content="简介 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为： 1strcpy( char *dest, char *src )  简单方法 核心代码： 1while( *dest++ = *src++ );  增量值算法 因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下： 12">
 <meta name="keywords" content="算法,字符串">
 <meta property="og:type" content="article">
 <meta property="og:title" content="字符串拷贝算法">
 <meta property="og:url" content="https://blog.lecury.cn/2015/11/08/字符串拷贝算法/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="简介 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为： 1strcpy( char *dest, char *src ) 简单方法 核心代码： 1while( *dest++ = *src++ ); 增量值算法 因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下： 12int">
+<meta property="og:description" content="简介 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为： 1strcpy( char *dest, char *src )  简单方法 核心代码： 1while( *dest++ = *src++ );  增量值算法 因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下： 12">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T07:42:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字符串拷贝算法">
-<meta name="twitter:description" content="简介 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为： 1strcpy( char *dest, char *src ) 简单方法 核心代码： 1while( *dest++ = *src++ ); 增量值算法 因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下： 12int">
+<meta name="twitter:description" content="简介 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为： 1strcpy( char *dest, char *src )  简单方法 核心代码： 1while( *dest++ = *src++ );  增量值算法 因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下： 12">
 
 
 
@@ -396,16 +396,16 @@
       
 
       
-        <h2 id="简介">简介</h2>
+        <h2 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h2>
 <p>李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">strcpy</span>( <span class="keyword">char</span> *dest, <span class="keyword">char</span> *src )</span><br></pre></td></tr></table></figure>
-<h2 id="简单方法">简单方法</h2>
+<h2 id="简单方法"><a class="markdownIt-Anchor" href="#简单方法"></a> 简单方法</h2>
 <p>核心代码：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>( *dest++ = *src++ );</span><br></pre></td></tr></table></figure>
-<h2 id="增量值算法">增量值算法</h2>
+<h2 id="增量值算法"><a class="markdownIt-Anchor" href="#增量值算法"></a> 增量值算法</h2>
 <p>因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> delta = dest - src;</span><br><span class="line"><span class="keyword">while</span>(*(<span class="keyword">char</span> *)(src + delta)++ = *src++);</span><br></pre></td></tr></table></figure>
-<h2 id="每次复制4个字节算法">每次复制4个字节算法</h2>
+<h2 id="每次复制4个字节算法"><a class="markdownIt-Anchor" href="#每次复制4个字节算法"></a> 每次复制4个字节算法</h2>
 <p>因为在32操作系统下，每次复制32位字符串，会大大地提高效率。核心代码如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> * d = (<span class="keyword">int</span> *)dest;</span><br><span class="line"><span class="keyword">int</span> * s = (<span class="keyword">int</span> *)src;</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span>(!CONTAIN_OF_ZERO_BYTE(*s)) &#123;</span><br><span class="line">        * d = * s;</span><br><span class="line">        d++, s++;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    src  = s;</span><br><span class="line">    dest = d;</span><br><span class="line">    <span class="keyword">while</span>( *dest++ = *src++ );   <span class="comment">//最多执行4次</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述的那个宏很重要，可以判断一个字节中是否含有‘\0’，因为字符串复制遇到’\0’就可以结束了。</p>
@@ -532,7 +532,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -545,7 +545,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -594,7 +594,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单方法"><span class="nav-number">2.</span> <span class="nav-text">简单方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增量值算法"><span class="nav-number">3.</span> <span class="nav-text">增量值算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每次复制4个字节算法"><span class="nav-number">4.</span> <span class="nav-text">每次复制4个字节算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text"> 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单方法"><span class="nav-number">2.</span> <span class="nav-text"> 简单方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增量值算法"><span class="nav-number">3.</span> <span class="nav-text"> 增量值算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#每次复制4个字节算法"><span class="nav-number">4.</span> <span class="nav-text"> 每次复制4个字节算法</span></a></li></ol></div>
             
 
           </div>

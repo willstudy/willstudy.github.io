@@ -303,6 +303,308 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2016/02/21/同步互斥锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/02/21/同步互斥锁/" itemprop="url">同步互斥锁.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-21T15:32:30+08:00">
+                2016-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/02/21/同步互斥锁/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2016/02/21/同步互斥锁/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/02/21/同步互斥锁/" class="leancloud_visitors" data-flag-title="同步互斥锁.md">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          这一篇文章主要讲述UNIX里面的锁机制，分为2类：一种主要用于多线程Thread之间的共享资源访问，另一种主要用于多进程Process之间的访问。参考资料《UNIX环境高级编程》，这是我自己的一些理解，以后还要继续补充。
+ 线程Thread之间的锁
+在多线程的环境中，涉及到共享变量的存取，就需要一定程度的同步，否则可能出现意想不到的情况。在UNIX中，用于多线程之间同步的锁分为以下几种：
+
+互斥量
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/02/21/同步互斥锁/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2016/01/24/探索Linux的SUID位/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/01/24/探索Linux的SUID位/" itemprop="url">探索Linux的SUID位</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-24T14:18:30+08:00">
+                2016-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/01/24/探索Linux的SUID位/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2016/01/24/探索Linux的SUID位/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2016/01/24/探索Linux的SUID位/" class="leancloud_visitors" data-flag-title="探索Linux的SUID位">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。
+ 写在前面
+本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。
+ ruid、euid、suid
+一个程序，准确的说是一个进程，拥有着这
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/01/24/探索Linux的SUID位/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2016/01/12/动态内存分配器的一个简易实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -396,11 +698,11 @@
         
           
           堆是进程空间里很重要的一部分，有效的使用堆可以很大程度上提高程序的性能，本文参考《深入理解计算机系统》简要的实现了一个内存分配器。
-介绍
+ 介绍
 这是用C语言实现的一个简易的动态内存分配器，模拟动态内存的分配与回收，是本学期CSAPP课程的第五个实验。它是基于mmlib包所提供的一个存储器系统模型，在对此进行的扩充。实现了用于堆Heap内存管理的动态分配功能。
-内存管理与动态分配
-内存管理
-是在系统层面对
+ 内存管理与动态分配
+ 内存管理
+是在系统
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -548,9 +850,9 @@
         
           
           最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。
-std::deque
-类的原型
-1template &lt; class T, class Alloc = allocator&lt;T&gt; &gt; class
+ std::deque
+ 类的原型
+1template &lt; class T, class Alloc = allocator&lt;T&gt; &gt; cla
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -698,8 +1000,8 @@ std::deque
         
           
           This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me.
-Lab 4 :  Authentication
-Lab Environment Setu
+ Lab 4 :  Authentication
+ Lab Environment Se
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -847,12 +1149,12 @@ Lab Environment Setu
         
           
           本文参考算法导论书籍以及一些博客，实现了红黑树的插入删除算法。
-简介
+ 简介
 红黑树这个算法，以后可能会再次遇到，我就在此记录一下。这个算法使用的C语言实现的。
-红黑树的原理讲解
+ 红黑树的原理讲解
 我是通过参考枫叶博主关于对红黑树讲解，以及算法导论这本书大致了解了红黑树的实现细节。具体参见红黑树删除操作。
-红黑树的C实现
-123456789101112131415161718192021222324252627282930
+ 红黑树的C实现
+123456789101112131415161718192021222324252627282
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1000,8 +1302,8 @@ Lab Environment Setu
         
           
           本文简要的实现了平衡二叉树的插入、删除操作。为了更新节点的平衡度，新增了parent指针。
-简介
-这个平衡二叉树使用C语言实现的，因为写的匆忙，加上智商捉急，可能某些地方没有考虑周全，会有一点小bug，尚在排查中。本算法能基本的实现平衡二叉树的插入、删除操作，有关平衡二叉树的原理及实现，参考AVL树(一)之 图文解析 和 C语言的实现。这位博主讲解的非常详细！！虽然他给的代码中有一些错误，但从他的
+ 简介
+这个平衡二叉树使用C语言实现的，因为写的匆忙，加上智商捉急，可能某些地方没有考虑周全，会有一点小bug，尚在排查中。本算法能基本的实现平衡二叉树的插入、删除操作，有关平衡二叉树的原理及实现，参考AVL树(一)之 图文解析 和 C语言的实现。这位博主讲解的非常详细！！虽然他给的代码中有一些错误，但从他
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1149,7 +1451,7 @@ Lab Environment Setu
         
           
           This is a experiment of Information Security, about 7 exercises in this blog. May be a lot mistakes here, if you find it, please contact me. This lab consists of three parts:
-Lab 3 :  Privilege Separa
+ Lab 3 :  Privilege Separ
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1296,12 +1598,12 @@ Lab 3 :  Privilege Separa
       
         
           
-          本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C++盲点记录一下。这些都是C++的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…
-2 从C到C++
-2.1 命名空间
+          本学期的工程实践基础课选修了C++，因为要考试，顺便把以前学的C盲点记录一下。这些都是C的基础知识，涉及一些语法，以及程序设计中易犯的错误。不是概括的包含所有知识点，这只是针对我个人的盲点…
+ 2 从C到C++
+ 2.1 命名空间
 使用命名空间（namespace）时，结尾处不能添加分号。
-2.2 操作符
-使用不带参数的操作符，如**(hex, endl)，必须包含头文件iostream**；
+ 2.2 操作符
+使用不带参数的操作符，如**(hex, endl)，必须包含头文件iostream**；而
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1449,13 +1751,13 @@ Lab 3 :  Privilege Separa
         
           
           本文主要收集了一些很nice的方法，用来计算一个数，其二进制形式中1的位数。
-简介
+ 简介
 李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。
-简单相与法
+ 简单相与法
 比如一个二进制数 0b 1111 1111 = 0xFF，只需要：
 
 1、与 0b 0000 0001 = 0x01 相与，如果为真，则个数加1；
-2、与 0b 0000 0010 = 0x02 相与，如果为真
+2、与 0b 0000 0010 = 0x02 相与，如果
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1497,166 +1799,11 @@ Lab 3 :  Privilege Separa
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2015/11/08/字符串拷贝算法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Liu Chang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/common/brain.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Brains">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/11/08/字符串拷贝算法/" itemprop="url">字符串拷贝算法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-08T21:12:30+08:00">
-                2015-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2015/11/08/字符串拷贝算法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2015/11/08/字符串拷贝算法/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2015/11/08/字符串拷贝算法/" class="leancloud_visitors" data-flag-title="字符串拷贝算法">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          简介
-李明老师的C语言中级课程中，讲解了这一算法，无奈记性不好。。为了以后能时常看到，现记录下来。  函数原型为：
-1strcpy( char *dest, char *src )
-简单方法
-核心代码：
-1while( *dest++ = *src++ );
-增量值算法
-因为dest和src存储位置相邻，与其每次访问dest和src两个地址，不如只访问src所指存储空间，核心代码如下：
-12int
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/11/08/字符串拷贝算法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1704,7 +1851,7 @@ Lab 3 :  Privilege Separa
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1717,7 +1864,7 @@ Lab 3 :  Privilege Separa
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

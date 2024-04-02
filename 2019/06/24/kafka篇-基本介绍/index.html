@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="1. kafka基础 1.1 定位和功能 kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：  可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。 可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。 支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升可用">
+<meta name="description" content="1. kafka基础  1.1 定位和功能 kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：  可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。 可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。 支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升">
 <meta name="keywords" content="开源工具,kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kafka篇-基本介绍">
 <meta property="og:url" content="https://blog.lecury.cn/2019/06/24/kafka篇-基本介绍/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. kafka基础 1.1 定位和功能 kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：  可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。 可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。 支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升可用">
+<meta property="og:description" content="1. kafka基础  1.1 定位和功能 kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：  可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。 可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。 支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/kafka/topic.jpg">
 <meta property="og:image" content="https://blog.lecury.cn/images/kafka/consumer.jpg">
 <meta property="og:updated_time" content="2019-07-29T14:30:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka篇-基本介绍">
-<meta name="twitter:description" content="1. kafka基础 1.1 定位和功能 kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：  可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。 可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。 支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升可用">
+<meta name="twitter:description" content="1. kafka基础  1.1 定位和功能 kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：  可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。 可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。 支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/kafka/topic.jpg">
 
 
@@ -399,30 +399,30 @@
       
 
       
-        <h2 id="1-kafka基础">1. kafka基础</h2>
-<h4 id="1-1-定位和功能">1.1 定位和功能</h4>
+        <h2 id="1-kafka基础"><a class="markdownIt-Anchor" href="#1-kafka基础"></a> 1. kafka基础</h2>
+<h4 id="11-定位和功能"><a class="markdownIt-Anchor" href="#11-定位和功能"></a> 1.1 定位和功能</h4>
 <p>kafka是一个分布式的消息系统，使用scala语言编写，现已经贡献给Apache基金会。主要有以下特点：</p>
 <ul>
 <li>可以发布与订阅消息：消息可以细分为不同的主题，支持多种消息发布和订阅需求。</li>
 <li>可以存储消息记录，并具有较好容错性：可以按时间或者容量大小清理旧消息。</li>
 <li>支持弹性扩展，以支撑海量数据规模：kafka是分布式的，一方面可以提升系统吞吐，另一方面可以提升可用性。</li>
 </ul>
-<h4 id="1-2-消息">1.2 消息</h4>
+<h4 id="12-消息"><a class="markdownIt-Anchor" href="#12-消息"></a> 1.2 消息</h4>
 <p>kafka的数据单元称为【消息】，可以理解为一条数据记录，由键和值组成。键值都是字节数组，其中键是可选的，kafka通过散列键取模后，控制消息写到主题的不同分区。</p>
 <p>为了提高写入的效率，消息也会被分成一批写入kafka。</p>
-<h4 id="1-3-主题和分区">1.3 主题和分区</h4>
+<h4 id="13-主题和分区"><a class="markdownIt-Anchor" href="#13-主题和分区"></a> 1.3 主题和分区</h4>
 <p>主题也叫Topic，是数据记录发布和订阅的地方。不同类型或者业务的数据，可以区分为不同的主题。一个Topic可以拥有一个或者多个消费者来订阅数据，也可以有一个或多个生产者生产数据。对每一个Topic，kafka集群会维护一个分区日志，如下所示：</p>
 <p><img src="/images/kafka/topic.jpg" alt></p>
 <p>每个分区都是有序并且顺序不可变的记录集合，新数据不断追加到结构化的commit log文件中。分区中的每一个数据记录都会配置一个ID号来表示顺序，也称之为offset。</p>
 <p>消费者唯一保存的元数据是offset，在读取记录后，会以线性的方式增加偏移量。由于这个位置是消费者控制，所以消费者可以采用任何顺序来消费记录。比如重置到一个旧的偏移位置，从而达到数据回溯的目的。</p>
 <p>Topic还有Partition（分区）的概念，一方面是扩展单台服务器的硬件限制，继而扩展Topic的日志量级，因为单独的分区都会受限于主机的文件限制。另一方面可以并行的处理以提高效率，比如并行的处理消费或者生产过程。</p>
-<h4 id="1-3-生产者和消费者">1.3 生产者和消费者</h4>
+<h4 id="13-生产者和消费者"><a class="markdownIt-Anchor" href="#13-生产者和消费者"></a> 1.3 生产者和消费者</h4>
 <p>kafka的客户端分为生产者和消费者两种类型，其中生产者用于创建消息，将消息写入到kafka的某个主题。在大部分场景下，生产者不关注消息写到哪个分区，如果要控制部分消息写到相同的分区，需要自定义实现分区器，对消息的键做散列过程。</p>
 <p>消费者从主题中订阅消息，它需要保存分区的offset。消费者从属于一个消费群组，一个或者多个消费群组可以订阅相同的主题，消费群组用来保证每个分区只能被一个消费者使用。例如：</p>
 <p><img src="/images/kafka/consumer.jpg" alt></p>
 <p>消费群组A有两个消费者C1、C2，每个消费者均分两个分区。而消费群组B有四个消费者C3~C6，每个消费者均分1个分区。</p>
 <p>kafka只能保证分区内的记录是有序的，而不保证不同分区的顺序。</p>
-<h4 id="1-4-broker和集群">1.4 broker和集群</h4>
+<h4 id="14-broker和集群"><a class="markdownIt-Anchor" href="#14-broker和集群"></a> 1.4 broker和集群</h4>
 <p>一个独立的kafka服务器被称为broker，</p>
 <ul>
 <li>broker接收生产者消息，为消息设置偏移量，并提交到磁盘保存。</li>
@@ -430,17 +430,17 @@
 </ul>
 <p>broker是集群的组成部分，每个集群都有一个broker充当集群控制器的角色，负责kafka管理工作，比如将分区分配给broker和监控broker等。为了提升可用性，分区还有副本的概念，每个分区副本都归属于不同的broker，如果一个副本挂掉，其他副本仍是可用的，这个得益于分区复制的特性。</p>
 <p>kafka有两种消息保留策略，一种是设定过期时间，超时自动清理，一种是设置大小，当消息数量达到上限时，旧消息会过期会删除。</p>
-<h2 id="2-kafka-API">2. kafka API</h2>
-<h4 id="2-1-The-Produer-API">2.1 The Produer API</h4>
+<h2 id="2-kafka-api"><a class="markdownIt-Anchor" href="#2-kafka-api"></a> 2. kafka API</h2>
+<h4 id="21-the-produer-api"><a class="markdownIt-Anchor" href="#21-the-produer-api"></a> 2.1 The Produer API</h4>
 <p>允许应用程序发布一串流式的数据到一个或者多个kafka topic。</p>
-<h4 id="2-2-The-Consumer-API">2.2 The Consumer API</h4>
+<h4 id="22-the-consumer-api"><a class="markdownIt-Anchor" href="#22-the-consumer-api"></a> 2.2 The Consumer API</h4>
 <p>允许应用程序订阅一个或者多个topic，并消费到相应topic中新发布的数据。</p>
-<h4 id="2-3-The-Streams-API">2.3 The Streams API</h4>
+<h4 id="23-the-streams-api"><a class="markdownIt-Anchor" href="#23-the-streams-api"></a> 2.3 The Streams API</h4>
 <p>允许一个应用程序作为一个流处理器，消费一个或者多个topic，然后作为生产者输出到一个或者多个topic中。</p>
-<h4 id="2-4-The-Connector-API">2.4 The Connector API</h4>
+<h4 id="24-the-connector-api"><a class="markdownIt-Anchor" href="#24-the-connector-api"></a> 2.4 The Connector API</h4>
 <p>允许构建并运行可重用的生产者或者消费者，将Kafka topics连接到已存在的应用程序或者数据系统。比如，连接到一个关系型数据库，捕捉表（table）的所有变更内容。</p>
-<h2 id="3-kafka概要">3. kafka概要</h2>
-<h4 id="3-1-优缺点">3.1 优缺点</h4>
+<h2 id="3-kafka概要"><a class="markdownIt-Anchor" href="#3-kafka概要"></a> 3. kafka概要</h2>
+<h4 id="31-优缺点"><a class="markdownIt-Anchor" href="#31-优缺点"></a> 3.1 优缺点</h4>
 <p>优点：</p>
 <ul>
 <li>高吞吐：充分利用磁盘顺序读写能力，单机吞吐性能卓越，每秒可处理数千条消息。</li>
@@ -460,7 +460,7 @@
 <li>消息调整：broker通过确定的系统调用来传递消息，如果消息未发生改变的时候，性能表现良好，如果消息发生更改或者调整，那么性能会下降的比较厉害。</li>
 <li>不保证消息传递的稳定性：可能出现消息丢失、重复消息、消息乱序等。</li>
 </ul>
-<h4 id="3-2-性能表现">3.2 性能表现</h4>
+<h4 id="32-性能表现"><a class="markdownIt-Anchor" href="#32-性能表现"></a> 3.2 性能表现</h4>
 <p>硬件配置：</p>
 <ul>
 <li>Intel Xeon 2.5 GHz processor with six cores</li>
@@ -517,7 +517,7 @@
 <li>99.9分位: 14ms</li>
 </ul>
 <p>数据来源：<a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="noopener">https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines</a></p>
-<h4 id="3-3-适用场景">3.3 适用场景</h4>
+<h4 id="33-适用场景"><a class="markdownIt-Anchor" href="#33-适用场景"></a> 3.3 适用场景</h4>
 <p><strong>消息传递系统</strong><br>
 kafka可以很好的替代传统的消息队列，比如数据生成器与数据处理的解耦，缓冲未处理的消息以流量削峰等。相比传统的消息系统，kafka拥有更好的吞吐、内置分区、具有复制和容错的能力。</p>
 <p><strong>Trace系统</strong><br>
@@ -527,7 +527,7 @@ kafka可以很好的替代传统的消息队列，比如数据生成器与数据
 <p><strong>流处理</strong><br>
 kafka可以解耦数据产出和数据加工环节，并以毫秒级延迟传递消息，这种特性可以基于各个主题创建实时数据流图，实现数据的流式处理。举个简单的例子：用户的点击、浏览行为可以推送到主题A，行为分析模块从主题A中获取数据开始分析产生模型数据，并推到主题B，推荐模块从主题B中获取模型，以生效新的推荐模型等等。</p>
 <p><strong>等等</strong></p>
-<h2 id="4-参考">4. 参考</h2>
+<h2 id="4-参考"><a class="markdownIt-Anchor" href="#4-参考"></a> 4. 参考</h2>
 <ul>
 <li>kafka官网手册</li>
 <li>kafka权威指南</li>
@@ -658,7 +658,7 @@ kafka可以解耦数据产出和数据加工环节，并以毫秒级延迟传递
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -671,7 +671,7 @@ kafka可以解耦数据产出和数据加工环节，并以毫秒级延迟传递
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -720,7 +720,7 @@ kafka可以解耦数据产出和数据加工环节，并以毫秒级延迟传递
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-kafka基础"><span class="nav-number">1.</span> <span class="nav-text">1. kafka基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-定位和功能"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 定位和功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-消息"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-主题和分区"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.3 主题和分区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-生产者和消费者"><span class="nav-number">1.0.4.</span> <span class="nav-text">1.3 生产者和消费者</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-broker和集群"><span class="nav-number">1.0.5.</span> <span class="nav-text">1.4 broker和集群</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-kafka-API"><span class="nav-number">2.</span> <span class="nav-text">2. kafka API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-The-Produer-API"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 The Produer API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-The-Consumer-API"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 The Consumer API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-The-Streams-API"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 The Streams API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-The-Connector-API"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 The Connector API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-kafka概要"><span class="nav-number">3.</span> <span class="nav-text">3. kafka概要</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-优缺点"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-性能表现"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 性能表现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-适用场景"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text">4. 参考</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-kafka基础"><span class="nav-number">1.</span> <span class="nav-text"> 1. kafka基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-定位和功能"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 1.1 定位和功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-消息"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 1.2 消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-主题和分区"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 1.3 主题和分区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-生产者和消费者"><span class="nav-number">1.0.4.</span> <span class="nav-text"> 1.3 生产者和消费者</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-broker和集群"><span class="nav-number">1.0.5.</span> <span class="nav-text"> 1.4 broker和集群</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-kafka-api"><span class="nav-number">2.</span> <span class="nav-text"> 2. kafka API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-the-produer-api"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 The Produer API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-the-consumer-api"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 The Consumer API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-the-streams-api"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 The Streams API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#24-the-connector-api"><span class="nav-number">2.0.4.</span> <span class="nav-text"> 2.4 The Connector API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-kafka概要"><span class="nav-number">3.</span> <span class="nav-text"> 3. kafka概要</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-优缺点"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-性能表现"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 性能表现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#33-适用场景"><span class="nav-number">3.0.3.</span> <span class="nav-text"> 3.3 适用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text"> 4. 参考</span></a></li></div>
             
 
           </div>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="redis,架构设计,缓存,">
+  <meta name="keywords" content="架构设计,redis,缓存,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. redis概述 1.1 简介 redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：https://github.com/antirez/redis 在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优势和">
-<meta name="keywords" content="redis,架构设计,缓存">
+<meta name="description" content="1. redis概述  1.1 简介 redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：https://github.com/antirez/redis 在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优">
+<meta name="keywords" content="架构设计,redis,缓存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis篇——基本介绍">
 <meta property="og:url" content="https://blog.lecury.cn/2020/04/17/redis篇-基本介绍/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. redis概述 1.1 简介 redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：https://github.com/antirez/redis 在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优势和">
+<meta property="og:description" content="1. redis概述  1.1 简介 redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：https://github.com/antirez/redis 在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2024-03-27T11:21:30.759Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis篇——基本介绍">
-<meta name="twitter:description" content="1. redis概述 1.1 简介 redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：https://github.com/antirez/redis 在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优势和">
+<meta name="twitter:description" content="1. redis概述  1.1 简介 redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：https://github.com/antirez/redis 在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优">
 
 
 
@@ -396,11 +396,11 @@
       
 
       
-        <h2 id="1-redis概述">1. redis概述</h2>
-<h4 id="1-1-简介">1.1 简介</h4>
+        <h2 id="1-redis概述"><a class="markdownIt-Anchor" href="#1-redis概述"></a> 1. redis概述</h2>
+<h4 id="11-简介"><a class="markdownIt-Anchor" href="#11-简介"></a> 1.1 简介</h4>
 <p>redis是一个开源的、内存型的、支持多种数据结构的存储系统，常用来做缓存、数据库、消息代理，除此之外，它还支持数据持久化存储，支持集群化的协同方式，项目地址：<a href="https://github.com/antirez/redis" target="_blank" rel="noopener">https://github.com/antirez/redis</a></p>
 <p>在很多项目中，都有redis的身影，它扮演着多样的角色，发挥了重要的作用。架构师的职责之一就是技术选型，了解redis的原理、特点、优势和不足，是成为架构师必不可少的一环。</p>
-<h4 id="1-2-redis功能">1.2 redis功能</h4>
+<h4 id="12-redis功能"><a class="markdownIt-Anchor" href="#12-redis功能"></a> 1.2 redis功能</h4>
 <p>redis提供了如下功能：</p>
 <ul>
 <li>提供了基于key-value的查询/存储/watch/过期等功能</li>
@@ -410,7 +410,7 @@
 <li>支持集群模式、支持主从节点数据复制等</li>
 </ul>
 <p>redis具有丰富的功能，还提供了各种语言的API，入门门槛较低，可以低成本的嵌入到各类项目中。</p>
-<h4 id="1-3-应用场景">1.3 应用场景</h4>
+<h4 id="13-应用场景"><a class="markdownIt-Anchor" href="#13-应用场景"></a> 1.3 应用场景</h4>
 <p>这里简单说一下redis的几个应用场景。</p>
 <p><strong>缓存系统</strong></p>
 <p>redis具有非常优秀的读写性能，常用作缓存cache系统，用来提高系统负载能力和响应速度。</p>
@@ -424,25 +424,25 @@
 <p>redis不仅支持数据持久化，还支持集群化的协同方式，这些特性很好的支持了分布式设计的一些要求（支持扩容和高可用）。</p>
 <p><strong>排行榜、热搜、秒杀等</strong></p>
 <p>redis内置一些数据结构，可以很方便的解决各式各样的热点数据访问问题。</p>
-<h2 id="2-redis优点">2. redis优点</h2>
-<h4 id="2-1-高性能">2.1 高性能</h4>
+<h2 id="2-redis优点"><a class="markdownIt-Anchor" href="#2-redis优点"></a> 2. redis优点</h2>
+<h4 id="21-高性能"><a class="markdownIt-Anchor" href="#21-高性能"></a> 2.1 高性能</h4>
 <p>redis是基于内存型的数据存储系统，所以读写性能非常优秀，读写qps能达到10w左右（写稍微慢一些）。</p>
-<h4 id="2-2-高可用">2.2 高可用</h4>
+<h4 id="22-高可用"><a class="markdownIt-Anchor" href="#22-高可用"></a> 2.2 高可用</h4>
 <p>redis支持数据持久化和集群化的操作方式，通过搭建redis集群和实现数据迁移，来提高可用性。</p>
-<h4 id="2-3-易用性">2.3 易用性</h4>
+<h4 id="23-易用性"><a class="markdownIt-Anchor" href="#23-易用性"></a> 2.3 易用性</h4>
 <p>redis对外暴露的接口非常简单，不经提供了客户端工具，还支持了多种语言的client api，接入成本很低。</p>
-<h4 id="2-4-支持丰富的数据数据结构">2.4 支持丰富的数据数据结构</h4>
+<h4 id="24-支持丰富的数据数据结构"><a class="markdownIt-Anchor" href="#24-支持丰富的数据数据结构"></a> 2.4 支持丰富的数据数据结构</h4>
 <p>redis的value，除了常规的string之外，还支持List/Set/Zset等数据结构，丰富的数据类型能支持更加多样的存储和查询场景。比如秒杀系统、排行榜等</p>
-<h4 id="2-5-支持事务级、原子级操作">2.5 支持事务级、原子级操作</h4>
+<h4 id="25-支持事务级-原子级操作"><a class="markdownIt-Anchor" href="#25-支持事务级-原子级操作"></a> 2.5 支持事务级、原子级操作</h4>
 <p>redis支持事务级操作，即将多个命令打包一起执行，还支持原子性操作。</p>
-<h2 id="3-redis劣势">3 redis劣势</h2>
-<h4 id="3-1-成本高昂">3.1 成本高昂</h4>
+<h2 id="3-redis劣势"><a class="markdownIt-Anchor" href="#3-redis劣势"></a> 3 redis劣势</h2>
+<h4 id="31-成本高昂"><a class="markdownIt-Anchor" href="#31-成本高昂"></a> 3.1 成本高昂</h4>
 <p>成本高昂是redis的最大痛点，一方面redis强依赖于RAM，设计大容量的缓存系统，需要很多台机器；另一方面redis也消耗CPU资源，无法进行混部（消耗CPU、低内存占用的服务），导致redis只能独占机器，成本高昂。</p>
-<h4 id="3-2-持久化做的不好（影响性能）">3.2 持久化做的不好（影响性能）</h4>
+<h4 id="32-持久化做的不好影响性能"><a class="markdownIt-Anchor" href="#32-持久化做的不好影响性能"></a> 3.2 持久化做的不好（影响性能）</h4>
 <p>RDB和AOF两种持久化方式各有优缺点。</p>
-<h4 id="3-3-存在内存碎片问题">3.3 存在内存碎片问题</h4>
-<h4 id="3-4-key的索引较为简单，无法支持scan等查询操作">3.4 key的索引较为简单，无法支持scan等查询操作</h4>
-<h2 id="4-总结">4. 总结</h2>
+<h4 id="33-存在内存碎片问题"><a class="markdownIt-Anchor" href="#33-存在内存碎片问题"></a> 3.3 存在内存碎片问题</h4>
+<h4 id="34-key的索引较为简单无法支持scan等查询操作"><a class="markdownIt-Anchor" href="#34-key的索引较为简单无法支持scan等查询操作"></a> 3.4 key的索引较为简单，无法支持scan等查询操作</h4>
+<h2 id="4-总结"><a class="markdownIt-Anchor" href="#4-总结"></a> 4. 总结</h2>
 <p>技术选型是架构师必备的技能之一，应对复杂的业务场景，结合公司当前所处的情况，如何更好的解决问题、实现需求，非常考验一个架构师的功底。</p>
 <p>本文简单的介绍了redis的基本特性和优缺点对比，并列举了一些常见的应用场景，希望能为以后的架构决策有所帮助。</p>
 
@@ -462,9 +462,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/redis/" rel="tag"># redis</a>
-          
             <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
           
             <a href="/tags/缓存/" rel="tag"># 缓存</a>
           
@@ -573,7 +573,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -586,7 +586,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -635,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-redis概述"><span class="nav-number">1.</span> <span class="nav-text">1. redis概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-简介"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-redis功能"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 redis功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-应用场景"><span class="nav-number">1.0.3.</span> <span class="nav-text">1.3 应用场景</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-redis优点"><span class="nav-number">2.</span> <span class="nav-text">2. redis优点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-高性能"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 高性能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-高可用"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 高可用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-易用性"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 易用性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-支持丰富的数据数据结构"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 支持丰富的数据数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-支持事务级、原子级操作"><span class="nav-number">2.0.5.</span> <span class="nav-text">2.5 支持事务级、原子级操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-redis劣势"><span class="nav-number">3.</span> <span class="nav-text">3 redis劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-成本高昂"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 成本高昂</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-持久化做的不好（影响性能）"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 持久化做的不好（影响性能）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-存在内存碎片问题"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 存在内存碎片问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-key的索引较为简单，无法支持scan等查询操作"><span class="nav-number">3.0.4.</span> <span class="nav-text">3.4 key的索引较为简单，无法支持scan等查询操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-redis概述"><span class="nav-number">1.</span> <span class="nav-text"> 1. redis概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-简介"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 1.1 简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-redis功能"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 1.2 redis功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-应用场景"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 1.3 应用场景</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-redis优点"><span class="nav-number">2.</span> <span class="nav-text"> 2. redis优点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-高性能"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 高性能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-高可用"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 高可用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-易用性"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 易用性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#24-支持丰富的数据数据结构"><span class="nav-number">2.0.4.</span> <span class="nav-text"> 2.4 支持丰富的数据数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#25-支持事务级-原子级操作"><span class="nav-number">2.0.5.</span> <span class="nav-text"> 2.5 支持事务级、原子级操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-redis劣势"><span class="nav-number">3.</span> <span class="nav-text"> 3 redis劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-成本高昂"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 成本高昂</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-持久化做的不好影响性能"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 持久化做的不好（影响性能）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#33-存在内存碎片问题"><span class="nav-number">3.0.3.</span> <span class="nav-text"> 3.3 存在内存碎片问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#34-key的索引较为简单无法支持scan等查询操作"><span class="nav-number">3.0.4.</span> <span class="nav-text"> 3.4 key的索引较为简单，无法支持scan等查询操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text"> 4. 总结</span></a></li></div>
             
 
           </div>

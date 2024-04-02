@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="1. pulsar是什么？ Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。 pulsar的关键特性如下：  云原生架构（计算与存储分离），无缝支持跨集群复制 比kafka更高的吞吐量和低延迟 无缝支持上百万个topi">
+<meta name="description" content="1. pulsar是什么？ Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。 pulsar的关键特性如下：  云原生架构（计算与存储分离），无缝支持跨集群复制 比kafka更高的吞吐量和低延迟 无缝支持上百万个top">
 <meta name="keywords" content="架构设计,pulsar,消息队列">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pulsar篇——基本介绍">
 <meta property="og:url" content="https://blog.lecury.cn/2021/06/27/pulsar篇-基本介绍/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. pulsar是什么？ Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。 pulsar的关键特性如下：  云原生架构（计算与存储分离），无缝支持跨集群复制 比kafka更高的吞吐量和低延迟 无缝支持上百万个topi">
+<meta property="og:description" content="1. pulsar是什么？ Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。 pulsar的关键特性如下：  云原生架构（计算与存储分离），无缝支持跨集群复制 比kafka更高的吞吐量和低延迟 无缝支持上百万个top">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/arch-design/pulsar.jpg">
 <meta property="og:updated_time" content="2024-03-27T14:49:43.518Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pulsar篇——基本介绍">
-<meta name="twitter:description" content="1. pulsar是什么？ Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。 pulsar的关键特性如下：  云原生架构（计算与存储分离），无缝支持跨集群复制 比kafka更高的吞吐量和低延迟 无缝支持上百万个topi">
+<meta name="twitter:description" content="1. pulsar是什么？ Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。 pulsar的关键特性如下：  云原生架构（计算与存储分离），无缝支持跨集群复制 比kafka更高的吞吐量和低延迟 无缝支持上百万个top">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/arch-design/pulsar.jpg">
 
 
@@ -398,7 +398,7 @@
       
 
       
-        <h2 id="1-pulsar是什么？">1. pulsar是什么？</h2>
+        <h2 id="1-pulsar是什么"><a class="markdownIt-Anchor" href="#1-pulsar是什么"></a> 1. pulsar是什么？</h2>
 <p>Apache Pulsar is a cloud-native, distributed messaging and streaming platform。和kafka比较像，由于站在了前人的肩膀上，它做的要比kafka更加出色。</p>
 <p>pulsar的关键特性如下：</p>
 <ol>
@@ -411,9 +411,9 @@
 <li>提供分层存储能力，释放BookKeeper的空间：将老数据or长期不用的数据放到AWS S3等</li>
 </ol>
 <p>Pulsar架构模型类似于Client-&gt;Proxy-&gt;Server</p>
-<h2 id="2-pulsar的架构简介">2. pulsar的架构简介</h2>
+<h2 id="2-pulsar的架构简介"><a class="markdownIt-Anchor" href="#2-pulsar的架构简介"></a> 2. pulsar的架构简介</h2>
 <p><img src="/images/arch-design/pulsar.jpg" alt></p>
-<h4 id="2-1-pulsar的分层架构">2.1 pulsar的分层架构</h4>
+<h4 id="21-pulsar的分层架构"><a class="markdownIt-Anchor" href="#21-pulsar的分层架构"></a> 2.1 pulsar的分层架构</h4>
 <p>与其他消息系统不同，Pulsar抽象为两层架构：</p>
 <ul>
 <li>无状态服务层：处理消息的Broker组成</li>
@@ -432,13 +432,13 @@
 <li>Bookies被设计成可以承载数千的并发读写的ledgers。 使用多个磁盘设备，一个用于日志，另一个用于一般存储，这样Bookies可以将读操作的影响和对于写操作的延迟分隔开。</li>
 </ul>
 <p>除了消息数据，cursors也会被持久化入BookKeeper。 Cursors是消费端订阅消费的位置。 BookKeeper让Pulsar可以用一种可扩展的方式存储消费位置</p>
-<h4 id="2-2-pulsar的订阅模式">2.2 pulsar的订阅模式</h4>
+<h4 id="22-pulsar的订阅模式"><a class="markdownIt-Anchor" href="#22-pulsar的订阅模式"></a> 2.2 pulsar的订阅模式</h4>
 <ul>
 <li>独占订阅：一个消费组只有一个消费者订阅消息。</li>
 <li>故障切换（Failover）：多个消费者可以加入同一订阅，但是只有一个消费者被选为主消费者，其他消费者为故障转移者。</li>
 <li>共享订阅：订阅组可以挂多个消费者，但一个消息只会传递给一个消费者。</li>
 </ul>
-<h4 id="2-3-broker故障处理fencing">2.3 broker故障处理fencing</h4>
+<h4 id="23-broker故障处理fencing"><a class="markdownIt-Anchor" href="#23-broker故障处理fencing"></a> 2.3 broker故障处理fencing</h4>
 <p>Pulsar的broker不存储状态，类似于Topic的proxy，拥有对Topic的代理权，当broker故障时，Pulsar需要将这些topic转移给正常的brokers，这个过程称为fencing。大致流程为：</p>
 <ol>
 <li>Topic X 的当前拥有者(B1)不可用(通过Zookeeper);</li>
@@ -449,8 +449,8 @@
 <li>B2现在可以创建新的Ledger并接受写入请求。</li>
 </ol>
 <p>整个过程类似于raft的选举，选举过程中不处理读写请求。</p>
-<h2 id="3-pulsar-vs-kafka">3. pulsar vs kafka</h2>
-<h4 id="3-1-特性对比">3.1 特性对比</h4>
+<h2 id="3-pulsar-vs-kafka"><a class="markdownIt-Anchor" href="#3-pulsar-vs-kafka"></a> 3. pulsar vs kafka</h2>
+<h4 id="31-特性对比"><a class="markdownIt-Anchor" href="#31-特性对比"></a> 3.1 特性对比</h4>
 <p>消费模式</p>
 <ul>
 <li>kafka对partition是独占消费，没有共享Queue的消费模式。</li>
@@ -466,7 +466,7 @@
 <li>设置保留期来删除消息，没被消费的数据过期也会被删除，不支持TTL</li>
 <li>消息被订阅消费才会被删除，不会丢失数据。也可以设置保留期，支持TTL。</li>
 </ul>
-<h4 id="3-2-优势对比">3.2 优势对比</h4>
+<h4 id="32-优势对比"><a class="markdownIt-Anchor" href="#32-优势对比"></a> 3.2 优势对比</h4>
 <p>pulsar相对kafka而言，优势：</p>
 <ul>
 <li>broker无状态支持更低成本扩容，无须重新分配现有数据。</li>
@@ -479,7 +479,7 @@
 <li>pulsar项目较新，社区活跃不足，而kafka更加成熟，社区更加活跃。</li>
 <li>kafka仅依赖broker和zk，而pulsar额外依赖bookKeeper，增加了系统的复杂性。</li>
 </ul>
-<h2 id="4-参考">4. 参考</h2>
+<h2 id="4-参考"><a class="markdownIt-Anchor" href="#4-参考"></a> 4. 参考</h2>
 <ul>
 <li><a href="https://www.infoq.cn/article/1uaxfkwuhukty1t_5gpq" target="_blank" rel="noopener">https://www.infoq.cn/article/1uaxfkwuhukty1t_5gpq</a></li>
 <li><a href="https://pulsar.apache.org/docs/en/concepts-overview/" target="_blank" rel="noopener">https://pulsar.apache.org/docs/en/concepts-overview/</a></li>
@@ -614,7 +614,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -627,7 +627,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -676,7 +676,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-pulsar是什么？"><span class="nav-number">1.</span> <span class="nav-text">1. pulsar是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-pulsar的架构简介"><span class="nav-number">2.</span> <span class="nav-text">2. pulsar的架构简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-pulsar的分层架构"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 pulsar的分层架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-pulsar的订阅模式"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 pulsar的订阅模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-broker故障处理fencing"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 broker故障处理fencing</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-pulsar-vs-kafka"><span class="nav-number">3.</span> <span class="nav-text">3. pulsar vs kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-特性对比"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 特性对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-优势对比"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 优势对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text">4. 参考</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-pulsar是什么"><span class="nav-number">1.</span> <span class="nav-text"> 1. pulsar是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-pulsar的架构简介"><span class="nav-number">2.</span> <span class="nav-text"> 2. pulsar的架构简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-pulsar的分层架构"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 pulsar的分层架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-pulsar的订阅模式"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 pulsar的订阅模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-broker故障处理fencing"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 broker故障处理fencing</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#3-pulsar-vs-kafka"><span class="nav-number">3.</span> <span class="nav-text"> 3. pulsar vs kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-特性对比"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 特性对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-优势对比"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 优势对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text"> 4. 参考</span></a></li></div>
             
 
           </div>

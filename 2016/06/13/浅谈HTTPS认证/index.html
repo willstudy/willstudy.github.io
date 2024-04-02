@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。 HTTP VS HTTPS 因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。 H">
+<meta name="description" content="在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。  HTTP VS HTTPS 因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。">
 <meta name="keywords" content="网络,HTTPS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈HTTPS认证">
 <meta property="og:url" content="https://blog.lecury.cn/2016/06/13/浅谈HTTPS认证/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。 HTTP VS HTTPS 因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。 H">
+<meta property="og:description" content="在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。  HTTP VS HTTPS 因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T08:15:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈HTTPS认证">
-<meta name="twitter:description" content="在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。 HTTP VS HTTPS 因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。 H">
+<meta name="twitter:description" content="在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。  HTTP VS HTTPS 因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。">
 
 
 
@@ -397,16 +397,16 @@
 
       
         <p>在学习kubernetes的过程中，关于监控部署这一部分中涉及到了HTTPS方面的知识。以前曾经在Web安全实践这门课上了解过这方面的知识，如今需要再详细的梳理一下HTTPS的认证过程。</p>
-<h2 id="HTTP-VS-HTTPS">HTTP VS HTTPS</h2>
+<h2 id="http-vs-https"><a class="markdownIt-Anchor" href="#http-vs-https"></a> HTTP VS HTTPS</h2>
 <p>因特网早期的很多东西在设计方面都没有考虑安全方面的因素，HTTP协议就是一个鲜明的例子。HTTP采用的明文传输的，如果我们使用wireshark抓包工具，可以很轻易的嗅探一些信息。</p>
 <p>HTTPS在HTTP的基础上增加了安全方面的考虑，主要分为2个过程。</p>
 <ul>
 <li>使用RSA加密算法来进行身份认证以及协商加密算法和秘钥</li>
 <li>使用协商后的加密算法进行数据传输</li>
 </ul>
-<h2 id="HTTPS的身份认证">HTTPS的身份认证</h2>
+<h2 id="https的身份认证"><a class="markdownIt-Anchor" href="#https的身份认证"></a> HTTPS的身份认证</h2>
 <p>这里的身份认证分为2类，大多数情况下都是客户端需要验证服务端的身份，在政府以及银行一些领域，服务端也需要验证客户端的身份，这身份认证过程中使用的是RSA加密算法。</p>
-<h3 id="RSA加密算法">RSA加密算法</h3>
+<h3 id="rsa加密算法"><a class="markdownIt-Anchor" href="#rsa加密算法"></a> RSA加密算法</h3>
 <p>RSA加密算法是一种非对称加密算法，加密和解密的钥匙是不同的，所以被称为非对称加密算法。它有2种秘钥，分为公钥和私钥，公钥任何人都可以查到的，而私钥属于私人保管。这种加密体系下，私钥加密的的密文只有公钥可以解开，所以私钥可以用来签名；而公钥加密的密文只有私钥可以解开，它可以用来加密传输。</p>
 <p>在密码学中，很多加密算法都来源于一个数学难题，没错RSA算法的原理也来自于数论领域中的大数难于被质因分解的问题。它的秘钥生成过程大致如下：</p>
 <ul>
@@ -420,7 +420,7 @@
 <p>解密过程为 ：</p>
 <pre><code> X ^ e2 mod n = 0x4089 </code></pre>
 <p>大致了解了RSA加密算法的原理，那怎么应用到HTTPS中的呢？为了进行服务端或者客户端的认证，我们需要生成一个证书。</p>
-<h3 id="使用OpenSSL生成证书">使用OpenSSL生成证书</h3>
+<h3 id="使用openssl生成证书"><a class="markdownIt-Anchor" href="#使用openssl生成证书"></a> 使用OpenSSL生成证书</h3>
 <p>关于认证方面的事情一般都需要个第三者，为了验证某个人身份的合法性，我们需要向一个公信力非常强的组织求证。在HTTPS中，CA 就是这个第三者，它会给一个公司或者组织颁发一个证书，为了获取这个证书，公司或者组织往往要交一大笔费用的。</p>
 <p>在12306的网站中，就是没有 CA 认证的证书，所以每次访问的时候，都要手动点击信任。为了测试使用，我们自己生成一个 CA ，用来认证自己颁发的证书。首先我们生成一个2048位的 CA 私钥 <strong>ca.key</strong></p>
 <pre><code># openssl genrsa -out ca.key 2048 </code></pre>
@@ -434,7 +434,7 @@
 # openssl req -new -key server.key -subj "/CN=lecury.cn" -out server.csr </code></pre>
 <p>我们把生成后的私钥 <strong>server.key</strong> 自己保管，公钥 <strong>server.csr</strong> 交给 CA ，为我们制作证书 <strong>server.crt</strong></p>
 <pre><code># openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 5000</code></pre>
-<h3 id="HTTPS中对服务端的验证">HTTPS中对服务端的验证</h3>
+<h3 id="https中对服务端的验证"><a class="markdownIt-Anchor" href="#https中对服务端的验证"></a> HTTPS中对服务端的验证</h3>
 <p>在一些HTTPS网站中，在进行通信前，客户端和服务端的双方需要一些身份认证。大部分的情况下，客户端需要对服务端进行验证，过程如下：</p>
 <ul>
 <li>服务端将自己的证书发给客户端（浏览器）</li>
@@ -443,9 +443,9 @@
 <li>服务端收到之后，利用私钥解开，协商一种加密算法，然后利用此算法进行数据传输过程中的加密。</li>
 </ul>
 <p>在HTTPS过程中RSA加密算法用来对双方身份信息的验证，因为RSA为非对称加密算法，加密效率相对低下，所以在实际进行数据传输的过程中，采用的一般是对称加密算法比如说DES等。</p>
-<h3 id="对客户端的认证">对客户端的认证</h3>
+<h3 id="对客户端的认证"><a class="markdownIt-Anchor" href="#对客户端的认证"></a> 对客户端的认证</h3>
 <p>服务端请求对客户端身份信息的验证，这种情况一般发生在政府或者银行的网站上。一般的解决办法是网银盾或者是USBkey，客户端的证书保存在服务端那里，由服务端来验客户端身份的有效性。</p>
-<h2 id="总结">总结</h2>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
 <p>HTTPS是因特网安全领域的一个重要变现，它广泛的应用在了各个网站的身份认证中，了解一下它的基本原理还是非常有必要的。</p>
 
       
@@ -573,7 +573,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -586,7 +586,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -635,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-VS-HTTPS"><span class="nav-number">1.</span> <span class="nav-text">HTTP VS HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS的身份认证"><span class="nav-number">2.</span> <span class="nav-text">HTTPS的身份认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RSA加密算法"><span class="nav-number">2.1.</span> <span class="nav-text">RSA加密算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用OpenSSL生成证书"><span class="nav-number">2.2.</span> <span class="nav-text">使用OpenSSL生成证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS中对服务端的验证"><span class="nav-number">2.3.</span> <span class="nav-text">HTTPS中对服务端的验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对客户端的认证"><span class="nav-number">2.4.</span> <span class="nav-text">对客户端的认证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#http-vs-https"><span class="nav-number">1.</span> <span class="nav-text"> HTTP VS HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#https的身份认证"><span class="nav-number">2.</span> <span class="nav-text"> HTTPS的身份认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rsa加密算法"><span class="nav-number">2.1.</span> <span class="nav-text"> RSA加密算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用openssl生成证书"><span class="nav-number">2.2.</span> <span class="nav-text"> 使用OpenSSL生成证书</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#https中对服务端的验证"><span class="nav-number">2.3.</span> <span class="nav-text"> HTTPS中对服务端的验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对客户端的认证"><span class="nav-number">2.4.</span> <span class="nav-text"> 对客户端的认证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
             
 
           </div>

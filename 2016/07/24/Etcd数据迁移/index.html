@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。 数据迁移 在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的 e">
+<meta name="description" content="本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。  数据迁移 在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的">
 <meta name="keywords" content="Etcd">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Etcd数据迁移">
 <meta property="og:url" content="https://blog.lecury.cn/2016/07/24/Etcd数据迁移/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。 数据迁移 在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的 e">
+<meta property="og:description" content="本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。  数据迁移 在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T08:20:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Etcd数据迁移">
-<meta name="twitter:description" content="本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。 数据迁移 在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的 e">
+<meta name="twitter:description" content="本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。  数据迁移 在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的">
 
 
 
@@ -397,10 +397,10 @@
 
       
         <p>本文讲述从一个正在运行的 etcd 上，将数据迁移到一个包含三台 etcd 服务器组成的集群上，其中包含一些故障恢复和数据迁移的方法以及高可用 etcd 集群搭建方式的介绍。</p>
-<h2 id="数据迁移">数据迁移</h2>
+<h2 id="数据迁移"><a class="markdownIt-Anchor" href="#数据迁移"></a> 数据迁移</h2>
 <p>在 inf-platform53 机器上运行着一个 etcd 服务器，其 data-dir 为 /var/lib/etcd/。我们要以 /var/lib/etcd 中的数据为基础，搭建一个包含三个节点的高可用的 etcd 集群，三个节点的主机名分别为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">inf-platform53</span><br><span class="line">inf-platform56</span><br><span class="line">inf-platform60</span><br></pre></td></tr></table></figure>
-<h4 id="初始化一个新的集群">初始化一个新的集群</h4>
+<h4 id="初始化一个新的集群"><a class="markdownIt-Anchor" href="#初始化一个新的集群"></a> 初始化一个新的集群</h4>
 <p>我们先分别在上述三个节点上创建 /home/work/etcd/data-dir/ 文件夹当作 etcd 集群每个节点的数据存放目录。然后以 inf-platform60 节点为起点创建一个单节点的 etcd 集群，启动脚本 <a href="http://force-start-etcd.sh" target="_blank" rel="noopener">force-start-etcd.sh</a> 如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Don't start it unless etcd cluster has a heavily crash !</span></span><br><span class="line"></span><br><span class="line">../bin/etcd --name etcd2 --data-dir /home/work/etcd/data-dir --advertise-client-urls http://inf-platform60:2379,http://inf-platform60:4001 --listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 --initial-advertise-peer-urls http://inf-platform60:2380 --listen-peer-urls http://0.0.0.0:2380 --initial-cluster-token etcd-cluster-1 --initial-cluster etcd2=http://inf-platform60:2380 --force-new-cluster &gt; ./<span class="built_in">log</span>/etcd.log 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>这一步的 <strong>–force-new-cluster</strong> 很重要，可能是为了抹除旧 etcd 的一些属性信息，从而能成功的创建一个单节点 etcd 的集群。</p>
@@ -408,14 +408,14 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member list</span><br></pre></td></tr></table></figure>
 <p>查看 peerURLs 指向的是不是 <code>http://inf-platform60:2380</code> ? 如果不是，需要更新这个 etcd 的 peerURLs 的指向，否则这样在加入新的节点时会失败的。我们手动更新这个 etcd 的 peerURLs 指向</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member update ce2a822cea30bfca http://inf-platform60:2380</span><br></pre></td></tr></table></figure>
-<h4 id="添加etcd1成员">添加etcd1成员</h4>
+<h4 id="添加etcd1成员"><a class="markdownIt-Anchor" href="#添加etcd1成员"></a> 添加etcd1成员</h4>
 <p>然后添加 inf-platform56 节点上的 etcd1 成员</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member add etcd1 http://inf-platform56:2380</span><br></pre></td></tr></table></figure>
 <p>注意要先添加 etcd1 成员后，再在 inf-platform56 机器上启动这个 etcd1 成员</p>
 <p>这时候我们登陆上 inf-platform56 机器上启动这个 etcd1 实例，启动脚本 <a href="http://force-start-etcd.sh" target="_blank" rel="noopener">force-start-etcd.sh</a> 如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Don't start it unless etcd cluster has a heavily crash !</span></span><br><span class="line"></span><br><span class="line">../bin/etcd --name etcd1 --data-dir /home/work/etcd/data-dir --advertise-client-urls http://inf-platform56:2379,http://inf-platform56:4001 --listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 --initial-advertise-peer-urls http://inf-platform56:2380 --listen-peer-urls http://0.0.0.0:2380 --initial-cluster-token etcd-cluster-1 --initial-cluster etcd2=http://inf-platform60:2380,etcd1=http://inf-platform56:2380 --initial-cluster-state existing &gt; ./<span class="built_in">log</span>/etcd.log 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>注意在这个节点上我们先把 data-dir 文件夹中的数据删除（如果有内容的情况下），然后设置 <code>--initial-cluster</code> 和 <code>--initial-cluster-state</code>。</p>
-<h4 id="添加-etcd0-成员">添加 etcd0 成员</h4>
+<h4 id="添加-etcd0-成员"><a class="markdownIt-Anchor" href="#添加-etcd0-成员"></a> 添加 etcd0 成员</h4>
 <p>这时候我们可以通过</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member list</span><br></pre></td></tr></table></figure>
 <p>观察到我们新加入的节点了，然后我们再以类似的步骤添加第三个节点 inf-platform53 上 的 etcd0 实例</p>
@@ -423,9 +423,9 @@
 <p>然后登陆到 inf-platform53 机器上启动 etcd0 这个实例，启动脚本 <a href="http://force-start-etcd.sh" target="_blank" rel="noopener">force-start-etcd.sh</a> 如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Don't start it unless etcd cluster has a heavily crash !</span></span><br><span class="line"></span><br><span class="line">../bin/etcd --name etcd0 --data-dir /home/work/etcd/data-dir --advertise-client-urls http://inf-platform53:2379,http://inf-platform53:4001 --listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 --initial-advertise-peer-urls http://inf-platform53:2380 --listen-peer-urls http://0.0.0.0:2380 --initial-cluster-token etcd-cluster-1 --initial-cluster etcd2=http://inf-platform60:2380,etcd1=http://inf-platform56:2380,etcd0=http://inf-platform53:2380 --initial-cluster-state existing &gt; ./<span class="built_in">log</span>/etcd.log 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
 <p>过程同加入 etcd1 的过程相似，这样我们就可以把单节点的 etcd 数据迁移到一个包含三个 etcd 实例组成的集群上了。</p>
-<h4 id="大体思路">大体思路</h4>
+<h4 id="大体思路"><a class="markdownIt-Anchor" href="#大体思路"></a> 大体思路</h4>
 <p>先通过 <code>--force-new-cluster</code> 强行拉起一个 etcd 集群，抹除了原有 data-dir 中原有集群的属性信息（内部猜测），然后通过加入新成员的方式扩展这个集群到指定的数目。</p>
-<h3 id="高可用etcd集群方式（可选择）">高可用etcd集群方式（可选择）</h3>
+<h3 id="高可用etcd集群方式可选择"><a class="markdownIt-Anchor" href="#高可用etcd集群方式可选择"></a> 高可用etcd集群方式（可选择）</h3>
 <p>上面数据迁移的过程一般是在紧急的状态下才会进行的操作，这时候可能 etcd 已经停掉了，或者节点不可用了。在一般情况下如何搭建一个高可用的 etcd 集群呢，目前采用的方法是用 supervise 来监控每个节点的 etcd 进程。</p>
 <p>在数据迁移的过程中，我们已经搭建好了一个包含三个节点的 etcd 集群了，这时候我们对其做一些改变，使用supervise 重新拉起这些进程。</p>
 <p>首先登陆到 inf-platform60 节点上，kill 掉 etcd 进程，编写 etcd 的启动脚本 <a href="http://start-etcd.sh" target="_blank" rel="noopener">start-etcd.sh</a>，其中 <a href="http://start-etcd.sh" target="_blank" rel="noopener">start-etcd.sh</a> 的内容如下：</p>
@@ -439,7 +439,7 @@
 <li>inf-platform53</li>
 </ul>
 <p>上进行同样的操作，注意要针对每个节点的不同修改对应的etcd name 和 peerURLs 等。</p>
-<h3 id="常见问题">常见问题</h3>
+<h3 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题"></a> 常见问题</h3>
 <p><b>1、etcd 读取已有的 data-dir 数据而启动失败，常常表现为cluster id not match什么的</b></p>
 <p>可能原因是新启动的 etcd 属性与之前的不同，可以尝 <code>--force-new-cluster</code> 选项的形式启动一个新的集群</p>
 <p><b>2、etcd 集群搭建完成后，通过 kubectl get pods 等一些操作发生错误的情况</b></p>
@@ -574,7 +574,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -587,7 +587,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -636,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据迁移"><span class="nav-number">1.</span> <span class="nav-text">数据迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化一个新的集群"><span class="nav-number">1.0.1.</span> <span class="nav-text">初始化一个新的集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加etcd1成员"><span class="nav-number">1.0.2.</span> <span class="nav-text">添加etcd1成员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-etcd0-成员"><span class="nav-number">1.0.3.</span> <span class="nav-text">添加 etcd0 成员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大体思路"><span class="nav-number">1.0.4.</span> <span class="nav-text">大体思路</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用etcd集群方式（可选择）"><span class="nav-number">1.1.</span> <span class="nav-text">高可用etcd集群方式（可选择）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">1.2.</span> <span class="nav-text">常见问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据迁移"><span class="nav-number">1.</span> <span class="nav-text"> 数据迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化一个新的集群"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 初始化一个新的集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加etcd1成员"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 添加etcd1成员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-etcd0-成员"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 添加 etcd0 成员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#大体思路"><span class="nav-number">1.0.4.</span> <span class="nav-text"> 大体思路</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用etcd集群方式可选择"><span class="nav-number">1.1.</span> <span class="nav-text"> 高可用etcd集群方式（可选择）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">1.2.</span> <span class="nav-text"> 常见问题</span></a></li></ol></div>
             
 
           </div>

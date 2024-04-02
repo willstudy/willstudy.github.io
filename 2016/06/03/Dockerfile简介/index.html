@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。 Dockerfile的基本结构 Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#&apos;作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令和">
+<meta name="description" content="Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。  Dockerfile的基本结构 Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#&apos;作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令">
 <meta name="keywords" content="docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dockerfile简介">
 <meta property="og:url" content="https://blog.lecury.cn/2016/06/03/Dockerfile简介/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。 Dockerfile的基本结构 Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#&apos;作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令和">
+<meta property="og:description" content="Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。  Dockerfile的基本结构 Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#&apos;作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T08:14:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dockerfile简介">
-<meta name="twitter:description" content="Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。 Dockerfile的基本结构 Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#&apos;作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令和">
+<meta name="twitter:description" content="Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。  Dockerfile的基本结构 Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#&apos;作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令">
 
 
 
@@ -397,7 +397,7 @@
 
       
         <p>Dockerfile类似于Linux中的Makefile，Docker用它来快速便捷的创建一个镜像。本文介绍一下Dockerfile的编写规则，以及一些常见的Dockerfile样例。</p>
-<h2 id="Dockerfile的基本结构">Dockerfile的基本结构</h2>
+<h2 id="dockerfile的基本结构"><a class="markdownIt-Anchor" href="#dockerfile的基本结构"></a> Dockerfile的基本结构</h2>
 <p>Dockerfile指令是不区分大小写的，为了便于区分建议使用大写，它使用’#'作为注释。Dockerfile由一条条指令构成的，一般来说它由基础镜像信息、维护者信息、镜像操作指令和容器启动指令（可选）构成的。例如：</p>
 <pre><code># FROM说明此镜像是来源于centos这个基础镜像的
 FROM centos
@@ -412,17 +412,17 @@ WORKDIR /time_sevre/bin/
 # CMD 指明镜像运行时要启动的命令
 CMD ./time_server
 </code></pre>  
-<h2 id="Dockerfile的指令">Dockerfile的指令</h2>
-<h4 id="FROM">FROM</h4>
+<h2 id="dockerfile的指令"><a class="markdownIt-Anchor" href="#dockerfile的指令"></a> Dockerfile的指令</h2>
+<h4 id="from"><a class="markdownIt-Anchor" href="#from"></a> FROM</h4>
 <pre><code>FROM < image > 或
 FROM < image >:tag
 </code></pre>  
 <p>Dockerfile第一条指令必须为FROM，如果一个镜像需要多个基础镜像的话可以使用多个FROM</p>
-<h4 id="MAINTAINER">MAINTAINER</h4>
+<h4 id="maintainer"><a class="markdownIt-Anchor" href="#maintainer"></a> MAINTAINER</h4>
 <pre><code># 指定维护者信息。
 MAINTAINER < name >
 </code></pre>
-<h4 id="RUN">RUN</h4>
+<h4 id="run"><a class="markdownIt-Anchor" href="#run"></a> RUN</h4>
 <pre><code># 等价于 /bin/sh -c
 RUN < command > 或
 # 使用 exec 执行
@@ -431,7 +431,7 @@ RUN ["executable", "param1", "param2"]
 <p>指定使用其它终端可以通过第二种方式实现，例如</p>
 <pre><code>RUN ["/bin/bash", "-c", "echo hello"]</code></pre>    
 <p>每条 RUN 指令将在当前镜像基础上执行指定命令，并提交为新的镜像。当命令较长时可以使用 \ 来换行。</p>
-<h4 id="CMD">CMD</h4>
+<h4 id="cmd"><a class="markdownIt-Anchor" href="#cmd"></a> CMD</h4>
 <pre><code># 使用 exec 执行，推荐方式
 CMD ["executable","param1","param2"]
 # 在 /bin/sh 中执行，提供给需要交互的应用
@@ -441,35 +441,35 @@ CMD ["param1","param2"]
 </code></pre>
 <p>指定启动容器时执行的命令，每个 Dockerfile 只能有一条 CMD 命令。<strong>如果指定了多条命令，只有最后一条会被执行</strong>。<br>
 如果用户启动容器时候指定了运行的命令，则会覆盖掉 CMD 指定的命令。</p>
-<h4 id="ENTRYPOINT">ENTRYPOINT</h4>
+<h4 id="entrypoint"><a class="markdownIt-Anchor" href="#entrypoint"></a> ENTRYPOINT</h4>
 <pre><code>ENTRYPOINT ["executable", "param1", "param2"]
 # shell中执行
 ENTRYPOINT command param1 param2
 </code></pre>
 <p>配置容器启动后执行的命令，并且<strong>不可被 docker run 提供的参数覆盖</strong>。<br>
 每个 Dockerfile 中只能有一个 <strong>ENTRYPOINT</strong>，当指定多个时，只有最后一个起效。</p>
-<h4 id="EXPOSE">EXPOSE</h4>
+<h4 id="expose"><a class="markdownIt-Anchor" href="#expose"></a> EXPOSE</h4>
 <pre><code>EXPOSE < port > [< port >...]</code></pre>  
 <p>告诉 Docker 服务端容器暴露的端口号，供互联系统使用。在启动容器时需要通过 -P，Docker 主机会自动分配一个端口转发到指定的端口。</p>
-<h4 id="ENV">ENV</h4>
+<h4 id="env"><a class="markdownIt-Anchor" href="#env"></a> ENV</h4>
 <p>指定镜像的环境变量信息，ENV &lt; key &gt; &lt; value &gt; 的形式，例如：</p>
 <pre><code>ENV PG_MAJOR 9.3
 ENV PG_VERSION 9.3.4
 RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress && …
 ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
 </code></pre>
-<h3 id="ADD">ADD</h3>
+<h3 id="add"><a class="markdownIt-Anchor" href="#add"></a> ADD</h3>
 <p>格式为 ADD &lt; src &gt; &lt; dest &gt;。<br>
 该命令将复制指定的 <src> 到容器中的 <dest>。<br>
 其中 <src> 可以是Dockerfile所在目录的一个相对路径；也可以是一个 URL；还可以是一个 tar 文件（自动解压为目录）</src></dest></src></p>
-<h4 id="COPY">COPY</h4>
+<h4 id="copy"><a class="markdownIt-Anchor" href="#copy"></a> COPY</h4>
 <pre><code>COPY < src > < dest ></code></pre>  
 <p>复制本地主机的 <src>（为 Dockerfile 所在目录的相对路径）到容器中的 <dest>。<br>
 当使用本地目录为源目录时，推荐使用 COPY。</dest></src></p>
-<h4 id="VOLUME">VOLUME</h4>
+<h4 id="volume"><a class="markdownIt-Anchor" href="#volume"></a> VOLUME</h4>
 <pre><code>VOLUME /data </code></pre>  
 <p>创建一个可以从本地主机或其他容器挂载的挂载点，一般用来存放数据库和需要保持的数据等</p>
-<h4 id="USER">USER</h4>
+<h4 id="user"><a class="markdownIt-Anchor" href="#user"></a> USER</h4>
 <p>Docker镜像默认运行的是root用户，如果要以其他用户来运行此镜像就需要USER来指定一个用户。</p>
 <pre><code>USER daemon</code></pre>     
 <p>指定运行容器时的用户名或 UID，后续的 RUN 也会使用指定用户。<br>
@@ -477,7 +477,7 @@ ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
 <pre><code>RUN groupadd -r postgres && useradd -r -g postgres postgres。  
 </code></pre>
 <p>要临时获取管理员权限可以使用gosu，而不推荐 sudo。</p>
-<h4 id="WORKDIR">WORKDIR</h4>
+<h4 id="workdir"><a class="markdownIt-Anchor" href="#workdir"></a> WORKDIR</h4>
 <pre><code>WORKDIR /path/to/workdir</code></pre>  
 <p>为后续的 RUN、CMD、ENTRYPOINT 指令配置工作目录。<br>
 可以使用多个 WORKDIR 指令，后续命令如果参数是相对路径，则会基于之前命令指定的路径。例如</p>
@@ -487,7 +487,7 @@ WORKDIR c
 RUN pwd
 </code></pre>
 <p>则最终路径为 /a/b/c。</p>
-<h4 id="ONBUILD">ONBUILD</h4>
+<h4 id="onbuild"><a class="markdownIt-Anchor" href="#onbuild"></a> ONBUILD</h4>
 <pre><code>ONBUILD [ INSTRUCTION ]</code></pre>  
 <p>配置当所创建的镜像作为其它新创建镜像的基础镜像时，所执行的操作指令。<br>
 例如，Dockerfile 使用如下的内容创建了镜像 image-A。</p>
@@ -503,11 +503,11 @@ ADD . /app/src
 RUN /usr/local/bin/python-build --dir /app/src  
 </code></pre>
 <p>使用 ONBUILD 指令的镜像，推荐在标签中注明，例如 ruby:1.9-onbuild。</p>
-<h2 id="镜像的创建">镜像的创建</h2>
+<h2 id="镜像的创建"><a class="markdownIt-Anchor" href="#镜像的创建"></a> 镜像的创建</h2>
 <p>镜像的创建会读取Dockerfile，使用</p>
 <pre><code># docker build -t 镜像名 /.../Dockerfile</code></pre>
 <p>可以创建一个镜像了</p>
-<h2 id="参考">参考</h2>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h2>
 <p><a href="http://wiki.baidu.com/pages/viewpage.action?pageId=190303481" target="_blank"><b>Dockfile 文件介绍</b></a></p>
 
       
@@ -633,7 +633,7 @@ RUN /usr/local/bin/python-build --dir /app/src
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -646,7 +646,7 @@ RUN /usr/local/bin/python-build --dir /app/src
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -695,7 +695,7 @@ RUN /usr/local/bin/python-build --dir /app/src
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile的基本结构"><span class="nav-number">1.</span> <span class="nav-text">Dockerfile的基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile的指令"><span class="nav-number">2.</span> <span class="nav-text">Dockerfile的指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FROM"><span class="nav-number">2.0.1.</span> <span class="nav-text">FROM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MAINTAINER"><span class="nav-number">2.0.2.</span> <span class="nav-text">MAINTAINER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RUN"><span class="nav-number">2.0.3.</span> <span class="nav-text">RUN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMD"><span class="nav-number">2.0.4.</span> <span class="nav-text">CMD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ENTRYPOINT"><span class="nav-number">2.0.5.</span> <span class="nav-text">ENTRYPOINT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EXPOSE"><span class="nav-number">2.0.6.</span> <span class="nav-text">EXPOSE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ENV"><span class="nav-number">2.0.7.</span> <span class="nav-text">ENV</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ADD"><span class="nav-number">2.1.</span> <span class="nav-text">ADD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#COPY"><span class="nav-number">2.1.1.</span> <span class="nav-text">COPY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VOLUME"><span class="nav-number">2.1.2.</span> <span class="nav-text">VOLUME</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#USER"><span class="nav-number">2.1.3.</span> <span class="nav-text">USER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WORKDIR"><span class="nav-number">2.1.4.</span> <span class="nav-text">WORKDIR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ONBUILD"><span class="nav-number">2.1.5.</span> <span class="nav-text">ONBUILD</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像的创建"><span class="nav-number">3.</span> <span class="nav-text">镜像的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dockerfile的基本结构"><span class="nav-number">1.</span> <span class="nav-text"> Dockerfile的基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dockerfile的指令"><span class="nav-number">2.</span> <span class="nav-text"> Dockerfile的指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#from"><span class="nav-number">2.0.1.</span> <span class="nav-text"> FROM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#maintainer"><span class="nav-number">2.0.2.</span> <span class="nav-text"> MAINTAINER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run"><span class="nav-number">2.0.3.</span> <span class="nav-text"> RUN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cmd"><span class="nav-number">2.0.4.</span> <span class="nav-text"> CMD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#entrypoint"><span class="nav-number">2.0.5.</span> <span class="nav-text"> ENTRYPOINT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#expose"><span class="nav-number">2.0.6.</span> <span class="nav-text"> EXPOSE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#env"><span class="nav-number">2.0.7.</span> <span class="nav-text"> ENV</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add"><span class="nav-number">2.1.</span> <span class="nav-text"> ADD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#copy"><span class="nav-number">2.1.1.</span> <span class="nav-text"> COPY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#volume"><span class="nav-number">2.1.2.</span> <span class="nav-text"> VOLUME</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#user"><span class="nav-number">2.1.3.</span> <span class="nav-text"> USER</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#workdir"><span class="nav-number">2.1.4.</span> <span class="nav-text"> WORKDIR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#onbuild"><span class="nav-number">2.1.5.</span> <span class="nav-text"> ONBUILD</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#镜像的创建"><span class="nav-number">3.</span> <span class="nav-text"> 镜像的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"> 参考</span></a></li></div>
             
 
           </div>

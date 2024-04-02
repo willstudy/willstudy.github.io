@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文内容来源于：GitHub - CnTransGroup/EffectiveModernCppChinese: 《Effective Modern C++》- 完成翻译  1. 优先考虑auto而非显式类型声明 简化代码，避免一些移植和效率性问题，不过注意auto推导若非己愿，使用显式类型初始化惯用法  2. 区别() {}方式创建对象 后者调用的是std::initializer_list方法">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modern C++学习心得笔记">
+<meta property="og:url" content="https://blog.lecury.cn/2022/12/17/Modern C++学习心得笔记/index.html">
+<meta property="og:site_name" content="Brains">
+<meta property="og:description" content="本文内容来源于：GitHub - CnTransGroup/EffectiveModernCppChinese: 《Effective Modern C++》- 完成翻译  1. 优先考虑auto而非显式类型声明 简化代码，避免一些移植和效率性问题，不过注意auto推导若非己愿，使用显式类型初始化惯用法  2. 区别() {}方式创建对象 后者调用的是std::initializer_list方法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-04-02T16:28:49.764Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Modern C++学习心得笔记">
+<meta name="twitter:description" content="本文内容来源于：GitHub - CnTransGroup/EffectiveModernCppChinese: 《Effective Modern C++》- 完成翻译  1. 优先考虑auto而非显式类型声明 简化代码，避免一些移植和效率性问题，不过注意auto推导若非己愿，使用显式类型初始化惯用法  2. 区别() {}方式创建对象 后者调用的是std::initializer_list方法">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'IW3LH2292C',
+      apiKey: 'e10c4c9f288f42b0cebb6ddee08e893b',
+      indexName: 'lecury',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7626921954258592" crossorigin="anonymous"></script>
+
+
+
+  <link rel="canonical" href="https://blog.lecury.cn/2022/12/17/Modern C++学习心得笔记/">
+
+
+
+
+
+  <title>Modern C++学习心得笔记 | Brains</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e5e6b1126fd24befcad0b84368faae9c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Brains</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.lecury.cn/2022/12/17/Modern C++学习心得笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Liu Chang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/common/brain.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Brains">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Modern C++学习心得笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-12-17T22:32:30+08:00">
+                2022-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2022/12/17/Modern C++学习心得笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2022/12/17/Modern C++学习心得笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2022/12/17/Modern C++学习心得笔记/" class="leancloud_visitors" data-flag-title="Modern C++学习心得笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文内容来源于：GitHub - CnTransGroup/EffectiveModernCppChinese: 《Effective Modern C++》- 完成翻译</p>
+<h4 id="1-优先考虑auto而非显式类型声明"><a class="markdownIt-Anchor" href="#1-优先考虑auto而非显式类型声明"></a> 1. 优先考虑auto而非显式类型声明</h4>
+<p>简化代码，避免一些移植和效率性问题，不过注意auto推导若非己愿，使用显式类型初始化惯用法</p>
+<h4 id="2-区别-方式创建对象"><a class="markdownIt-Anchor" href="#2-区别-方式创建对象"></a> 2. 区别() {}方式创建对象</h4>
+<p>后者调用的是std::initializer_list方法，前者是构造函数。</p>
+<h4 id="3-指针初始化优先使用nullptr而非0或者null"><a class="markdownIt-Anchor" href="#3-指针初始化优先使用nullptr而非0或者null"></a> 3. 指针初始化优先使用nullptr而非0或者NULL</h4>
+<p>nullptr显式指明它是指针类型的空值，0/NULL存在隐式转换的可能性，表达含义前者更为清晰。</p>
+<h4 id="4-优先考虑using而非typedefs定义类型别名"><a class="markdownIt-Anchor" href="#4-优先考虑using而非typedefs定义类型别名"></a> 4. 优先考虑using而非typedefs定义类型别名</h4>
+<p>using更加强大支持模板化，使用更简洁。</p>
+<h4 id="5-优先使用限定域enumcolor而非color"><a class="markdownIt-Anchor" href="#5-优先使用限定域enumcolor而非color"></a> 5. 优先使用限定域enum::Color而非Color</h4>
+<p>后者读代码时，很难确定作用域。</p>
+<h4 id="6-优先使用deleted关键词禁用函数拷贝构造和赋值操作"><a class="markdownIt-Anchor" href="#6-优先使用deleted关键词禁用函数拷贝构造和赋值操作"></a> 6. 优先使用deleted关键词禁用函数（拷贝构造和赋值操作）</h4>
+<p>相比private方式定义更加清晰，避免友元函数也能访问的Bug。</p>
+<h4 id="7-优先使用override关键词声明重写虚函数"><a class="markdownIt-Anchor" href="#7-优先使用override关键词声明重写虚函数"></a> 7. 优先使用override关键词声明重写虚函数</h4>
+<p>虚函数重写的规则很多，一不留神不满足虚函数重写就犯错了，为了强制编译器检查重写情况，可以加override关键词。</p>
+<h4 id="8-noexcept声明对于移动语义-swap-内存释放函数和析构函数非常有用"><a class="markdownIt-Anchor" href="#8-noexcept声明对于移动语义-swap-内存释放函数和析构函数非常有用"></a> 8. noexcept声明对于移动语义、swap、内存释放函数和析构函数非常有用</h4>
+<p>声明noexcept编译器会少做许多事情，提高效率和性能。</p>
+<p>简化调用代码，确认不抛出异常的情况下，也能执行一些特殊优化操作。</p>
+<p>当vector容量调整时，需要移动元素，如果元素的移动拷贝构造函数是noexcept的，那么可以采用move的方式，而不是copy方式，大幅提高效率。</p>
+<p>应用在移动构造函数、移动复制函数、swap函数场景。</p>
+<h4 id="9-尽量使用constexpr"><a class="markdownIt-Anchor" href="#9-尽量使用constexpr"></a> 9. 尽量使用constexpr</h4>
+<p>constexpr修饰函数或者表达式，可以将函数或者表达式的结果推导为常量，从而用在一些常量限定域的使用场景中，比如数组的维度、模版的参数等。<br>
+另外是一种很强的约束，更好地保证程序的正确语义不被破坏。<br>
+比如将用到的constexpr表达式都直接替换成最终结果等。相比宏来说，没有额外的开销，但更安全可靠。</p>
+<h4 id="10-显式按需生成默认函数"><a class="markdownIt-Anchor" href="#10-显式按需生成默认函数"></a> 10. 显式按需生成默认函数</h4>
+<p>C++会缺省生成一些默认函数，比如构造函数、拷贝构造函数等，有时候默认生成的规则还有点问题，建议的办法是当需要生成默认的构造函数时，需要增加=default，显示声明出来。</p>
+<h4 id="11-善用shared_ptr"><a class="markdownIt-Anchor" href="#11-善用shared_ptr"></a> 11. 善用shared_ptr</h4>
+<ol>
+<li>shared_ptr要比uniq_ptr、原始指针大两倍，一个是原始指针，一个是指向控制块的指针。控制块用于定义引用计数、自定义删除器等，负责shared_ptr的析构操作。</li>
+<li>避免用原始指针创建shared_ptr，可能会创建多个控制块，导致析构多次。不需要自定义删除器时，建议使用make_shared创建，代码更紧凑，规避资源泄漏风险。</li>
+<li>如果想返回this指针的shared_ptr，需要继承std::enable_shared_from_this类，并使用shared_from_this方法获取shard_ptr<this>，这是为了创建多个控制块。</this></li>
+</ol>
+<h4 id="12-使用stdweak_ptr替代可能会悬空的stdshared_ptr"><a class="markdownIt-Anchor" href="#12-使用stdweak_ptr替代可能会悬空的stdshared_ptr"></a> 12. 使用std::weak_ptr替代可能会悬空的std::shared_ptr</h4>
+<p>std::weak_ptr能检测到指针是否悬空 &amp; 不负责管理指针的生命周期，潜在使用场景包括：缓存、观察者列表、打破std::shared_ptr环状引用。</p>
+<h4 id="13-理解stdmove"><a class="markdownIt-Anchor" href="#13-理解stdmove"></a> 13. 理解std::move</h4>
+<p>std::move不会移除const属性，因此避免移动const的对象，会产生const属性的右值引用，会被转成拷贝操作，而不是移动操作。</p>
+<p>std::move仅仅做右值类型的转换，运行期间不作任何事情（不移动东西）。</p>
+<h4 id="14-stdmove-vs-stdforward"><a class="markdownIt-Anchor" href="#14-stdmove-vs-stdforward"></a> 14. std::move vs std::forward</h4>
+<p>std::move始终转换成右值，但是std::forward只有绑定右值属性时，才会被转发成右值，通常用于模板函数通用引用参数的转发。</p>
+<h4 id="15-理解通用引用-右值引用"><a class="markdownIt-Anchor" href="#15-理解通用引用-右值引用"></a> 15. 理解通用引用 &amp; 右值引用</h4>
+<p>通用引用：如果函数模板形参的类型为T&amp;&amp;，并且T需要被推导得知，或者如果一个对象被声明为auto&amp;&amp;，这个形参或者对象就是一个通用引用。当参数绑定到右值时，表现为右值引用；当参数绑定为左值时，则为左值引用。</p>
+<p>右值引用：声明为具体类型的Type&amp;&amp;，不涉及类型推导。</p>
+<h4 id="16-避免对通用引用进行重载"><a class="markdownIt-Anchor" href="#16-避免对通用引用进行重载"></a> 16. 避免对通用引用进行重载</h4>
+<p>通用引用形参的函数重载，会导致函数调用的机会比期望的多得多，容易出现误匹配的情况，导致bug产生。</p>
+<p>比如构造函数的通用引用参数重载，对于non-const左值，它们比拷贝构造函数而更匹配，会劫持派生类对于基类的拷贝和移动构造函数的调用。</p>
+<h4 id="17-移动操作也有一些局限性"><a class="markdownIt-Anchor" href="#17-移动操作也有一些局限性"></a> 17. 移动操作也有一些局限性</h4>
+<p>待移动的对象没有提供移动操作，移动会退化成复制操作。<br>
+移动操作并不比复制快，比如字符串复制之类的。<br>
+移动方法不可用，没有被声明noexcept。<br>
+源对象是左值。</p>
+<h4 id="18-熟悉完美转发失败的情况"><a class="markdownIt-Anchor" href="#18-熟悉完美转发失败的情况"></a> 18. 熟悉完美转发失败的情况</h4>
+<p>模板类型推导失败，或者推导错误的类型时。<br>
+参数是花括号初始化，传入指针0/NULL等情况（推导出错误的类型）</p>
+<h4 id="19-理解lambda"><a class="markdownIt-Anchor" href="#19-理解lambda"></a> 19. 理解lambda</h4>
+<ol>
+<li>参数捕获时，避免悬空指针/引用：<br>
+1.1 如果按引用捕获，避免出现引用对象生命周期消亡后继续被使用的情况，指针同理。<br>
+1.2 C14支持移动捕获，lambda捕获参数列表，newPtr = std::move(pw)，将所属权转移到<br>
+1.3 C11可以使用std::bind模拟移动捕获。</li>
+<li>支持通用引用泛型参数：使用decltype解析引用类型（左值 or 右值），然后使用std::forward进行完美转发。</li>
+<li>优先使用lambda而不是bind，前者更易读、可维护、有效，只有C++11不支持移动捕获的情况才，才推荐使用std::bind。</li>
+</ol>
+<h4 id="20-异步任务使用stdasync而不是stdthread"><a class="markdownIt-Anchor" href="#20-异步任务使用stdasync而不是stdthread"></a> 20. 异步任务使用std::async而不是std::thread</h4>
+<ol>
+<li>代码更优雅：基于任务的代码量更少，能避免一些异常程序终止情况。</li>
+<li>抽象层级更高：线程管理交给底层开发者，比如啥时候创建线程执行任务，避免资源超额、抛出异常、程序终止的问题。<br>
+避免以默认参数调用std::async，因为这种情况导致func运行的所在线程不定，读取thread_local参数时，会有出错的可能性。比如明确新起一个线程，则指明std::launch::async模式（切到新线程）。</li>
+</ol>
+<h4 id="21-stdatomic-volatile"><a class="markdownIt-Anchor" href="#21-stdatomic-volatile"></a> 21. std::atomic &amp; volatile</h4>
+<p>1）std::atomic用于在不使用互斥锁情况下，来使变量被多个线程访问的情况。是用来编写并发程序的一个工具，避免并发读取不一致的case。<br>
+2）volatile用在读取和写入不应被优化掉的内存上。是用来处理特殊内存的一个工具，避免内存读取操作被优化。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/12/19/浅谈rpc技术/" rel="next" title="浅谈rpc技术">
+                <i class="fa fa-chevron-left"></i> 浅谈rpc技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2024/03/02/AI LLM学习心得/" rel="prev" title="AI LLM学习心得">
+                AI LLM学习心得 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/common/brain.jpg" alt="Liu Chang">
+            
+              <p class="site-author-name" itemprop="name">Liu Chang</p>
+              <p class="site-description motion-element" itemprop="description">Algorithm、Machine Learning、Search、Cloud computing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/willstudy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:958823492@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-优先考虑auto而非显式类型声明"><span class="nav-number">1.</span> <span class="nav-text"> 1. 优先考虑auto而非显式类型声明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-区别-方式创建对象"><span class="nav-number">2.</span> <span class="nav-text"> 2. 区别() {}方式创建对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-指针初始化优先使用nullptr而非0或者null"><span class="nav-number">3.</span> <span class="nav-text"> 3. 指针初始化优先使用nullptr而非0或者NULL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-优先考虑using而非typedefs定义类型别名"><span class="nav-number">4.</span> <span class="nav-text"> 4. 优先考虑using而非typedefs定义类型别名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-优先使用限定域enumcolor而非color"><span class="nav-number">5.</span> <span class="nav-text"> 5. 优先使用限定域enum::Color而非Color</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-优先使用deleted关键词禁用函数拷贝构造和赋值操作"><span class="nav-number">6.</span> <span class="nav-text"> 6. 优先使用deleted关键词禁用函数（拷贝构造和赋值操作）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-优先使用override关键词声明重写虚函数"><span class="nav-number">7.</span> <span class="nav-text"> 7. 优先使用override关键词声明重写虚函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-noexcept声明对于移动语义-swap-内存释放函数和析构函数非常有用"><span class="nav-number">8.</span> <span class="nav-text"> 8. noexcept声明对于移动语义、swap、内存释放函数和析构函数非常有用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-尽量使用constexpr"><span class="nav-number">9.</span> <span class="nav-text"> 9. 尽量使用constexpr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-显式按需生成默认函数"><span class="nav-number">10.</span> <span class="nav-text"> 10. 显式按需生成默认函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-善用shared_ptr"><span class="nav-number">11.</span> <span class="nav-text"> 11. 善用shared_ptr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-使用stdweak_ptr替代可能会悬空的stdshared_ptr"><span class="nav-number">12.</span> <span class="nav-text"> 12. 使用std::weak_ptr替代可能会悬空的std::shared_ptr</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-理解stdmove"><span class="nav-number">13.</span> <span class="nav-text"> 13. 理解std::move</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-stdmove-vs-stdforward"><span class="nav-number">14.</span> <span class="nav-text"> 14. std::move vs std::forward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-理解通用引用-右值引用"><span class="nav-number">15.</span> <span class="nav-text"> 15. 理解通用引用 &amp; 右值引用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-避免对通用引用进行重载"><span class="nav-number">16.</span> <span class="nav-text"> 16. 避免对通用引用进行重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-移动操作也有一些局限性"><span class="nav-number">17.</span> <span class="nav-text"> 17. 移动操作也有一些局限性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#18-熟悉完美转发失败的情况"><span class="nav-number">18.</span> <span class="nav-text"> 18. 熟悉完美转发失败的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#19-理解lambda"><span class="nav-number">19.</span> <span class="nav-text"> 19. 理解lambda</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#20-异步任务使用stdasync而不是stdthread"><span class="nav-number">20.</span> <span class="nav-text"> 20. 异步任务使用std::async而不是std::thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#21-stdatomic-volatile"><span class="nav-number">21.</span> <span class="nav-text"> 21. std::atomic &amp; volatile</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lecury</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz',
+        appKey: 'Ro8xPoiy3igQTMA4btTCXGPL',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("G2aAv17JtEl2zVkbeDg2GpZj-gzGzoHsz", "Ro8xPoiy3igQTMA4btTCXGPL");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

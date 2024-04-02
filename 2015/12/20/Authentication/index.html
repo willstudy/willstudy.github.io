@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me. Lab 4 :  Authentication Lab Environment Setu">
+<meta name="description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me.  Lab 4 :  Authentication  Lab Environment Se">
 <meta name="keywords" content="系统安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Authentication">
 <meta property="og:url" content="https://blog.lecury.cn/2015/12/20/Authentication/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me. Lab 4 :  Authentication Lab Environment Setu">
+<meta property="og:description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me.  Lab 4 :  Authentication  Lab Environment Se">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/Authentication/1.png">
 <meta property="og:image" content="https://blog.lecury.cn/images/Authentication/2.png">
@@ -105,7 +105,7 @@
 <meta property="og:updated_time" content="2019-04-05T07:51:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Authentication">
-<meta name="twitter:description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me. Lab 4 :  Authentication Lab Environment Setu">
+<meta name="twitter:description" content="This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me.  Lab 4 :  Authentication  Lab Environment Se">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/Authentication/1.png">
 
 
@@ -413,15 +413,15 @@
 
       
         <p>This is a experiment of Information Security, about 7 exercises and challenges in this blog. May be a lot mistakes here, if you find it, please contact me.</p>
-<h2 id="Lab-4-Authentication"><strong>Lab 4 :  Authentication</strong></h2>
-<h3 id="Lab-Environment-Setup"><strong>Lab Environment Setup</strong></h3>
+<h2 id="lab-4-authentication"><a class="markdownIt-Anchor" href="#lab-4-authentication"></a> <strong>Lab 4 :  Authentication</strong></h2>
+<h3 id="lab-environment-setup"><a class="markdownIt-Anchor" href="#lab-environment-setup"></a> <strong>Lab Environment Setup</strong></h3>
 <ul>
 <li>Platform  :  Ubuntu 12.04 ( 64 bits )</li>
 <li>Contents  :         <a href="http://219.219.220.220:8091/~csslab2015/lab4/Lab4-Authentication.html" target="_blank" rel="noopener">Authentication</a></li>
 </ul>
-<h3 id="Part-A：Identity-Forgery"><strong>Part A：Identity Forgery</strong></h3>
+<h3 id="part-aidentity-forgery"><a class="markdownIt-Anchor" href="#part-aidentity-forgery"></a> <strong>Part A：Identity Forgery</strong></h3>
 <p>There is a new service in the Touchstone web server: the transfer service. You can first register an account in the server and log in. You can now find the account page which will present the transferring interface, along with user name, login time, among other things.</p>
-<h4 id="Exercise-1"><strong>Exercise 1 :</strong></h4>
+<h4 id="exercise-1"><a class="markdownIt-Anchor" href="#exercise-1"></a> <strong>Exercise 1 :</strong></h4>
 <p>There are many bugs and vulnerabilities in the current utility for transferring money. Find as many bugs as you can. For now, just focus on bugs that an adversary can trigger by giving unanticipated values to the transfer page. Think carefully about what kinds of inputs an attacker might provide, and try them out by entering them on the transfer page. Please write down detail descriptions of your observation in bugs.txt. (You should find at least 4 different bugs.)</p>
 <ul>
 <li>
@@ -442,7 +442,7 @@
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fromBalance = Db_readBalance (from);  <span class="comment">// 100$</span></span><br><span class="line"><span class="keyword">int</span> newFromBalance = fromBalance - money; <span class="comment">// 0$</span></span><br><span class="line"><span class="keyword">int</span> toBalance = Db_readBalance (to);  <span class="comment">// 100$</span></span><br><span class="line"><span class="keyword">int</span> newToBalance = toBalance + money;  <span class="comment">// 200$</span></span><br><span class="line">Db_writeBalance (from, newFromBalance); <span class="comment">// 0$</span></span><br><span class="line">Db_writeBalance (to, newToBalance);  <span class="comment">// 200$</span></span><br></pre></td></tr></table></figure>
 <p>If the sender and the receiver is the same person, it will get more money constantly.</p>
-<h4 id="Exercise-2"><strong>Exercise 2 :</strong></h4>
+<h4 id="exercise-2"><a class="markdownIt-Anchor" href="#exercise-2"></a> <strong>Exercise 2 :</strong></h4>
 <p>Fix as many bugs as you can, from those you found above. Just keep your code as clean as possible. Also don’t forget to test your implementation after you fix the bugs.</p>
 <p>For the <strong>first bug</strong>: when we get key-values form HTTP body, we should check the boundary of the <strong>temp</strong> array, If exceed the boundary, we should response a error to the browser and finish this request.</p>
 <p>For the <strong>second bug</strong>: we should check these input filed, and exclude some special characters, such as ** , ; ? ** and so on.</p>
@@ -458,18 +458,18 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fromBalance = Db_readBalance (from);</span><br><span class="line"><span class="keyword">int</span> newFromBalance = fromBalance - money;</span><br><span class="line">Db_writeBalance (from, newFromBalance);</span><br><span class="line"><span class="keyword">int</span> toBalance = Db_readBalance (to);</span><br><span class="line"><span class="keyword">int</span> newToBalance = toBalance + money;   <span class="comment">// a little stupid</span></span><br><span class="line">Db_writeBalance (to, newToBalance);</span><br></pre></td></tr></table></figure>
 <p><img src="/images/Authentication/7.png" alt><br>
 <img src="/images/Authentication/8.png" alt></p>
-<h4 id="Exercise-3"><strong>Exercise 3 :</strong></h4>
+<h4 id="exercise-3"><a class="markdownIt-Anchor" href="#exercise-3"></a> <strong>Exercise 3 :</strong></h4>
 <p>Read the source code of the login web page (in your browser), and the server’s source code. Make sure that you make it clear that how the server identify who is transferring.</p>
 <p><b>At first, if a new client comes, the <strong>server</strong> will <strong>accept</strong> a <strong>fd</strong> and send it to the <strong>httpd</strong> process. Then the <strong>httpd</strong> begins to parse the client’s requests, GET requests are sent to <strong>filesv</strong> process, while POST requests will be sent to <strong>banksv</strong> process.<br>
 </b></p>
 <p><b>Before transferring money to others, <strong>banksv</strong> process parses the body of the request, and get the key-values from this body. If the first key is equal to <strong>Transfer</strong>, that’s to say, the user wants to transfer money to others. The <strong>banksv</strong> process identify who is transferring by the remaining key-values, such as <strong>transfer_from transfer_to</strong> and so on, and then start to update data base.<br>
 </b></p>
 <p>To this point, it should be clear to us that we can fool the server. That is: if we can construct a fake POST with some specific HTTP body attributes (what should they be?), and send the request to the server, we can fool the server that a victim is transferring money. And the server will perform the transfer!</p>
-<h4 id="Exercise-4"><strong>Exercise 4 :</strong></h4>
+<h4 id="exercise-4"><a class="markdownIt-Anchor" href="#exercise-4"></a> <strong>Exercise 4 :</strong></h4>
 <p>Try to construct a POST request about the money transferring, which steal money from some account if you know the victim’s account (it’s often the case). You can use browser.c or some tools, such as firebug to construct the request. Your request may look like this:</p>
 <p>We can construct a HTTP POST request like this :</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *req =<span class="string">"POST / HTTP/1.1\r\nContent-Length: 74\r\n\r\n"</span></span><br><span class="line">        <span class="string">"submit=Transfer&amp;transfer_from=abc&amp;transfer_to=LiuChang&amp;"</span></span><br><span class="line">        <span class="string">"transfer_money=100\r\n\r\n"</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="Exercise-5"><strong>Exercise 5 :</strong></h4>
+<h4 id="exercise-5"><a class="markdownIt-Anchor" href="#exercise-5"></a> <strong>Exercise 5 :</strong></h4>
 <p>Locate the code which handles the post request in handle.c, and add more code. You may find the response header Set-cookie: value useful. When one user transfers money, you should identify the user by cookie.</p>
 <p><b>I am sorry about that I change a lot in this codes and ignore some design principles…</b></p>
 <p><strong>First of all</strong>, we should put forward such a problem about how to generate and save cookies ? In my way, I use a very large random integer as a cookie which can identify the unique user, may be repeated in very little probability, but who care. obtaining accurate values correspond to its user by guessing is impossible. I also add a filed named <strong>favorite number</strong>, it will describe clearly in <strong>Exercise 7</strong>, together they formed the cookie, like this :</p>
@@ -481,16 +481,16 @@
 <p><strong>Finally</strong>, when user wants to transfer money to others, it must provide its passport : cookie. If a attack doesn’t know the cookie exactly and just constructs a HTTP request likes <strong>Exercise 4</strong>, failure is no doubt. I will attach my codes to illustrate it more clearly.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line"><span class="keyword">if</span>( Db_checkUser( to ) &lt;= <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"the transfer receiver does not exist !!!"</span> );</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( m &lt;= <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd , <span class="string">"illegal transfer account ! transfer money must be bigger than 0 !"</span>);</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( m &gt; Db_readBalance(from) ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"illegal transfer account ! transfer money must be less than your account !"</span>);</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( <span class="built_in">strcmp</span>( from, to ) == <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"sender is the same as the reciever !"</span> );</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>( <span class="built_in">strcmp</span>( cookie_value, real_cookie ) != <span class="number">0</span> ) &#123;</span><br><span class="line">    illegalInput( fd, <span class="string">"identify the cookie error! You are a bad guy..."</span> );</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;       </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
 <p>An important to note: this cookie_value is parsed from the HTTP body in <strong>parseHeaders</strong> function, and was passed from <strong>Parse_parse</strong> to <strong>Handle_main</strong>, finally passed to <strong>handlePost</strong> function. It is a little awkward.</p>
-<h3 id="Part-B：Packet-Sniffing"><strong>Part B：Packet Sniffing</strong></h3>
-<h4 id="Exercise-6"><strong>Exercise 6 :</strong></h4>
+<h3 id="part-bpacket-sniffing"><a class="markdownIt-Anchor" href="#part-bpacket-sniffing"></a> <strong>Part B：Packet Sniffing</strong></h3>
+<h4 id="exercise-6"><a class="markdownIt-Anchor" href="#exercise-6"></a> <strong>Exercise 6 :</strong></h4>
 <p>Using the Wireshark to steal the cookie, and then use the cookie to make fake POST request. Send the request to the server and transfer some one else’s money.</p>
 <p>My account’s username is <strong>LiuChang</strong>. I use <strong>HttpFox</strong> to capture the cookie and construct a HTTP POST request to steal <strong>Alice</strong> account’s money. I will illustrate it in some pictures.<br>
 <img src="/images/Authentication/10.png" alt="We steal Alice's cookie"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">char *req2 =&quot;POST / HTTP/1.1\r\nContent-Length: 75\r\nCookie: Alice=876960:Favorite_number=123\r\n\r\n&quot;</span><br><span class="line">           &quot;submit=Transfer&amp;transfer_from=Alice&amp;transfer_to=LiuChang&amp;&quot;</span><br><span class="line">           &quot;transfer_money=80\r\n\r\n&quot;;</span><br><span class="line"></span><br><span class="line">write(sock_client,req2,strlen(req2));</span><br></pre></td></tr></table></figure>
 <p><img src="/images/Authentication/11.png" alt="Steal Alice's money successfully"></p>
-<h3 id="Part-C：Encryption"><strong>Part C：Encryption</strong></h3>
+<h3 id="part-cencryption"><a class="markdownIt-Anchor" href="#part-cencryption"></a> <strong>Part C：Encryption</strong></h3>
 <p>Encryption is the standard way to protect sensitive information from leaking. Encryption itself does not prevent interception, but denies the message content to the interceptor. In this part of the lab, you will explore how to use encryption to protect the packets.</p>
-<h4 id="Exercise-7"><strong>Exercise 7 :</strong></h4>
+<h4 id="exercise-7"><a class="markdownIt-Anchor" href="#exercise-7"></a> <strong>Exercise 7 :</strong></h4>
 <p>Encrypt the cookie. You should modify as least these files: index.html, handle.c, and dbutil.c etc…</p>
 <p>As we known,<strong>Cookie</strong> is a small piece of data sent from a website and stored in the user’s web browser while the user is browsing it. It always saves user’s sensitive information and can be obtained by tools easily. In order to protect users’ sensitive information, we should encrypt these cookies.</p>
 <p>In <strong>Exercise : 5</strong>, we use <strong>HttpFox</strong> to capture these Cookies and get user’s information easily. In order to defuse this , we need encrypt these cookies, and separate <strong>Login</strong> and <strong>Register</strong> modules.</p>
@@ -629,7 +629,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -642,7 +642,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -691,7 +691,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-4-Authentication"><span class="nav-number">1.</span> <span class="nav-text">Lab 4 :  Authentication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lab-Environment-Setup"><span class="nav-number">1.1.</span> <span class="nav-text">Lab Environment Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-A：Identity-Forgery"><span class="nav-number">1.2.</span> <span class="nav-text">Part A：Identity Forgery</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">Exercise 1 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-2"><span class="nav-number">1.2.2.</span> <span class="nav-text">Exercise 2 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-3"><span class="nav-number">1.2.3.</span> <span class="nav-text">Exercise 3 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-4"><span class="nav-number">1.2.4.</span> <span class="nav-text">Exercise 4 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-5"><span class="nav-number">1.2.5.</span> <span class="nav-text">Exercise 5 :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-B：Packet-Sniffing"><span class="nav-number">1.3.</span> <span class="nav-text">Part B：Packet Sniffing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-6"><span class="nav-number">1.3.1.</span> <span class="nav-text">Exercise 6 :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part-C：Encryption"><span class="nav-number">1.4.</span> <span class="nav-text">Part C：Encryption</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Exercise-7"><span class="nav-number">1.4.1.</span> <span class="nav-text">Exercise 7 :</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#lab-4-authentication"><span class="nav-number">1.</span> <span class="nav-text"> Lab 4 :  Authentication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-environment-setup"><span class="nav-number">1.1.</span> <span class="nav-text"> Lab Environment Setup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-aidentity-forgery"><span class="nav-number">1.2.</span> <span class="nav-text"> Part A：Identity Forgery</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-1"><span class="nav-number">1.2.1.</span> <span class="nav-text"> Exercise 1 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-2"><span class="nav-number">1.2.2.</span> <span class="nav-text"> Exercise 2 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-3"><span class="nav-number">1.2.3.</span> <span class="nav-text"> Exercise 3 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-4"><span class="nav-number">1.2.4.</span> <span class="nav-text"> Exercise 4 :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-5"><span class="nav-number">1.2.5.</span> <span class="nav-text"> Exercise 5 :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-bpacket-sniffing"><span class="nav-number">1.3.</span> <span class="nav-text"> Part B：Packet Sniffing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-6"><span class="nav-number">1.3.1.</span> <span class="nav-text"> Exercise 6 :</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part-cencryption"><span class="nav-number">1.4.</span> <span class="nav-text"> Part C：Encryption</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#exercise-7"><span class="nav-number">1.4.1.</span> <span class="nav-text"> Exercise 7 :</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

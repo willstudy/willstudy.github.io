@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="1. 架构设计的模型简介 目前常见的服务架构设计，主要分为：  存储型架构：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等 计算型架构：以计算为核心，结合并行化、调度技术、缓存等，优化服务的吞吐、延迟等等。  很多场景下服务架构是可以实现存储、计算的分离，从而实现专项优化、极限优化（比如pulsar等），但是对于某些特殊场景，需要一体化的存储+计算。比如搜索场景，它的场景特点有">
+<meta name="description" content="1. 架构设计的模型简介 目前常见的服务架构设计，主要分为：  存储型架构：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等 计算型架构：以计算为核心，结合并行化、调度技术、缓存等，优化服务的吞吐、延迟等等。  很多场景下服务架构是可以实现存储、计算的分离，从而实现专项优化、极限优化（比如pulsar等），但是对于某些特殊场景，需要一体化的存储+计算。比如搜索场景，它的场景特点">
 <meta name="keywords" content="架构设计,思考复盘">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于架构设计的一些思考">
 <meta property="og:url" content="https://blog.lecury.cn/2021/12/18/关于架构设计的一些思考/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. 架构设计的模型简介 目前常见的服务架构设计，主要分为：  存储型架构：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等 计算型架构：以计算为核心，结合并行化、调度技术、缓存等，优化服务的吞吐、延迟等等。  很多场景下服务架构是可以实现存储、计算的分离，从而实现专项优化、极限优化（比如pulsar等），但是对于某些特殊场景，需要一体化的存储+计算。比如搜索场景，它的场景特点有">
+<meta property="og:description" content="1. 架构设计的模型简介 目前常见的服务架构设计，主要分为：  存储型架构：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等 计算型架构：以计算为核心，结合并行化、调度技术、缓存等，优化服务的吞吐、延迟等等。  很多场景下服务架构是可以实现存储、计算的分离，从而实现专项优化、极限优化（比如pulsar等），但是对于某些特殊场景，需要一体化的存储+计算。比如搜索场景，它的场景特点">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/arch-design/arch.jpg">
 <meta property="og:updated_time" content="2024-03-27T14:38:01.786Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于架构设计的一些思考">
-<meta name="twitter:description" content="1. 架构设计的模型简介 目前常见的服务架构设计，主要分为：  存储型架构：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等 计算型架构：以计算为核心，结合并行化、调度技术、缓存等，优化服务的吞吐、延迟等等。  很多场景下服务架构是可以实现存储、计算的分离，从而实现专项优化、极限优化（比如pulsar等），但是对于某些特殊场景，需要一体化的存储+计算。比如搜索场景，它的场景特点有">
+<meta name="twitter:description" content="1. 架构设计的模型简介 目前常见的服务架构设计，主要分为：  存储型架构：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等 计算型架构：以计算为核心，结合并行化、调度技术、缓存等，优化服务的吞吐、延迟等等。  很多场景下服务架构是可以实现存储、计算的分离，从而实现专项优化、极限优化（比如pulsar等），但是对于某些特殊场景，需要一体化的存储+计算。比如搜索场景，它的场景特点">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/arch-design/arch.jpg">
 
 
@@ -398,7 +398,7 @@
       
 
       
-        <h2 id="1-架构设计的模型简介">1. 架构设计的模型简介</h2>
+        <h2 id="1-架构设计的模型简介"><a class="markdownIt-Anchor" href="#1-架构设计的模型简介"></a> 1. 架构设计的模型简介</h2>
 <p>目前常见的服务架构设计，主要分为：</p>
 <ul>
 <li><strong>存储型架构</strong>：以存储为核心，关注高性能的读写、一致性的保证、可弹性的容量伸缩等等</li>
@@ -418,7 +418,7 @@
 </ul>
 <p>需要兼顾存储和计算两个方面</p>
 <p><img src="/images/arch-design/arch.jpg" alt></p>
-<h2 id="2-数据架构模式如何设计？">2. 数据架构模式如何设计？</h2>
+<h2 id="2-数据架构模式如何设计"><a class="markdownIt-Anchor" href="#2-数据架构模式如何设计"></a> 2. 数据架构模式如何设计？</h2>
 <p>如果你对数据架构或者百度搜索技术：</p>
 <ul>
 <li>数据量暴涨情况下，如何快速实现数据层的弹性伸缩？</li>
@@ -430,7 +430,7 @@
 <p>感兴趣的话，可以看看这篇文章：</p>
 <p><a href="https://mp.weixin.qq.com/s/JZZXktYSSccbCPOrR6Ss_Q" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/JZZXktYSSccbCPOrR6Ss_Q</a></p>
 <p>Topic主要涉及的是数据架构的云原生、弹性计算、进阶云原生的相关技术，感兴趣的同学看看。目录索引为：</p>
-<h2 id="3-架构设计的核心要素">3. 架构设计的核心要素</h2>
+<h2 id="3-架构设计的核心要素"><a class="markdownIt-Anchor" href="#3-架构设计的核心要素"></a> 3. 架构设计的核心要素</h2>
 <p>架构设计中最核心的5个要素：</p>
 <ul>
 <li>稳定性：如何保证系统的稳定性？（降低出问题的概率，为企业省钱）</li>
@@ -440,14 +440,14 @@
 <li>时效性：比如资讯类消息如何更快传播到用户那边？（类比百度、头条，增加企业竞争力）</li>
 </ul>
 <p>九九归一，架构最核心的两点：<strong>为企业省钱 &amp; 增加企业收入。</strong></p>
-<h2 id="4-架构设计的一般流程">4. 架构设计的一般流程</h2>
+<h2 id="4-架构设计的一般流程"><a class="markdownIt-Anchor" href="#4-架构设计的一般流程"></a> 4. 架构设计的一般流程</h2>
 <p><strong>1. 需求调研</strong>：明确要解决的问题和预期要达成的目标，解决真实存在的问题，而不是实现臆想中的架构。</p>
 <p><strong>2. 确定目标</strong>：清晰且合理的目标是影响架构能否成功的关键，以终为始。</p>
 <p><strong>3. 方案设计、技术选型</strong>：为了达成预设的目标，方案设计会受人员背景、开发环境、公司层面等因素影响，需要结合当前环境下的各个因素，做最优的方案选型。</p>
 <p><strong>4. 分工和排期</strong>：确定方案选型后，需要进一步拆解方案，进行人员分工、确定交付计划。</p>
 <p><strong>5. 持续性交付</strong>：为什么说持续性交付？架构更迭有时是一个漫长的过程，由于某些管理因素、顺利达成最终的目标，建议要有持续性、阶段性的产出。</p>
 <p><strong>6. 复盘</strong>：定期开展复盘，回顾进展、及时纠正一些非预期的问题。</p>
-<h2 id="5-个人思考">5. 个人思考</h2>
+<h2 id="5-个人思考"><a class="markdownIt-Anchor" href="#5-个人思考"></a> 5. 个人思考</h2>
 <p><strong>关于架构设计相关</strong></p>
 <ol>
 <li>没有最好的架构设计，只有当前背景下最优的解决方案。</li>
@@ -582,7 +582,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -595,7 +595,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -644,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-架构设计的模型简介"><span class="nav-number">1.</span> <span class="nav-text">1. 架构设计的模型简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据架构模式如何设计？"><span class="nav-number">2.</span> <span class="nav-text">2. 数据架构模式如何设计？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-架构设计的核心要素"><span class="nav-number">3.</span> <span class="nav-text">3. 架构设计的核心要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-架构设计的一般流程"><span class="nav-number">4.</span> <span class="nav-text">4. 架构设计的一般流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-个人思考"><span class="nav-number">5.</span> <span class="nav-text">5. 个人思考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-架构设计的模型简介"><span class="nav-number">1.</span> <span class="nav-text"> 1. 架构设计的模型简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据架构模式如何设计"><span class="nav-number">2.</span> <span class="nav-text"> 2. 数据架构模式如何设计？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-架构设计的核心要素"><span class="nav-number">3.</span> <span class="nav-text"> 3. 架构设计的核心要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-架构设计的一般流程"><span class="nav-number">4.</span> <span class="nav-text"> 4. 架构设计的一般流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-个人思考"><span class="nav-number">5.</span> <span class="nav-text"> 5. 个人思考</span></a></li></ol></div>
             
 
           </div>

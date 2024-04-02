@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。 写在前面 本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。 ruid、euid、suid 一个程序，准确的说是一个进程，拥有着这三种">
+<meta name="description" content="在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。  写在前面 本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。  ruid、euid、suid 一个程序，准确的说是一个进程，拥有着这">
 <meta name="keywords" content="系统安全,Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="探索Linux的SUID位">
 <meta property="og:url" content="https://blog.lecury.cn/2016/01/24/探索Linux的SUID位/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。 写在前面 本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。 ruid、euid、suid 一个程序，准确的说是一个进程，拥有着这三种">
+<meta property="og:description" content="在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。  写在前面 本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。  ruid、euid、suid 一个程序，准确的说是一个进程，拥有着这">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T08:00:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="探索Linux的SUID位">
-<meta name="twitter:description" content="在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。 写在前面 本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。 ruid、euid、suid 一个程序，准确的说是一个进程，拥有着这三种">
+<meta name="twitter:description" content="在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。  写在前面 本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。  ruid、euid、suid 一个程序，准确的说是一个进程，拥有着这">
 
 
 
@@ -397,9 +397,9 @@
 
       
         <p>在系统安全中,uid扮演了非常重要的角色，这里比较深入的叙述了Linux中的uid机制。</p>
-<h2 id="写在前面"><strong>写在前面</strong></h2>
+<h2 id="写在前面"><a class="markdownIt-Anchor" href="#写在前面"></a> <strong>写在前面</strong></h2>
 <p>本学期学习的信息安全课程中，接触到了Linux的uid方面的，关于访问权限控制的知识。由于从论文上得到的知识，总感觉有点虚幻，就想自己动手探索一下：Linux中uid的特性。以下实验均出自Ubuntu 12.04 64位机器。</p>
-<h2 id="ruid、euid、suid"><strong>ruid、euid、suid</strong></h2>
+<h2 id="ruid-euid-suid"><a class="markdownIt-Anchor" href="#ruid-euid-suid"></a> <strong>ruid、euid、suid</strong></h2>
 <p>一个程序，准确的说是一个进程，拥有着这三种id。它们分别代表着：</p>
 <ul>
 <li><strong>ruid</strong> : 哪个用户运行这个程序，ruid就是谁</li>
@@ -413,7 +413,7 @@
 <li>若进程的有效组id或者进程的附属组id之一等于文件的组id，那么如果组适当的访问权限被设置，则允许访问，反之则拒绝访问。</li>
 <li>若其他用户适当的访问权限位被设置，则允许访问，否则拒绝访问。</li>
 </ul>
-<h2 id="设置权限"><strong>设置权限</strong></h2>
+<h2 id="设置权限"><a class="markdownIt-Anchor" href="#设置权限"></a> <strong>设置权限</strong></h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setuid</span><span class="params">( <span class="keyword">uid_t</span> uid )</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setgid</span><span class="params">( <span class="keyword">gid_t</span> gid )</span></span>;</span><br></pre></td></tr></table></figure>
 <p>1）若进程具有root权限，即euid为0，那么setuid会将ruid、euid、suid全部设为uid参数。<br>
 2）若进程没有root权限，但uid参数等于ruid或者suid，那么setuid只将euid设置为uid参数。<br>
@@ -426,21 +426,21 @@
 <li>s = 4：代表为文件的使用者打开s位。</li>
 </ul>
 <p>s 也可以是上述三个值的和，作用是它们功能的并集。</p>
-<h3 id="关于文件s位的作用"><strong>关于文件s位的作用</strong></h3>
+<h3 id="关于文件s位的作用"><a class="markdownIt-Anchor" href="#关于文件s位的作用"></a> <strong>关于文件s位的作用</strong></h3>
 <p>我的一个同学非常形象的描述这个s位的作用，它就像是一个印章(戳)。如果打开这个文件的s位，也就意味着无论谁执行使用这个文件，它都拥有着文件拥有者的权限。就好像银行行长给你一张支票，上面有他的签名。无论谁拿着这张支票都可以到银行取到钱。因为银行行长的签名具有向银行取钱的权利。</p>
 <p>那么对于Linux的shadow文件或者是passwd文件，只有root可以读写。每一个用户可以通过<strong>passwd</strong>命令来更改自己的密码，为了实现普通用户可以更改仅root才能修改的shadow文件，操作系统为<strong>passwd</strong>的使用者位打开了s位。在Ubuntu 12.04 64上权限如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-rwsr-xr-x 1 root root 42824 Sep 13  2012 /usr/bin/passwd</span><br></pre></td></tr></table></figure>
-<h3 id="关于文件粘着位-t-的理解"><strong>关于文件粘着位(t)的理解</strong></h3>
+<h3 id="关于文件粘着位t的理解"><a class="markdownIt-Anchor" href="#关于文件粘着位t的理解"></a> <strong>关于文件粘着位(t)的理解</strong></h3>
 <p>要删除一个文件，你不一定要有这个文件的写权限，但你一定要有这个文件的上级目录的写权限。也就是说，你即使没有一个文件的写权限，但你有这个文件的上级目录的写权限，你也可以把这个文件给删除，而如果没有一个目录的写权限，也就不能在这个目录下创建文件。</p>
 <p>如何才能使一个目录既可以让任何用户写入文件，又不让用户删除这个目录下他人的文件，粘着位就是能起到这个作用。粘着位一般只用在目录上，也可作用在普通文件上。<strong>如果一个可执行程序文件这一位被设置了，那么当该程序第一次被执行时，在其终止时，程序的正文部分(机器指令)仍被保存在交换区，这使得下次执行该程序时能较快的将其载入内存</strong>。</p>
 <p>如果用户对目录有写权限，则可以删除其中的文件和子目录，即使该用户不是这些文件的所有者，而且也没有读或写许可。粘着位出现执行许可的位置上，用t表示，设置了该位后，其它用户就不可以删除不属于他的文件和目录。但是该目录下的目录不继承该权限，要再设置才可使用。</p>
 <p>目录/tmp和/var/tmp是设置粘着位的典型候选者–任何人都可以在这两个目录中创建文件，但用户不能删除或重命名属于其他人的文件，为此在这两个目录的文件模式都设置了粘着位。其权限如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drwxrwxrwt  13 root root  4096 Jan 24 18:47 /tmp</span><br></pre></td></tr></table></figure>
 <p>注意：那么原来的执行标志x到哪里去了呢? 系统是这样规定的, 假如本来在该位上有x, 则这些特别标志 (suid, sgid, sticky) 显示为小写字母 (s, s, t). 否则, 显示为大写字母 (S, S, T) 。</p>
-<h2 id="测试程序"><strong>测试程序</strong></h2>
+<h2 id="测试程序"><a class="markdownIt-Anchor" href="#测试程序"></a> <strong>测试程序</strong></h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * set.c 文件 使用root权限执行的</span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uid_t</span> ruid;</span><br><span class="line">    <span class="keyword">uid_t</span> euid;</span><br><span class="line">    <span class="keyword">uid_t</span> suid;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    setresuid( <span class="number">800</span>, <span class="number">900</span>, <span class="number">100</span> );</span><br><span class="line">    getresuid( &amp;ruid, &amp;euid, &amp;suid );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"orignal ruid = %d, euid = %d, suid = %d\n"</span>, ruid, euid, suid );</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">    <span class="keyword">if</span>( (pid = fork()) == <span class="number">0</span> ) &#123;</span><br><span class="line">            execve( <span class="string">"./hello"</span>,<span class="literal">NULL</span>, <span class="literal">NULL</span> );</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">if</span>((pid = fork()) == <span class="number">0</span>) &#123;</span><br><span class="line">            getresuid( &amp;ruid, &amp;euid, &amp;suid );</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"fork ruid = %d, euid = %d, suid = %d\n"</span>, ruid, euid, suid );</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">    seteuid(<span class="number">800</span>);</span><br><span class="line">    getresuid( &amp;ruid, &amp;euid, &amp;suid );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"seteuid(800) ruid = %d, euid = %d, suid = %d\n"</span>, ruid, euid, suid );</span><br><span class="line"></span><br><span class="line">    seteuid(<span class="number">900</span>);</span><br><span class="line">    getresuid( &amp;ruid, &amp;euid, &amp;suid );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"seteuid(900) ruid = %d, euid = %d, suid = %d\n"</span>, ruid, euid, suid );</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * hello.c 文件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uid_t</span> r_uid;</span><br><span class="line">    <span class="keyword">uid_t</span> e_uid;</span><br><span class="line">    <span class="keyword">uid_t</span> s_uid;</span><br><span class="line"></span><br><span class="line">    getresuid( &amp;r_uid, &amp;e_uid, &amp;s_uid );</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hello --- r_uid = %d, e_uid = %d, s_uid = %d\n"</span>, r_uid, e_uid, s_uid )    ;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="参考"><strong>参考</strong></h2>
+<h2 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> <strong>参考</strong></h2>
 <p>[1] UNIX环境高级编程第4、8章<br>
 [2]   <a href="http://www.cnblogs.com/xingyun/archive/2011/12/03/2274546.html" target="_blank">博客园的落崖惊风</a></p>
 
@@ -569,7 +569,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -582,7 +582,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -631,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ruid、euid、suid"><span class="nav-number">2.</span> <span class="nav-text">ruid、euid、suid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置权限"><span class="nav-number">3.</span> <span class="nav-text">设置权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于文件s位的作用"><span class="nav-number">3.1.</span> <span class="nav-text">关于文件s位的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于文件粘着位-t-的理解"><span class="nav-number">3.2.</span> <span class="nav-text">关于文件粘着位(t)的理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试程序"><span class="nav-number">4.</span> <span class="nav-text">测试程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text"> 写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ruid-euid-suid"><span class="nav-number">2.</span> <span class="nav-text"> ruid、euid、suid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置权限"><span class="nav-number">3.</span> <span class="nav-text"> 设置权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于文件s位的作用"><span class="nav-number">3.1.</span> <span class="nav-text"> 关于文件s位的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于文件粘着位t的理解"><span class="nav-number">3.2.</span> <span class="nav-text"> 关于文件粘着位(t)的理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试程序"><span class="nav-number">4.</span> <span class="nav-text"> 测试程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
             
 
           </div>

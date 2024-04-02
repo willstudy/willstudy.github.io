@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="架构设计,etcd,配置中心,服务注册,运维,">
+  <meta name="keywords" content="etcd,架构设计,配置中心,服务注册,运维,">
 
 
 
@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="1. etcd集群 1.1 etcd集群简介 etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇数，">
-<meta name="keywords" content="架构设计,etcd,配置中心,服务注册,运维">
+<meta name="description" content="1. etcd集群  1.1 etcd集群简介 etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇">
+<meta name="keywords" content="etcd,架构设计,配置中心,服务注册,运维">
 <meta property="og:type" content="article">
 <meta property="og:title" content="etcd篇——运维指南">
 <meta property="og:url" content="https://blog.lecury.cn/2021/04/07/etcd篇-运维指南/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="1. etcd集群 1.1 etcd集群简介 etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇数，">
+<meta property="og:description" content="1. etcd集群  1.1 etcd集群简介 etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://blog.lecury.cn/images/etcd/etcd-arch.jpg">
 <meta property="og:updated_time" content="2024-03-27T11:28:25.767Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="etcd篇——运维指南">
-<meta name="twitter:description" content="1. etcd集群 1.1 etcd集群简介 etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇数，">
+<meta name="twitter:description" content="1. etcd集群  1.1 etcd集群简介 etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：  API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。 集群成员的数目一般是奇">
 <meta name="twitter:image" content="https://blog.lecury.cn/images/etcd/etcd-arch.jpg">
 
 
@@ -398,22 +398,22 @@
       
 
       
-        <h2 id="1-etcd集群">1. etcd集群</h2>
-<h4 id="1-1-etcd集群简介">1.1 etcd集群简介</h4>
+        <h2 id="1-etcd集群"><a class="markdownIt-Anchor" href="#1-etcd集群"></a> 1. etcd集群</h2>
+<h4 id="11-etcd集群简介"><a class="markdownIt-Anchor" href="#11-etcd集群简介"></a> 1.1 etcd集群简介</h4>
 <p>etcd为了提高可用性提供了集群模式，集群模式下会选举leader，并通过leader和raft机制保证集群模式下的一致性问题，同一时刻有且仅有一个leader。关于集群模式，需要关注以下：</p>
 <ol>
 <li>API操作etcd时，不需要关注节点是否是leader，对于需要保证一致性的请求，follower节点会自动转发给leader处理。</li>
 <li>集群成员的数目一般是奇数，如果有3个成员，表明集群最大允许挂掉1个节点，如果有5个成员，则最大允许挂掉2个节点。<strong>当然节点数目不是越大越好，因为一致性机制下节点数目会影响写性能。</strong></li>
 </ol>
-<h4 id="1-2-etcd集群搭建">1.2 etcd集群搭建</h4>
+<h4 id="12-etcd集群搭建"><a class="markdownIt-Anchor" href="#12-etcd集群搭建"></a> 1.2 etcd集群搭建</h4>
 <p>参考手册：<a href="https://blog.lecury.cn/2016/06/27/Etcd%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/">https://blog.lecury.cn/2016/06/27/Etcd集群搭建过程/</a></p>
 <p><img src="/images/etcd/etcd-arch.jpg" alt="etcd架构图"></p>
-<h2 id="2-etcd运维">2. etcd运维</h2>
+<h2 id="2-etcd运维"><a class="markdownIt-Anchor" href="#2-etcd运维"></a> 2. etcd运维</h2>
 <p>集群模式大大提高了etcd的可用性，但是仍存在异常和挂掉的可能性。为了进一步提高稳定性和可用性，可以从以下方面着手。</p>
-<h4 id="2-1-etcd-operator">2.1 etcd operator</h4>
+<h4 id="21-etcd-operator"><a class="markdownIt-Anchor" href="#21-etcd-operator"></a> 2.1 etcd operator</h4>
 <p>etcd operator概念最早出现在k8s的生态中，目的是借助k8s平台自动创建、管理etcd集群，不仅提供部署能力，还提供故障迁移的能力。</p>
 <p>方案的理念是相似的，是将etcd集群交给一个全局控制器来管理，这个控制器可以运行在k8s平台，也可以独立运行，以提高etcd集群的稳定性和可用性。</p>
-<h4 id="2-2-容灾和恢复">2.2 容灾和恢复</h4>
+<h4 id="22-容灾和恢复"><a class="markdownIt-Anchor" href="#22-容灾和恢复"></a> 2.2 容灾和恢复</h4>
 <p>目前搜集到的方案大致是：</p>
 <ol>
 <li>定期dump数据，推送到分布式存储中。</li>
@@ -425,7 +425,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ etcd \</span><br><span class="line">  --name m1 \</span><br><span class="line">  --listen-client-urls http://host1:2379 \</span><br><span class="line">  --advertise-client-urls http://host1:2379 \</span><br><span class="line">  --listen-peer-urls http://host1:2380 &amp;</span><br><span class="line">$ etcd \</span><br><span class="line">  --name m2 \</span><br><span class="line">  --listen-client-urls http://host2:2379 \</span><br><span class="line">  --advertise-client-urls http://host2:2379 \</span><br><span class="line">  --listen-peer-urls http://host2:2380 &amp;</span><br><span class="line">$ etcd \</span><br><span class="line">  --name m3 \</span><br><span class="line">  --listen-client-urls http://host3:2379 \</span><br><span class="line">  --advertise-client-urls http://host3:2379 \</span><br><span class="line">  --listen-peer-urls http://host3:2380 &amp;</span><br></pre></td></tr></table></figure>
 <p>整体操作还是挺麻烦的，完善的容灾机制需要快、准，最好提供平台化的支持，最终目标是实现一键回滚到某个时间点。</p>
 <p>参考：<a href="https://etcd.io/docs/v3.3.12/op-guide/recovery/" target="_blank" rel="noopener">https://etcd.io/docs/v3.3.12/op-guide/recovery/</a></p>
-<h4 id="2-3-etcd监控和报警">2.3 etcd监控和报警</h4>
+<h4 id="23-etcd监控和报警"><a class="markdownIt-Anchor" href="#23-etcd监控和报警"></a> 2.3 etcd监控和报警</h4>
 <p>对etcd集群来说，监控和报警是必不可少的，没有机制能够保证100%的可用，我们需要监控和报警及时的发现问题。</p>
 <p>etcd内置了很多prometheus metrics，可以通过prometheus+Grafana方便的监控etcd集群。主要监控点包括：</p>
 <ul>
@@ -437,7 +437,7 @@
 <li>等等</li>
 </ul>
 <p>这里有个etcd监控模板：<a href="https://grafana.com/grafana/dashboards/3070" target="_blank" rel="noopener">https://grafana.com/grafana/dashboards/3070</a></p>
-<h4 id="2-4-etcd集群新增节点">2.4 etcd集群新增节点</h4>
+<h4 id="24-etcd集群新增节点"><a class="markdownIt-Anchor" href="#24-etcd集群新增节点"></a> 2.4 etcd集群新增节点</h4>
 <p>如果该节点曾属于集群成员，那么删除etcd data目录，重启即可。可以通过以下方式查看是否是集群成员</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=2 etcdctl member list</span><br></pre></td></tr></table></figure>
 <p>如果该节点是一个新的节点，那么启动etcd时，</p>
@@ -446,8 +446,8 @@
 <li>设置环境变量<code>ETCD_INITIAL_CLUSTER</code>和<code>ETCD_INITIAL_CLUSTER_STATE</code>：分别指明了etcd的集群地址和集群状态。</li>
 <li>启动这个new node</li>
 </ol>
-<h2 id="3-常见问题">3. 常见问题</h2>
-<h4 id="3-1-如何选择etcd集群的节点数目？">3.1 如何选择etcd集群的节点数目？</h4>
+<h2 id="3-常见问题"><a class="markdownIt-Anchor" href="#3-常见问题"></a> 3. 常见问题</h2>
+<h4 id="31-如何选择etcd集群的节点数目"><a class="markdownIt-Anchor" href="#31-如何选择etcd集群的节点数目"></a> 3.1 如何选择etcd集群的节点数目？</h4>
 <p>首先要理解为什么需要增加节点数目？原因大致为：</p>
 <ol>
 <li><strong>提高etcd集群的可用性</strong>：3个节点能最大容忍一个节点不可用，5个节点则可以最大容忍2个节点不可用，节点数增加从概率角度上确实能增大集群的可用性。</li>
@@ -455,7 +455,7 @@
 </ol>
 <p><strong>注意节点数并不是越多越好</strong>，因为etcd的一致性机制，每次写操作都需要同步到每个节点，节点数越多会降低写操作的吞吐。</p>
 <p>在读写均存在的场景下，建议etcd集群有3个节点，如果读远大于写的场景下，可以考虑增加到5个节点。</p>
-<h4 id="3-2-etcd内存、snapshot大小异常">3.2 etcd内存、snapshot大小异常</h4>
+<h4 id="32-etcd内存-snapshot大小异常"><a class="markdownIt-Anchor" href="#32-etcd内存-snapshot大小异常"></a> 3.2 etcd内存、snapshot大小异常</h4>
 <p>大致原因有以下几点：</p>
 <ol>
 <li>etcd的key/value具有版本功能，频繁更新key/value会使得版本增加过快。</li>
@@ -468,9 +468,9 @@
 <li>设置存储quota上限: 启动参数增加<code>--quota-backend-bytes=8589934592</code></li>
 <li>限制raft log：调小<code>--snapshot-count=10000</code></li>
 </ol>
-<h4 id="3-3-etcd节点挂掉时间太长，重启失败咋办？">3.3 etcd节点挂掉时间太长，重启失败咋办？</h4>
+<h4 id="33-etcd节点挂掉时间太长重启失败咋办"><a class="markdownIt-Anchor" href="#33-etcd节点挂掉时间太长重启失败咋办"></a> 3.3 etcd节点挂掉时间太长，重启失败咋办？</h4>
 <p>集群没挂掉的情况下，直接删除data目录，重新加入集群处理。</p>
-<h4 id="3-4-mvcc-database-space-exceeded-报错如何处理？">3.4 mvcc: database space exceeded 报错如何处理？</h4>
+<h4 id="34-mvcc-database-space-exceeded-报错如何处理"><a class="markdownIt-Anchor" href="#34-mvcc-database-space-exceeded-报错如何处理"></a> 3.4 mvcc: database space exceeded 报错如何处理？</h4>
 <p>etcd会保存key的历史版本，如果没有定期compact的话，就会耗尽etcd的存储空间。如果etcd的剩余空间很小的时候，就会报警：<code>mvcc: database space exceeded.</code> 解决办法：</p>
 <ol>
 <li>compact etcd历史</li>
@@ -495,9 +495,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
-          
             <a href="/tags/etcd/" rel="tag"># etcd</a>
+          
+            <a href="/tags/架构设计/" rel="tag"># 架构设计</a>
           
             <a href="/tags/配置中心/" rel="tag"># 配置中心</a>
           
@@ -610,7 +610,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -623,7 +623,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -672,7 +672,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-etcd集群"><span class="nav-number">1.</span> <span class="nav-text">1. etcd集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-etcd集群简介"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.1 etcd集群简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-etcd集群搭建"><span class="nav-number">1.0.2.</span> <span class="nav-text">1.2 etcd集群搭建</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-etcd运维"><span class="nav-number">2.</span> <span class="nav-text">2. etcd运维</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-etcd-operator"><span class="nav-number">2.0.1.</span> <span class="nav-text">2.1 etcd operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-容灾和恢复"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.2 容灾和恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-etcd监控和报警"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.3 etcd监控和报警</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-etcd集群新增节点"><span class="nav-number">2.0.4.</span> <span class="nav-text">2.4 etcd集群新增节点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-常见问题"><span class="nav-number">3.</span> <span class="nav-text">3. 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-如何选择etcd集群的节点数目？"><span class="nav-number">3.0.1.</span> <span class="nav-text">3.1 如何选择etcd集群的节点数目？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-etcd内存、snapshot大小异常"><span class="nav-number">3.0.2.</span> <span class="nav-text">3.2 etcd内存、snapshot大小异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-etcd节点挂掉时间太长，重启失败咋办？"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.3 etcd节点挂掉时间太长，重启失败咋办？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-mvcc-database-space-exceeded-报错如何处理？"><span class="nav-number">3.0.4.</span> <span class="nav-text">3.4 mvcc: database space exceeded 报错如何处理？</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-etcd集群"><span class="nav-number">1.</span> <span class="nav-text"> 1. etcd集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-etcd集群简介"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 1.1 etcd集群简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-etcd集群搭建"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 1.2 etcd集群搭建</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-etcd运维"><span class="nav-number">2.</span> <span class="nav-text"> 2. etcd运维</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#21-etcd-operator"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 2.1 etcd operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-容灾和恢复"><span class="nav-number">2.0.2.</span> <span class="nav-text"> 2.2 容灾和恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#23-etcd监控和报警"><span class="nav-number">2.0.3.</span> <span class="nav-text"> 2.3 etcd监控和报警</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#24-etcd集群新增节点"><span class="nav-number">2.0.4.</span> <span class="nav-text"> 2.4 etcd集群新增节点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-常见问题"><span class="nav-number">3.</span> <span class="nav-text"> 3. 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#31-如何选择etcd集群的节点数目"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 3.1 如何选择etcd集群的节点数目？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#32-etcd内存-snapshot大小异常"><span class="nav-number">3.0.2.</span> <span class="nav-text"> 3.2 etcd内存、snapshot大小异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#33-etcd节点挂掉时间太长重启失败咋办"><span class="nav-number">3.0.3.</span> <span class="nav-text"> 3.3 etcd节点挂掉时间太长，重启失败咋办？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#34-mvcc-database-space-exceeded-报错如何处理"><span class="nav-number">3.0.4.</span> <span class="nav-text"> 3.4 mvcc: database space exceeded 报错如何处理？</span></a></li></ol></li></div>
             
 
           </div>

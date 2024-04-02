@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。 std::deque 类的原型 1template &amp;lt; class T, class Alloc = allocator&amp;lt;T&amp;gt; &amp;gt; class">
+<meta name="description" content="最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。  std::deque  类的原型 1template &amp;lt; class T, class Alloc = allocator&amp;lt;T&amp;gt; &amp;gt; cla">
 <meta name="keywords" content="数据结构,STL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="STL基础数据结构">
 <meta property="og:url" content="https://blog.lecury.cn/2016/01/05/STL-基础数据结构/index.html">
 <meta property="og:site_name" content="Brains">
-<meta property="og:description" content="最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。 std::deque 类的原型 1template &amp;lt; class T, class Alloc = allocator&amp;lt;T&amp;gt; &amp;gt; class">
+<meta property="og:description" content="最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。  std::deque  类的原型 1template &amp;lt; class T, class Alloc = allocator&amp;lt;T&amp;gt; &amp;gt; cla">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-05T07:54:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL基础数据结构">
-<meta name="twitter:description" content="最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。 std::deque 类的原型 1template &amp;lt; class T, class Alloc = allocator&amp;lt;T&amp;gt; &amp;gt; class">
+<meta name="twitter:description" content="最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。  std::deque  类的原型 1template &amp;lt; class T, class Alloc = allocator&amp;lt;T&amp;gt; &amp;gt; cla">
 
 
 
@@ -397,15 +397,15 @@
 
       
         <p>最近在刷LeetCode，一直在用C实现上面的算法。但经常遇到题目，需要维护动态二维数组，需要队列、栈、map等数据结构时，用C实现时，需要很长的时间来完成这些数据结构的原型。无奈为了提高效率（偷懒~）决定转型C++解决上面的题目。</p>
-<h2 id="std-deque">std::deque</h2>
-<h4 id="类的原型"><strong>类的原型</strong></h4>
+<h2 id="stddeque"><a class="markdownIt-Anchor" href="#stddeque"></a> std::deque</h2>
+<h4 id="类的原型"><a class="markdownIt-Anchor" href="#类的原型"></a> <strong>类的原型</strong></h4>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt; <span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">allocator</span>&lt;T&gt; &gt; <span class="title">class</span> <span class="title">deque</span>;</span></span><br></pre></td></tr></table></figure>
 <p>它位于deque文件中，先看看它的类的声明。<code>class Alloc = allocator&lt;T&gt;</code> 这句话什么鬼？这可能要涉及到STL六大要素之分配器了，先跳过，以后涉及到再学。</p>
-<h4 id="概述"><strong>概述</strong></h4>
+<h4 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> <strong>概述</strong></h4>
 <p>deque是C++的基本容器之一，即双端队列，它可以在两端进行插入和删除操作。不同的库可能有不同的实现方式，但通常以动态数组实现的，deque中的元素存储在不同的chunks。</p>
 <p>deque提供的函数与vector相似，但对于在<strong>两端的插入和删除操作</strong>要比vector更有效率。还有需要注意的是，不像vector, deque不保证把<strong>所有的元素以线性的地址存储</strong>，即不能通过**指针++**的形式访问下一个元素，这将导致未定义的行为，这是与vector访问元素的区别。</p>
 <p>还有一个区别用原文叙述比较好：While vectors use a single array that needs to be occasionally reallocated for growth, the elements of a deque can be scattered in different chunks of storage, with the container keeping the necessary information internally to provide direct access to any of its elements in constant time and with a uniform sequential interface (through iterators).</p>
-<h4 id="容器的特性"><strong>容器的特性</strong></h4>
+<h4 id="容器的特性"><a class="markdownIt-Anchor" href="#容器的特性"></a> <strong>容器的特性</strong></h4>
 <ul>
 <li>
 <p><strong>Sequence</strong>: Elements in sequence containers are ordered in a strict linear sequence. Individual elements are accessed by their position in this sequence.每个双端队列的元素是严格的按照线性序列排序的，每个元素可以通过它在队列中的位置直接访问到，有点像数组。</p>
@@ -417,7 +417,7 @@
 <p><strong>Allocator-aware</strong>: The container uses an allocator object to dynamically handle its storage needs.也就是说，可以自己选择这个对象的内存分配器，allocator出现源于:对内存分配和对象构造分离的需求，因为new和delete的出现，不仅代表对象的销毁，也代表了内存的空间回收。</p>
 </li>
 </ul>
-<h4 id="容器的使用"><strong>容器的使用</strong></h4>
+<h4 id="容器的使用"><a class="markdownIt-Anchor" href="#容器的使用"></a> <strong>容器的使用</strong></h4>
 <p><strong>Iterators :</strong></p>
 <ul>
 <li>begin()</li>
@@ -466,14 +466,14 @@
 <p>注意emplace函数与insert函数的区别在于：前者是将参数传递给元素类型的构造函数，而后者则是调用拷贝构造函数来进行操作。当容器里面存放的是某个类的对象的话，二者的区别就体现出来了。例如：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">student</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">  <span class="built_in">string</span> name;</span><br><span class="line">  student(<span class="built_in">string</span> username) : name(username) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"><span class="built_in">deque</span>&lt;student&gt; ST;</span><br><span class="line">ST.insert(ST.end(), student(<span class="string">"LiuChang"</span>));</span><br><span class="line">ST.emplace(ST.end(), <span class="string">"LiuChang"</span>);</span><br></pre></td></tr></table></figure>
 <p>参考：<a href="http://www.cplusplus.com/reference/deque/deque/" target="_blank">C++ Reference : deque</a></p>
-<h2 id="std-queue">std::queue</h2>
-<h4 id="类的原型-2"><strong>类的原型</strong></h4>
+<h2 id="stdqueue"><a class="markdownIt-Anchor" href="#stdqueue"></a> std::queue</h2>
+<h4 id="类的原型-2"><a class="markdownIt-Anchor" href="#类的原型-2"></a> <strong>类的原型</strong></h4>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">template &lt; class T, class Container = deque&lt;T&gt; &gt; class queue;</span><br><span class="line">```  </span><br><span class="line">从上述原型中，可以看出，其实queue是对deque双端队列的一种封装，它放在queue头文件中。</span><br><span class="line">#### **基本操作**</span><br><span class="line">- empty</span><br><span class="line">- size</span><br><span class="line">- front : 访问队首元素</span><br><span class="line">- back  : 访问队尾元素</span><br><span class="line">- push  : 在队尾插入元素</span><br><span class="line">- pop   : 移除队首元素</span><br><span class="line">- swap  : 交换俩个队列的内容  </span><br><span class="line"></span><br><span class="line">#### 实例：二叉树的最大深度</span><br><span class="line">题目来源于LeetCode:</span><br></pre></td></tr></table></figure>
 <p>Given a binary tree, find its maximum depth.<br>
 The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">这一题属于Easy级别，考虑到函数调用的开销，宜使用二叉树的层次遍历。  </span><br><span class="line">```c++</span><br><span class="line">/**</span><br><span class="line"> * Definition for a binary tree node.</span><br><span class="line"> * struct TreeNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     TreeNode *left;</span><br><span class="line"> *     TreeNode *right;</span><br><span class="line"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span><br><span class="line"> * &#125;;</span><br><span class="line"> */</span><br><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    int maxDepth(TreeNode* root) &#123;</span><br><span class="line">      if ( root == NULL ) return 0;</span><br><span class="line"></span><br><span class="line">      queue&lt;TreeNode *&gt; Q;</span><br><span class="line">      int maxDepth = 0;</span><br><span class="line"></span><br><span class="line">      Q.push(root);</span><br><span class="line">      while(!Q.empty()) &#123;</span><br><span class="line">          ++maxDepth;</span><br><span class="line">          for( int i = 0, n = Q.size(); i &lt; n; i++ ) // 把当前层次的节点，全部弹出队列</span><br><span class="line">          &#123;</span><br><span class="line">              TreeNode * q = Q.front();</span><br><span class="line">              Q.pop();</span><br><span class="line">              if( q-&gt;left ) Q.push(q-&gt;left);</span><br><span class="line">              if( q-&gt;right ) Q.push(q-&gt;right);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      return maxDepth;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="std-stack"><strong>std::stack</strong></h2>
-<h4 id="类的原型-3"><strong>类的原型</strong></h4>
+<h2 id="stdstack"><a class="markdownIt-Anchor" href="#stdstack"></a> <strong>std::stack</strong></h2>
+<h4 id="类的原型-3"><a class="markdownIt-Anchor" href="#类的原型-3"></a> <strong>类的原型</strong></h4>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt; <span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Container</span> = <span class="title">deque</span>&lt;T&gt; &gt; <span class="title">class</span> <span class="title">stack</span>;</span></span><br></pre></td></tr></table></figure>
 <p>它位于stack文件中，很明显，它也是对deque双端队列的封装。<br>
 <strong>基本操作</strong></p>
@@ -617,7 +617,7 @@ The maximum depth is the number of nodes along the longest path from the root no
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -630,7 +630,7 @@ The maximum depth is the number of nodes along the longest path from the root no
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -679,7 +679,7 @@ The maximum depth is the number of nodes along the longest path from the root no
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#std-deque"><span class="nav-number">1.</span> <span class="nav-text">std::deque</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的原型"><span class="nav-number">1.0.1.</span> <span class="nav-text">类的原型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#概述"><span class="nav-number">1.0.2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器的特性"><span class="nav-number">1.0.3.</span> <span class="nav-text">容器的特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器的使用"><span class="nav-number">1.0.4.</span> <span class="nav-text">容器的使用</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#std-queue"><span class="nav-number">2.</span> <span class="nav-text">std::queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的原型-2"><span class="nav-number">2.0.1.</span> <span class="nav-text">类的原型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-stack"><span class="nav-number">3.</span> <span class="nav-text">std::stack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的原型-3"><span class="nav-number">3.0.1.</span> <span class="nav-text">类的原型</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#stddeque"><span class="nav-number">1.</span> <span class="nav-text"> std::deque</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的原型"><span class="nav-number">1.0.1.</span> <span class="nav-text"> 类的原型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#概述"><span class="nav-number">1.0.2.</span> <span class="nav-text"> 概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器的特性"><span class="nav-number">1.0.3.</span> <span class="nav-text"> 容器的特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#容器的使用"><span class="nav-number">1.0.4.</span> <span class="nav-text"> 容器的使用</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#stdqueue"><span class="nav-number">2.</span> <span class="nav-text"> std::queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的原型-2"><span class="nav-number">2.0.1.</span> <span class="nav-text"> 类的原型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stdstack"><span class="nav-number">3.</span> <span class="nav-text"> std::stack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类的原型-3"><span class="nav-number">3.0.1.</span> <span class="nav-text"> 类的原型</span></a></li></ol></li></div>
             
 
           </div>
